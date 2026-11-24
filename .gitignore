@@ -1,0 +1,5 @@
+__pycache__/
+*.pyc
+spend/state.json
+spend/ledger-exports/
+.env
