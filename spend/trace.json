@@ -1,0 +1,285 @@
+{
+ "rate_config": {
+  "input_per_1k": 0.0001,
+  "output_per_1k": 0.0005,
+  "source": "configured"
+ },
+ "totals": {
+  "spent_usd": 0.007363,
+  "by_bucket": {
+   "integration": 0.002641,
+   "test": 0.0,
+   "rehearsal": 0.004712,
+   "final": 0.0,
+   "experiment": 1e-05
+  }
+ },
+ "gates": {
+  "warn_at": 7.0,
+  "halt_nonessential_at": 9.0,
+  "absolute_stop_at": 9.75
+ },
+ "ledger": [
+  {
+   "ts": "2026-11-26T06:44:26Z",
+   "purpose": "experiment",
+   "prompt_tokens": 24,
+   "completion_tokens": 16,
+   "cost_usd": 1e-05,
+   "total_after_usd": 1e-05,
+   "note": "phase1-smoke"
+  },
+  {
+   "ts": "2026-11-26T06:51:23Z",
+   "purpose": "integration",
+   "prompt_tokens": 1300,
+   "completion_tokens": 187,
+   "cost_usd": 0.000224,
+   "total_after_usd": 0.000234,
+   "note": "propose:demo1-integration-fixture-exec"
+  },
+  {
+   "ts": "2026-11-26T06:51:26Z",
+   "purpose": "integration",
+   "prompt_tokens": 1543,
+   "completion_tokens": 728,
+   "cost_usd": 0.000518,
+   "total_after_usd": 0.000752,
+   "note": "propose:demo2-integration"
+  },
+  {
+   "ts": "2026-11-26T06:52:41Z",
+   "purpose": "integration",
+   "prompt_tokens": 1342,
+   "completion_tokens": 149,
+   "cost_usd": 0.000209,
+   "total_after_usd": 0.000961,
+   "note": "propose:demo1-integration-fixture-exec"
+  },
+  {
+   "ts": "2026-11-26T06:52:43Z",
+   "purpose": "integration",
+   "prompt_tokens": 1600,
+   "completion_tokens": 82,
+   "cost_usd": 0.000201,
+   "total_after_usd": 0.001162,
+   "note": "compose-final:demo1-integration-fixture-exec"
+  },
+  {
+   "ts": "2026-11-26T06:52:45Z",
+   "purpose": "integration",
+   "prompt_tokens": 1585,
+   "completion_tokens": 529,
+   "cost_usd": 0.000423,
+   "total_after_usd": 0.001585,
+   "note": "propose:demo2-integration"
+  },
+  {
+   "ts": "2026-11-26T06:52:46Z",
+   "purpose": "integration",
+   "prompt_tokens": 2029,
+   "completion_tokens": 116,
+   "cost_usd": 0.000261,
+   "total_after_usd": 0.001846,
+   "note": "compose-final:demo2-integration"
+  },
+  {
+   "ts": "2026-11-26T06:52:48Z",
+   "purpose": "integration",
+   "prompt_tokens": 1340,
+   "completion_tokens": 73,
+   "cost_usd": 0.00017,
+   "total_after_usd": 0.002017,
+   "note": "propose:demo3-integration"
+  },
+  {
+   "ts": "2026-11-26T06:52:49Z",
+   "purpose": "integration",
+   "prompt_tokens": 1773,
+   "completion_tokens": 250,
+   "cost_usd": 0.000302,
+   "total_after_usd": 0.002319,
+   "note": "compose-final:demo3-integration"
+  },
+  {
+   "ts": "2026-11-26T06:52:50Z",
+   "purpose": "integration",
+   "prompt_tokens": 1345,
+   "completion_tokens": 82,
+   "cost_usd": 0.000176,
+   "total_after_usd": 0.002494,
+   "note": "propose:refusal-integration"
+  },
+  {
+   "ts": "2026-11-26T06:52:51Z",
+   "purpose": "integration",
+   "prompt_tokens": 1428,
+   "completion_tokens": 28,
+   "cost_usd": 0.000157,
+   "total_after_usd": 0.002651,
+   "note": "propose-retry:refusal-integration"
+  },
+  {
+   "ts": "2026-11-26T06:53:01Z",
+   "purpose": "rehearsal",
+   "prompt_tokens": 1342,
+   "completion_tokens": 159,
+   "cost_usd": 0.000214,
+   "total_after_usd": 0.002865,
+   "note": "propose:demo1-drill1-real-send"
+  },
+  {
+   "ts": "2026-11-26T06:53:04Z",
+   "purpose": "rehearsal",
+   "prompt_tokens": 1904,
+   "completion_tokens": 142,
+   "cost_usd": 0.000261,
+   "total_after_usd": 0.003126,
+   "note": "compose-final:demo1-drill1-real-send"
+  },
+  {
+   "ts": "2026-11-26T06:53:05Z",
+   "purpose": "rehearsal",
+   "prompt_tokens": 1342,
+   "completion_tokens": 190,
+   "cost_usd": 0.000229,
+   "total_after_usd": 0.003355,
+   "note": "propose:demo1-drill2-fixture-exec"
+  },
+  {
+   "ts": "2026-11-26T06:53:06Z",
+   "purpose": "rehearsal",
+   "prompt_tokens": 1598,
+   "completion_tokens": 71,
+   "cost_usd": 0.000195,
+   "total_after_usd": 0.00355,
+   "note": "compose-final:demo1-drill2-fixture-exec"
+  },
+  {
+   "ts": "2026-11-26T06:53:08Z",
+   "purpose": "rehearsal",
+   "prompt_tokens": 1342,
+   "completion_tokens": 183,
+   "cost_usd": 0.000226,
+   "total_after_usd": 0.003776,
+   "note": "propose:demo1-drill3-fixture-exec"
+  },
+  {
+   "ts": "2026-11-26T06:53:09Z",
+   "purpose": "rehearsal",
+   "prompt_tokens": 1593,
+   "completion_tokens": 172,
+   "cost_usd": 0.000245,
+   "total_after_usd": 0.004021,
+   "note": "compose-final:demo1-drill3-fixture-exec"
+  },
+  {
+   "ts": "2026-11-26T06:53:11Z",
+   "purpose": "rehearsal",
+   "prompt_tokens": 1585,
+   "completion_tokens": 487,
+   "cost_usd": 0.000402,
+   "total_after_usd": 0.004423,
+   "note": "propose:demo2-drill1"
+  },
+  {
+   "ts": "2026-11-26T06:53:12Z",
+   "purpose": "rehearsal",
+   "prompt_tokens": 2039,
+   "completion_tokens": 37,
+   "cost_usd": 0.000222,
+   "total_after_usd": 0.004645,
+   "note": "compose-final:demo2-drill1"
+  },
+  {
+   "ts": "2026-11-26T06:53:14Z",
+   "purpose": "rehearsal",
+   "prompt_tokens": 1585,
+   "completion_tokens": 482,
+   "cost_usd": 0.0004,
+   "total_after_usd": 0.005044,
+   "note": "propose:demo2-drill2"
+  },
+  {
+   "ts": "2026-11-26T06:53:15Z",
+   "purpose": "rehearsal",
+   "prompt_tokens": 1980,
+   "completion_tokens": 95,
+   "cost_usd": 0.000246,
+   "total_after_usd": 0.005289,
+   "note": "compose-final:demo2-drill2"
+  },
+  {
+   "ts": "2026-11-26T06:53:16Z",
+   "purpose": "rehearsal",
+   "prompt_tokens": 1585,
+   "completion_tokens": 518,
+   "cost_usd": 0.000418,
+   "total_after_usd": 0.005707,
+   "note": "propose:demo2-drill3"
+  },
+  {
+   "ts": "2026-11-26T06:53:18Z",
+   "purpose": "rehearsal",
+   "prompt_tokens": 1994,
+   "completion_tokens": 109,
+   "cost_usd": 0.000254,
+   "total_after_usd": 0.005961,
+   "note": "compose-final:demo2-drill3"
+  },
+  {
+   "ts": "2026-11-26T06:53:19Z",
+   "purpose": "rehearsal",
+   "prompt_tokens": 1340,
+   "completion_tokens": 68,
+   "cost_usd": 0.000168,
+   "total_after_usd": 0.006129,
+   "note": "propose:demo3-drill1"
+  },
+  {
+   "ts": "2026-11-26T06:53:20Z",
+   "purpose": "rehearsal",
+   "prompt_tokens": 1774,
+   "completion_tokens": 248,
+   "cost_usd": 0.000301,
+   "total_after_usd": 0.00643,
+   "note": "compose-final:demo3-drill1"
+  },
+  {
+   "ts": "2026-11-26T06:53:21Z",
+   "purpose": "rehearsal",
+   "prompt_tokens": 1340,
+   "completion_tokens": 74,
+   "cost_usd": 0.000171,
+   "total_after_usd": 0.006601,
+   "note": "propose:demo3-drill2"
+  },
+  {
+   "ts": "2026-11-26T06:53:22Z",
+   "purpose": "rehearsal",
+   "prompt_tokens": 1772,
+   "completion_tokens": 240,
+   "cost_usd": 0.000297,
+   "total_after_usd": 0.006898,
+   "note": "compose-final:demo3-drill2"
+  },
+  {
+   "ts": "2026-11-26T06:53:23Z",
+   "purpose": "rehearsal",
+   "prompt_tokens": 1340,
+   "completion_tokens": 73,
+   "cost_usd": 0.00017,
+   "total_after_usd": 0.007068,
+   "note": "propose:demo3-drill3"
+  },
+  {
+   "ts": "2026-11-26T06:53:24Z",
+   "purpose": "rehearsal",
+   "prompt_tokens": 1771,
+   "completion_tokens": 236,
+   "cost_usd": 0.000295,
+   "total_after_usd": 0.007363,
+   "note": "compose-final:demo3-drill3"
+  }
+ ]
+}

@@ -8,7 +8,7 @@ the submission's required prompt/token trace as a by-product.
 - Every Ember call passes through the meter **before** it is made: log purpose tag, prompt +
   completion tokens, cost at the configured rate, running total.
 - Budget gates: **warn at $7.00**, non-essential calls halted at **$9.00**, absolute stop at **$9.75**.
-- Purpose tags: `experiment` / `test` / `rehearsal` / `final`.
+- Purpose tags: `experiment` / `integration` / `test` / `rehearsal` / `final`.
 - The rate is a **single config value**, set from Meta Model API docs at first credited access
   (per-token pricing is an open question until then — plan §11). The plan holds whatever the rate is.
 - Ledger exports as **JSON + CSV** — that export IS the submission's prompt/token trace.

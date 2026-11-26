@@ -25,7 +25,7 @@ WARN_AT = 7.00
 HALT_NONESSENTIAL_AT = 9.00
 ABSOLUTE_STOP_AT = 9.75
 ESSENTIAL_PURPOSES = {"final"}  # everything else is non-essential
-PURPOSES = {"experiment", "test", "rehearsal", "final"}
+PURPOSES = {"experiment", "integration", "test", "rehearsal", "final"}
 
 
 class BudgetHalt(Exception):

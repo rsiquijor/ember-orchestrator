@@ -16,9 +16,73 @@ from __future__ import annotations
 import json
 import os
 import secrets
+import time
 import urllib.request
 
 ROOT = os.path.dirname(os.path.dirname(os.path.abspath(__file__)))
+
+# Tools with side effects. The orchestrator's approval step mints a
+# single-use token for each gated step; Ember never sees the token.
+GATED_TOOLS = {"run_workflow", "file_tickets"}
+
+TICKET_CATEGORIES = {"Network", "Billing", "Access", "Hardware",
+                     "Account", "Software", "Other"}
+TICKET_PRIORITIES = {"P1", "P2", "P3", "P4"}
+
+
+class BoardStore:
+    """The Triage Desk board: a deterministic JSON store.
+
+    Chosen for the demo over the Cube ITSM create API because ITSM ticket
+    creation unconditionally runs a non-Ember model (auto-triage +
+    sentiment) and sends notifications — both break the Ember-only rule.
+    The board is plain file I/O: no model, no sends.
+    """
+
+    def __init__(self, path: str | None = None):
+        self.path = path or os.environ.get(
+            "EMBER_BOARD_PATH", os.path.join(ROOT, "board", "tickets.json"))
+
+    def _read(self) -> list[dict]:
+        if not os.path.exists(self.path):
+            return []
+        with open(self.path) as f:
+            data = json.load(f)
+        return data.get("tickets", []) if isinstance(data, dict) else []
+
+    def _write(self, tickets: list[dict]) -> None:
+        os.makedirs(os.path.dirname(self.path) or ".", exist_ok=True)
+        tmp = self.path + ".tmp"
+        with open(tmp, "w") as f:
+            json.dump({"tickets": tickets}, f, indent=1)
+        os.replace(tmp, self.path)
+
+    def file(self, tickets: list[dict], run_tag: str = "") -> dict:
+        board = self._read()
+        filed_at = time.strftime("%Y-%m-%dT%H:%M:%SZ", time.gmtime())
+        ids = []
+        for t in tickets:
+            entry = {
+                "ticket_id": str(t["id"])[:40],
+                "category": t["category"],
+                "priority": t["priority"],
+                "draft_reply": str(t["draft_reply"])[:1000],
+                "route": str(t.get("route") or "")[:80],
+                "filed_at": filed_at,
+                "run_tag": run_tag,
+                "status": "filed — draft reply awaiting human send",
+            }
+            board.append(entry)
+            ids.append(entry["ticket_id"])
+        self._write(board)
+        return {"filed": len(ids), "board_total": len(board),
+                "ticket_ids": ids}
+
+    def list(self) -> list[dict]:
+        return self._read()
+
+    def clear(self) -> None:
+        self._write([])
 
 
 def load_catalog() -> dict:
@@ -52,6 +116,7 @@ class CubeTools:
     def __init__(self, tokens: ApprovalTokens):
         self.tokens = tokens
         self.catalog = load_catalog()
+        self.board = BoardStore()
 
     # ------------------------------------------------------------- tools
     def list_workflows(self) -> dict:
@@ -76,6 +141,35 @@ class CubeTools:
     def get_run_status(self, run_id: str) -> dict:
         raise NotImplementedError
 
+    def file_tickets(self, tickets: list, approval_token: str = "",
+                     run_tag: str = "") -> dict:
+        """File human-approved triaged tickets to the board store.
+
+        Same gate as run_workflow: no valid single-use approval token, no
+        filing. Deterministic validation + file write; no model, no sends.
+        """
+        if not self.tokens.consume(approval_token):
+            raise ApprovalError(
+                "file_tickets refused: no valid human approval token. "
+                "Ember proposes; a human approves; only then does this unlock.")
+        if not isinstance(tickets, list) or not tickets:
+            raise ValueError("file_tickets needs a non-empty tickets list")
+        if len(tickets) > 20:
+            raise ValueError("file_tickets capped at 20 tickets per call")
+        clean = []
+        for t in tickets:
+            if not isinstance(t, dict):
+                raise ValueError("each ticket must be an object")
+            for field in ("id", "category", "priority", "draft_reply"):
+                if not str(t.get(field) or "").strip():
+                    raise ValueError(f"ticket missing required field: {field}")
+            if t["category"] not in TICKET_CATEGORIES:
+                raise ValueError(f"unknown category: {t['category']!r}")
+            if t["priority"] not in TICKET_PRIORITIES:
+                raise ValueError(f"unknown priority: {t['priority']!r}")
+            clean.append(t)
+        return self.board.file(clean, run_tag=run_tag)
+
     def _execute(self, workflow_id: str, inputs: dict) -> dict:
         raise NotImplementedError
 
@@ -91,6 +185,10 @@ class CubeTools:
                                      arguments.get("approval_token", ""))
         if name == "get_run_status":
             return self.get_run_status(arguments.get("run_id", ""))
+        if name == "file_tickets":
+            return self.file_tickets(arguments.get("tickets") or [],
+                                     arguments.get("approval_token", ""),
+                                     arguments.get("run_tag", ""))
         raise ValueError(f"unknown tool: {name}")
 
 
@@ -171,8 +269,24 @@ class HttpCubeTools(CubeTools):
         line = (f"{up}/{total} components up, "
                 + (f"DOWN: {', '.join(down)}, " if down else "")
                 + f"{open_inc} open incident{'s' if open_inc != 1 else ''}")
+        # Deterministic trim for the handover brief: most recent 5 incidents,
+        # short fields only; host reduced to the headline percentages.
+        incidents = []
+        for inc in (data.get("recent_incidents") or [])[:5]:
+            incidents.append({
+                "title": str(inc.get("title") or "")[:120],
+                "component": str(inc.get("component") or "")[:60],
+                "severity": str(inc.get("severity") or "")[:20],
+                "status": str(inc.get("status") or "")[:20],
+                "first_seen": str(inc.get("first_seen") or "")[:30],
+            })
+        host_raw = data.get("host") or {}
+        host = {k: host_raw.get(k) for k in
+                ("cpu_pct", "mem_pct", "disk_pct", "load1")
+                if host_raw.get(k) is not None}
         return {"line": line, "components_up": up, "components_total": total,
-                "open_incidents": open_inc}
+                "open_incidents": open_inc, "recent_incidents": incidents,
+                "host": host, "sampled_at": str(data.get("sampled_at") or "")[:30]}
 
     def _execute(self, workflow_id: str, inputs: dict) -> dict:
         flow_id = self._flow_ids.get(workflow_id)
