@@ -5,13 +5,13 @@
   "source": "configured"
  },
  "totals": {
-  "spent_usd": 0.007363,
+  "spent_usd": 0.016567,
   "by_bucket": {
-   "integration": 0.002641,
-   "test": 0.0,
-   "rehearsal": 0.004712,
    "final": 0.0,
-   "experiment": 1e-05
+   "integration": 0.00617,
+   "test": 0.0,
+   "experiment": 1e-05,
+   "rehearsal": 0.010386
   }
  },
  "gates": {
@@ -280,6 +280,240 @@
    "cost_usd": 0.000295,
    "total_after_usd": 0.007363,
    "note": "compose-final:demo3-drill3"
+  },
+  {
+   "ts": "2026-11-26T07:07:17Z",
+   "purpose": "integration",
+   "prompt_tokens": 2490,
+   "completion_tokens": 70,
+   "cost_usd": 0.000284,
+   "total_after_usd": 0.007647,
+   "note": "propose:finops-integration"
+  },
+  {
+   "ts": "2026-11-26T07:07:19Z",
+   "purpose": "integration",
+   "prompt_tokens": 2780,
+   "completion_tokens": 100,
+   "cost_usd": 0.000328,
+   "total_after_usd": 0.007975,
+   "note": "compose-final:finops-integration"
+  },
+  {
+   "ts": "2026-11-26T07:07:21Z",
+   "purpose": "integration",
+   "prompt_tokens": 2489,
+   "completion_tokens": 111,
+   "cost_usd": 0.000304,
+   "total_after_usd": 0.008279,
+   "note": "propose:blast-integration"
+  },
+  {
+   "ts": "2026-11-26T07:07:22Z",
+   "purpose": "integration",
+   "prompt_tokens": 3097,
+   "completion_tokens": 196,
+   "cost_usd": 0.000408,
+   "total_after_usd": 0.008687,
+   "note": "compose-final:blast-integration"
+  },
+  {
+   "ts": "2026-11-26T07:07:23Z",
+   "purpose": "integration",
+   "prompt_tokens": 2490,
+   "completion_tokens": 67,
+   "cost_usd": 0.000283,
+   "total_after_usd": 0.00897,
+   "note": "propose:cve-integration"
+  },
+  {
+   "ts": "2026-11-26T07:07:25Z",
+   "purpose": "integration",
+   "prompt_tokens": 3262,
+   "completion_tokens": 324,
+   "cost_usd": 0.000488,
+   "total_after_usd": 0.009458,
+   "note": "compose-final:cve-integration"
+  },
+  {
+   "ts": "2026-11-26T07:07:26Z",
+   "purpose": "integration",
+   "prompt_tokens": 2487,
+   "completion_tokens": 89,
+   "cost_usd": 0.000293,
+   "total_after_usd": 0.009751,
+   "note": "propose:capacity-integration"
+  },
+  {
+   "ts": "2026-11-26T07:07:29Z",
+   "purpose": "integration",
+   "prompt_tokens": 3788,
+   "completion_tokens": 183,
+   "cost_usd": 0.00047,
+   "total_after_usd": 0.010221,
+   "note": "compose-final:capacity-integration"
+  },
+  {
+   "ts": "2026-11-26T07:07:31Z",
+   "purpose": "integration",
+   "prompt_tokens": 2494,
+   "completion_tokens": 221,
+   "cost_usd": 0.00036,
+   "total_after_usd": 0.010581,
+   "note": "propose:refusal-integration"
+  },
+  {
+   "ts": "2026-11-26T07:07:32Z",
+   "purpose": "integration",
+   "prompt_tokens": 2728,
+   "completion_tokens": 79,
+   "cost_usd": 0.000312,
+   "total_after_usd": 0.010893,
+   "note": "propose-retry:refusal-integration"
+  },
+  {
+   "ts": "2026-11-26T07:07:40Z",
+   "purpose": "rehearsal",
+   "prompt_tokens": 2490,
+   "completion_tokens": 61,
+   "cost_usd": 0.00028,
+   "total_after_usd": 0.011173,
+   "note": "propose:finops-drill1"
+  },
+  {
+   "ts": "2026-11-26T07:07:41Z",
+   "purpose": "rehearsal",
+   "prompt_tokens": 2782,
+   "completion_tokens": 96,
+   "cost_usd": 0.000326,
+   "total_after_usd": 0.011499,
+   "note": "compose-final:finops-drill1"
+  },
+  {
+   "ts": "2026-11-26T07:07:42Z",
+   "purpose": "rehearsal",
+   "prompt_tokens": 2490,
+   "completion_tokens": 62,
+   "cost_usd": 0.00028,
+   "total_after_usd": 0.011779,
+   "note": "propose:finops-drill2"
+  },
+  {
+   "ts": "2026-11-26T07:07:43Z",
+   "purpose": "rehearsal",
+   "prompt_tokens": 2783,
+   "completion_tokens": 93,
+   "cost_usd": 0.000325,
+   "total_after_usd": 0.012104,
+   "note": "compose-final:finops-drill2"
+  },
+  {
+   "ts": "2026-11-26T07:07:44Z",
+   "purpose": "rehearsal",
+   "prompt_tokens": 2489,
+   "completion_tokens": 87,
+   "cost_usd": 0.000292,
+   "total_after_usd": 0.012396,
+   "note": "propose:blast-drill1"
+  },
+  {
+   "ts": "2026-11-26T07:07:45Z",
+   "purpose": "rehearsal",
+   "prompt_tokens": 3080,
+   "completion_tokens": 204,
+   "cost_usd": 0.00041,
+   "total_after_usd": 0.012806,
+   "note": "compose-final:blast-drill1"
+  },
+  {
+   "ts": "2026-11-26T07:07:46Z",
+   "purpose": "rehearsal",
+   "prompt_tokens": 2489,
+   "completion_tokens": 98,
+   "cost_usd": 0.000298,
+   "total_after_usd": 0.013104,
+   "note": "propose:blast-drill2"
+  },
+  {
+   "ts": "2026-11-26T07:07:48Z",
+   "purpose": "rehearsal",
+   "prompt_tokens": 3083,
+   "completion_tokens": 235,
+   "cost_usd": 0.000426,
+   "total_after_usd": 0.01353,
+   "note": "compose-final:blast-drill2"
+  },
+  {
+   "ts": "2026-11-26T07:07:49Z",
+   "purpose": "rehearsal",
+   "prompt_tokens": 2490,
+   "completion_tokens": 63,
+   "cost_usd": 0.000281,
+   "total_after_usd": 0.01381,
+   "note": "propose:cve-drill1"
+  },
+  {
+   "ts": "2026-11-26T07:07:50Z",
+   "purpose": "rehearsal",
+   "prompt_tokens": 3258,
+   "completion_tokens": 293,
+   "cost_usd": 0.000472,
+   "total_after_usd": 0.014282,
+   "note": "compose-final:cve-drill1"
+  },
+  {
+   "ts": "2026-11-26T07:07:51Z",
+   "purpose": "rehearsal",
+   "prompt_tokens": 2490,
+   "completion_tokens": 58,
+   "cost_usd": 0.000278,
+   "total_after_usd": 0.01456,
+   "note": "propose:cve-drill2"
+  },
+  {
+   "ts": "2026-11-26T07:07:53Z",
+   "purpose": "rehearsal",
+   "prompt_tokens": 3253,
+   "completion_tokens": 307,
+   "cost_usd": 0.000479,
+   "total_after_usd": 0.015039,
+   "note": "compose-final:cve-drill2"
+  },
+  {
+   "ts": "2026-11-26T07:07:54Z",
+   "purpose": "rehearsal",
+   "prompt_tokens": 2487,
+   "completion_tokens": 91,
+   "cost_usd": 0.000294,
+   "total_after_usd": 0.015333,
+   "note": "propose:capacity-drill1"
+  },
+  {
+   "ts": "2026-11-26T07:07:56Z",
+   "purpose": "rehearsal",
+   "prompt_tokens": 3790,
+   "completion_tokens": 158,
+   "cost_usd": 0.000458,
+   "total_after_usd": 0.015791,
+   "note": "compose-final:capacity-drill1"
+  },
+  {
+   "ts": "2026-11-26T07:07:57Z",
+   "purpose": "rehearsal",
+   "prompt_tokens": 2487,
+   "completion_tokens": 92,
+   "cost_usd": 0.000295,
+   "total_after_usd": 0.016086,
+   "note": "propose:capacity-drill2"
+  },
+  {
+   "ts": "2026-11-26T07:08:00Z",
+   "purpose": "rehearsal",
+   "prompt_tokens": 3790,
+   "completion_tokens": 205,
+   "cost_usd": 0.000481,
+   "total_after_usd": 0.016567,
+   "note": "compose-final:capacity-drill2"
   }
  ]
 }

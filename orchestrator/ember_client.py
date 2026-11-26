@@ -241,6 +241,40 @@ class StubEmberClient(EmberClient):
             calls = [ToolCall("get_watcher_status")]
             text = ("Plan: read the live Watcher status and open incidents, "
                     "then I will draft the shift handover brief for your approval.")
+        elif ("cost" in u or "finops" in u or "spending" in u
+              or "budget" in u or "burn" in u):
+            calls = [ToolCall("finops_summary")]
+            text = ("Plan: read the FinOps summary (costs today/month/"
+                    "projected, budget %, alerts) and report it. Read-only; "
+                    "runs on your approval.")
+        elif ("cve" in u or "vulnerab" in u or "secops" in u
+              or "security" in u or "exposed" in u or "threat" in u
+              or "kev" in u):
+            calls = [ToolCall("secops_status")]
+            text = ("Plan: read the SecOps posture (CVE/KEV/EPSS counts and "
+                    "top priority CVEs) and summarize. Read-only data — no "
+                    "investigation runs.")
+        elif ("capacity" in u or "headroom" in u or "forecast" in u
+              or "saturat" in u or "disk" in u):
+            calls = [ToolCall("capacity_report"), ToolCall("predictions")]
+            text = ("Plan: read the capacity report and failure predictions, "
+                    "then summarize headroom, the disk forecast, and top "
+                    "risks. Read-only.")
+        elif ("break" in u or "blast" in u or "depends" in u
+              or "depend" in u or "impact" in u or "goes down" in u
+              or "go down" in u or "downstream" in u):
+            if "stt" in u or "speech" in u:
+                comp = "stt-service"
+            elif "ocr" in u:
+                comp = "ocr-service"
+            elif "rpa" in u or "activepieces" in u:
+                comp = "rpa-sandbox"
+            else:  # brain / llm / model / default
+                comp = "model-endpoint"
+            calls = [ToolCall("graph_dependents", {"component": comp})]
+            text = (f"Plan: query the knowledge graph for everything that "
+                    f"depends on '{comp}' and explain the blast radius. "
+                    "Read-only.")
         elif "status" in u or "watcher" in u:
             calls = [ToolCall("get_watcher_status")]
             text = "Plan: read the live Watcher status and report it here."
@@ -266,7 +300,69 @@ class StubEmberClient(EmberClient):
         status = payload.get("get_watcher_status") or {}
         run = payload.get("run_workflow") or {}
         status_line = status.get("line", "")
-        if "triage" in u or "ticket" in u:
+        if "finops_summary" in payload:
+            fin = payload["finops_summary"] or {}
+            costs = fin.get("costs") or {}
+            budget = fin.get("budget") or {}
+            alerts = fin.get("alerts") or []
+            text = ("Cube costs (FinOps): "
+                    f"today ${costs.get('today_usd', 'n/a')}, "
+                    f"month so far ${costs.get('month_so_far_usd', 'n/a')}, "
+                    f"month projected ${costs.get('month_projected_usd', 'n/a')} "
+                    f"({budget.get('projected_pct', 'n/a')}% of the "
+                    f"${budget.get('monthly_usd', 'n/a')} monthly budget), "
+                    f"daily burn ${costs.get('daily_burn_usd', 'n/a')}. "
+                    + (f"Alerts: {'; '.join(str(a) for a in alerts)}."
+                       if alerts else "No alerts."))
+        elif "secops_status" in payload:
+            sec = payload["secops_status"] or {}
+            kpis = sec.get("kpis") or {}
+            top = (sec.get("priority_top5") or [{}])[0]
+            text = ("Security posture (SecOps): "
+                    f"{kpis.get('critical', 'n/a')} critical and "
+                    f"{kpis.get('high', 'n/a')} high CVEs in the current set, "
+                    f"{kpis.get('kev_in_set', 'n/a')} of them in CISA KEV "
+                    f"(catalog total {kpis.get('kev_total', 'n/a')}, "
+                    f"{kpis.get('kev_recent', 'n/a')} added recently). "
+                    + (f"Top priority: {top.get('id')} "
+                       f"({top.get('severity')}, CVSS {top.get('cvss')}) "
+                       f"in {top.get('product')}. " if top.get("id") else "")
+                    + "Read-only data — no investigation was run.")
+        elif "capacity_report" in payload or "predictions" in payload:
+            cap = payload.get("capacity_report") or {}
+            pred = payload.get("predictions") or {}
+            cur = cap.get("host_current") or {}
+            worst = (cap.get("worst_components") or [{}])[0]
+            top = (pred.get("top_risks") or [{}])[0]
+            text = ("Capacity outlook: "
+                    f"CPU {cur.get('cpu_pct', 'n/a')}%, "
+                    f"memory {cur.get('mem_pct', 'n/a')}%, "
+                    f"disk {cur.get('disk_pct', 'n/a')}% "
+                    f"({cur.get('disk_used_gb', 'n/a')}/"
+                    f"{cur.get('disk_total_gb', 'n/a')} GB), "
+                    f"disk reaches 90% in ~{cap.get('disk_days_to_90', 'n/a')} "
+                    "days at the current trend. "
+                    f"{cap.get('components_up', 'n/a')}/"
+                    f"{cap.get('components_total', 'n/a')} components up. "
+                    + (f"Weakest component: {worst.get('name')} "
+                       f"({worst.get('uptime_7d_pct')}% 7-day uptime). "
+                       if worst.get("name") else "")
+                    + (f"Top predicted risk: {top.get('name')} "
+                       f"(score {top.get('risk_score')}, {top.get('band')}) — "
+                       f"{top.get('predicted_window')}. "
+                       if top.get("name") else "")
+                    + f"High-risk components: {pred.get('high_count', 'n/a')}, "
+                    f"watch: {pred.get('watch_count', 'n/a')}.")
+        elif "graph_dependents" in payload:
+            gd = payload["graph_dependents"] or {}
+            deps = gd.get("dependents") or []
+            labels = [str(d.get("label")) for d in deps[:6]]
+            text = (f"Blast radius for '{gd.get('component')}': "
+                    f"{gd.get('count', len(deps))} things depend on it"
+                    + (f", including {', '.join(labels)}" if labels else "")
+                    + ". If it goes down, those lose their dependency — "
+                    "plan maintenance accordingly.")
+        elif "triage" in u or "ticket" in u:
             filed = payload.get("file_tickets") or {}
             if filed.get("error"):
                 text = f"Filing failed: {filed['error']}"

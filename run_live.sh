@@ -11,6 +11,10 @@ cd "$(dirname "$0")"
 if [ -f /root/metatron/ember.env ]; then
   set -a; . /root/metatron/ember.env; set +a
 fi
+if [ -f /root/metatron/mcp.env ]; then
+  # CUBE_SERVICES_API_KEY for the MCP Bus read tools (Phase 3).
+  set -a; . /root/metatron/mcp.env; set +a
+fi
 if [ -f ./ember-rates.env ]; then
   set -a; . ./ember-rates.env; set +a
 fi
