@@ -17,7 +17,7 @@
 
 Built for the **Muse Ember Hackathon** (Cerebral Valley, Nov–Dec 2026). Application **accepted** Nov 25, 2026. Everything in this repo runs on Muse Ember as the **only** AI — see [Hackathon compliance](#hackathon-compliance).
 
-![MAC hero — the Metatron Agentic Commander front page](docs/img/mac-hero.png)
+![MAC hero — the Metatron Agentic Commander front page](docs/img/IMG_9248.png)
 *The MAC front page: hero, the six-stage orchestration rail (Human → Ember orchestrates → Approve → Metatron executes → Ember summarizes → Next), the composer, and the live spend meter in the MODEL strip. Screenshot captured Nov 27, 2026 from a locally served copy of the production page (recorded-only mode); the live deployment's meter reads ≈ $0.50 of $10.*
 
 ---
@@ -90,7 +90,7 @@ Every interaction follows the six-stage rail at the top of the page:
 5. **EMBER summarizes** — Ember writes the answer from the actual tool results, and deterministic code **verifies** each step against reality (✓/✗ with a fix if something's off).
 6. **NEXT** — three buttons: **Take action** (a follow-up you can edit first), **Automate** (turn this into a recurring automation via the [Agent Builder Wizard](#agent-builder-wizard)), or **Done**.
 
-![USE CASES — the four demo groups with prompt chips](docs/img/mac-use-cases.png)
+![USE CASES — the four demo groups with prompt chips](docs/img/IMG_9249.png)
 *The USE CASES section: 19 prompt chips in 4 groups — AIOps, Process Automation, Business Use Cases, Grounding. Tapping a chip loads it into the composer (editable); it never auto-runs. Attach / Analyze / Paste Anything sit directly under the chat box.*
 
 ---
@@ -399,7 +399,7 @@ Recordings live in `demos/recorded.json` (recorded Nov 27, 2026, model `muse-emb
 
 The wizard turns a one-off run into a recurring automation — entirely inside the MAC page, with every approval in-screen. Four steps: **1 · What → 2 · Describe → 3 · Review & customize → 4 · Approve & create**.
 
-![Agent Builder Wizard — step 1, "What do you need?"](docs/img/mac-wizard.png)
+![Agent Builder Wizard — step 1, "What do you need?"](docs/img/IMG_9251.png)
 *After any run, NEXT STEPS offers Take action / Automate / Done. Automate opens the wizard at "What do you need?" — pick a template, answer questions from scratch, or describe it and let Ember design.*
 
 Three ways in:
@@ -452,7 +452,7 @@ Ask *"What can you do?"* and MAC answers with a grouped table of all 33 tools �
 
 Two read-only tools demonstrate **long-context reference with deterministic retrieval** — the "RAG without the embeddings" pattern: keyword BM25 (a classic text-ranking algorithm) over chunked corpora, in-process, no vector database, no Cube-side model. Ember answers **only** from returned passages, paraphrased, with a citation per claim; a disclaimer is appended by deterministic code on every answer, never left to the model.
 
-![Medical Manual Q&A — recorded replay with per-chapter cited summaries](docs/img/mac-demo-replay.png)
+![Medical Manual Q&A — recorded replay with per-chapter cited summaries](docs/img/IMG_9250.png)
 *A recorded Medical Manual Q&A run: one summary block per relevant chapter (Chapter 149. Viruses, Chapter 128. Transplantation…), a cross-chapter synthesis, per-claim citations, the deterministic disclaimer, and the run's real cost — $0.003077.*
 
 | | Medical Manual Q&A | Paralegal Assistant |
