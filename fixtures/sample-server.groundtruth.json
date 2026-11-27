@@ -1,0 +1,31 @@
+{
+ "log": "sample-server.log",
+ "lines": 620,
+ "anomalies": [
+  {
+   "line": 118,
+   "kind": "disk-full",
+   "detail": "ERROR ingest write failed: No space left on device (/data volume 100% full)"
+  },
+  {
+   "line": 237,
+   "kind": "auth-failure-burst",
+   "detail": "6 consecutive FAILED LOGIN for user=admin from 203.0.113.77 (lines 237-242)"
+  },
+  {
+   "line": 352,
+   "kind": "latency-spike",
+   "detail": "p99 latency 8420ms vs ~120ms baseline on /api/reports/daily"
+  },
+  {
+   "line": 461,
+   "kind": "crash-oom",
+   "detail": "worker-3 exited code=137 (OOM killed), supervisor restarting"
+  },
+  {
+   "line": 548,
+   "kind": "cert-expiry",
+   "detail": "TLS certificate for api.internal expires in 2 days (2026-11-27)"
+  }
+ ]
+}

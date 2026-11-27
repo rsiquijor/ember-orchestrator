@@ -5,13 +5,13 @@
   "source": "configured"
  },
  "totals": {
-  "spent_usd": 0.016567,
+  "spent_usd": 0.04408,
   "by_bucket": {
-   "final": 0.0,
-   "integration": 0.00617,
+   "experiment": 4.2e-05,
    "test": 0.0,
-   "experiment": 1e-05,
-   "rehearsal": 0.010386
+   "integration": 0.033651,
+   "rehearsal": 0.010386,
+   "final": 0.0
   }
  },
  "gates": {
@@ -514,6 +514,627 @@
    "cost_usd": 0.000481,
    "total_after_usd": 0.016567,
    "note": "compose-final:capacity-drill2"
+  },
+  {
+   "ts": "2026-11-26T12:43:17Z",
+   "purpose": "integration",
+   "prompt_tokens": 2491,
+   "completion_tokens": 160,
+   "cost_usd": 0.000329,
+   "total_after_usd": 0.016896,
+   "note": "propose:ui-record-whatsapp"
+  },
+  {
+   "ts": "2026-11-26T12:43:20Z",
+   "purpose": "integration",
+   "prompt_tokens": 3089,
+   "completion_tokens": 155,
+   "cost_usd": 0.000386,
+   "total_after_usd": 0.017282,
+   "note": "compose-final:ui-record-whatsapp"
+  },
+  {
+   "ts": "2026-11-26T12:43:21Z",
+   "purpose": "integration",
+   "prompt_tokens": 2489,
+   "completion_tokens": 70,
+   "cost_usd": 0.000284,
+   "total_after_usd": 0.017566,
+   "note": "propose:ui-record-handover"
+  },
+  {
+   "ts": "2026-11-26T12:43:23Z",
+   "purpose": "integration",
+   "prompt_tokens": 2921,
+   "completion_tokens": 205,
+   "cost_usd": 0.000395,
+   "total_after_usd": 0.017961,
+   "note": "compose-final:ui-record-handover"
+  },
+  {
+   "ts": "2026-11-26T12:43:24Z",
+   "purpose": "integration",
+   "prompt_tokens": 2734,
+   "completion_tokens": 467,
+   "cost_usd": 0.000507,
+   "total_after_usd": 0.018468,
+   "note": "propose:ui-record-triage"
+  },
+  {
+   "ts": "2026-11-26T12:43:26Z",
+   "purpose": "integration",
+   "prompt_tokens": 3157,
+   "completion_tokens": 222,
+   "cost_usd": 0.000427,
+   "total_after_usd": 0.018895,
+   "note": "compose-final:ui-record-triage"
+  },
+  {
+   "ts": "2026-11-26T12:43:27Z",
+   "purpose": "integration",
+   "prompt_tokens": 2490,
+   "completion_tokens": 79,
+   "cost_usd": 0.000289,
+   "total_after_usd": 0.019183,
+   "note": "propose:ui-record-finops"
+  },
+  {
+   "ts": "2026-11-26T12:43:28Z",
+   "purpose": "integration",
+   "prompt_tokens": 2789,
+   "completion_tokens": 95,
+   "cost_usd": 0.000326,
+   "total_after_usd": 0.019509,
+   "note": "compose-final:ui-record-finops"
+  },
+  {
+   "ts": "2026-11-26T12:43:29Z",
+   "purpose": "integration",
+   "prompt_tokens": 2490,
+   "completion_tokens": 64,
+   "cost_usd": 0.000281,
+   "total_after_usd": 0.01979,
+   "note": "propose:ui-record-cve"
+  },
+  {
+   "ts": "2026-11-26T12:43:31Z",
+   "purpose": "integration",
+   "prompt_tokens": 3258,
+   "completion_tokens": 282,
+   "cost_usd": 0.000467,
+   "total_after_usd": 0.020257,
+   "note": "compose-final:ui-record-cve"
+  },
+  {
+   "ts": "2026-11-26T12:43:32Z",
+   "purpose": "integration",
+   "prompt_tokens": 2489,
+   "completion_tokens": 106,
+   "cost_usd": 0.000302,
+   "total_after_usd": 0.020559,
+   "note": "propose:ui-record-blast"
+  },
+  {
+   "ts": "2026-11-26T12:43:34Z",
+   "purpose": "integration",
+   "prompt_tokens": 3085,
+   "completion_tokens": 180,
+   "cost_usd": 0.000398,
+   "total_after_usd": 0.020958,
+   "note": "compose-final:ui-record-blast"
+  },
+  {
+   "ts": "2026-11-26T12:43:35Z",
+   "purpose": "integration",
+   "prompt_tokens": 2487,
+   "completion_tokens": 97,
+   "cost_usd": 0.000297,
+   "total_after_usd": 0.021255,
+   "note": "propose:ui-record-capacity"
+  },
+  {
+   "ts": "2026-11-26T12:43:38Z",
+   "purpose": "integration",
+   "prompt_tokens": 3801,
+   "completion_tokens": 202,
+   "cost_usd": 0.000481,
+   "total_after_usd": 0.021736,
+   "note": "compose-final:ui-record-capacity"
+  },
+  {
+   "ts": "2026-11-26T12:43:40Z",
+   "purpose": "integration",
+   "prompt_tokens": 2494,
+   "completion_tokens": 109,
+   "cost_usd": 0.000304,
+   "total_after_usd": 0.02204,
+   "note": "propose:ui-record-refusal"
+  },
+  {
+   "ts": "2026-11-26T12:43:41Z",
+   "purpose": "integration",
+   "prompt_tokens": 2625,
+   "completion_tokens": 44,
+   "cost_usd": 0.000285,
+   "total_after_usd": 0.022325,
+   "note": "propose-retry:ui-record-refusal"
+  },
+  {
+   "ts": "2026-11-26T12:48:30Z",
+   "purpose": "integration",
+   "prompt_tokens": 2487,
+   "completion_tokens": 97,
+   "cost_usd": 0.000297,
+   "total_after_usd": 0.022622,
+   "note": "propose:ui-live"
+  },
+  {
+   "ts": "2026-11-26T12:48:34Z",
+   "purpose": "integration",
+   "prompt_tokens": 3800,
+   "completion_tokens": 219,
+   "cost_usd": 0.00049,
+   "total_after_usd": 0.023112,
+   "note": "compose-final:ui-live"
+  },
+  {
+   "ts": "2026-11-26T12:48:36Z",
+   "purpose": "integration",
+   "prompt_tokens": 2494,
+   "completion_tokens": 251,
+   "cost_usd": 0.000375,
+   "total_after_usd": 0.023487,
+   "note": "propose:ui-live"
+  },
+  {
+   "ts": "2026-11-26T12:48:38Z",
+   "purpose": "integration",
+   "prompt_tokens": 2703,
+   "completion_tokens": 27,
+   "cost_usd": 0.000284,
+   "total_after_usd": 0.023771,
+   "note": "propose-retry:ui-live"
+  },
+  {
+   "ts": "2026-11-26T13:03:52Z",
+   "purpose": "integration",
+   "prompt_tokens": 2491,
+   "completion_tokens": 159,
+   "cost_usd": 0.000329,
+   "total_after_usd": 0.0241,
+   "note": "propose:ui-live"
+  },
+  {
+   "ts": "2026-11-26T13:03:59Z",
+   "purpose": "integration",
+   "prompt_tokens": 3075,
+   "completion_tokens": 157,
+   "cost_usd": 0.000386,
+   "total_after_usd": 0.024486,
+   "note": "compose-final:ui-live"
+  },
+  {
+   "ts": "2026-11-26T13:16:18Z",
+   "purpose": "integration",
+   "prompt_tokens": 2489,
+   "completion_tokens": 74,
+   "cost_usd": 0.000286,
+   "total_after_usd": 0.024772,
+   "note": "propose:ui-live"
+  },
+  {
+   "ts": "2026-11-26T13:16:36Z",
+   "purpose": "integration",
+   "prompt_tokens": 2924,
+   "completion_tokens": 205,
+   "cost_usd": 0.000395,
+   "total_after_usd": 0.025167,
+   "note": "compose-final:ui-live"
+  },
+  {
+   "ts": "2026-11-26T13:17:14Z",
+   "purpose": "integration",
+   "prompt_tokens": 2490,
+   "completion_tokens": 59,
+   "cost_usd": 0.000279,
+   "total_after_usd": 0.025445,
+   "note": "propose:ui-live"
+  },
+  {
+   "ts": "2026-11-26T13:17:24Z",
+   "purpose": "integration",
+   "prompt_tokens": 2780,
+   "completion_tokens": 105,
+   "cost_usd": 0.00033,
+   "total_after_usd": 0.025775,
+   "note": "compose-final:ui-live"
+  },
+  {
+   "ts": "2026-11-26T13:21:21Z",
+   "purpose": "integration",
+   "prompt_tokens": 2489,
+   "completion_tokens": 93,
+   "cost_usd": 0.000295,
+   "total_after_usd": 0.02607,
+   "note": "propose:ui-live"
+  },
+  {
+   "ts": "2026-11-26T13:21:33Z",
+   "purpose": "integration",
+   "prompt_tokens": 3084,
+   "completion_tokens": 219,
+   "cost_usd": 0.000418,
+   "total_after_usd": 0.026488,
+   "note": "compose-final:ui-live"
+  },
+  {
+   "ts": "2026-11-26T13:22:05Z",
+   "purpose": "integration",
+   "prompt_tokens": 2489,
+   "completion_tokens": 90,
+   "cost_usd": 0.000294,
+   "total_after_usd": 0.026782,
+   "note": "propose:ui-live"
+  },
+  {
+   "ts": "2026-11-26T13:22:29Z",
+   "purpose": "integration",
+   "prompt_tokens": 2491,
+   "completion_tokens": 141,
+   "cost_usd": 0.00032,
+   "total_after_usd": 0.027102,
+   "note": "propose:ui-live"
+  },
+  {
+   "ts": "2026-11-26T13:22:38Z",
+   "purpose": "integration",
+   "prompt_tokens": 2651,
+   "completion_tokens": 136,
+   "cost_usd": 0.000333,
+   "total_after_usd": 0.027435,
+   "note": "compose-final:ui-live"
+  },
+  {
+   "ts": "2026-11-26T13:57:22Z",
+   "purpose": "integration",
+   "prompt_tokens": 2487,
+   "completion_tokens": 123,
+   "cost_usd": 0.00031,
+   "total_after_usd": 0.027745,
+   "note": "propose:ui-live"
+  },
+  {
+   "ts": "2026-11-26T14:01:02Z",
+   "purpose": "integration",
+   "prompt_tokens": 2487,
+   "completion_tokens": 86,
+   "cost_usd": 0.000292,
+   "total_after_usd": 0.028037,
+   "note": "propose:ui-live"
+  },
+  {
+   "ts": "2026-11-26T14:04:11Z",
+   "purpose": "integration",
+   "prompt_tokens": 2486,
+   "completion_tokens": 126,
+   "cost_usd": 0.000312,
+   "total_after_usd": 0.028349,
+   "note": "propose:ui-live"
+  },
+  {
+   "ts": "2026-11-26T14:04:26Z",
+   "purpose": "integration",
+   "prompt_tokens": 2844,
+   "completion_tokens": 280,
+   "cost_usd": 0.000424,
+   "total_after_usd": 0.028773,
+   "note": "compose-final:ui-live"
+  },
+  {
+   "ts": "2026-11-26T14:11:38Z",
+   "purpose": "integration",
+   "prompt_tokens": 2494,
+   "completion_tokens": 162,
+   "cost_usd": 0.00033,
+   "total_after_usd": 0.029103,
+   "note": "propose:ui-live"
+  },
+  {
+   "ts": "2026-11-26T14:11:39Z",
+   "purpose": "integration",
+   "prompt_tokens": 2673,
+   "completion_tokens": 64,
+   "cost_usd": 0.000299,
+   "total_after_usd": 0.029402,
+   "note": "propose-retry:ui-live"
+  },
+  {
+   "ts": "2026-11-26T14:26:57Z",
+   "purpose": "integration",
+   "prompt_tokens": 2491,
+   "completion_tokens": 183,
+   "cost_usd": 0.000341,
+   "total_after_usd": 0.029743,
+   "note": "propose:ui-live"
+  },
+  {
+   "ts": "2026-11-26T14:27:06Z",
+   "purpose": "integration",
+   "prompt_tokens": 3088,
+   "completion_tokens": 113,
+   "cost_usd": 0.000365,
+   "total_after_usd": 0.030108,
+   "note": "compose-final:ui-live"
+  },
+  {
+   "ts": "2026-11-26T14:28:15Z",
+   "purpose": "integration",
+   "prompt_tokens": 2487,
+   "completion_tokens": 102,
+   "cost_usd": 0.0003,
+   "total_after_usd": 0.030408,
+   "note": "propose:ui-live"
+  },
+  {
+   "ts": "2026-11-26T14:28:17Z",
+   "purpose": "integration",
+   "prompt_tokens": 2487,
+   "completion_tokens": 101,
+   "cost_usd": 0.000299,
+   "total_after_usd": 0.030707,
+   "note": "propose:ui-live"
+  },
+  {
+   "ts": "2026-11-26T14:31:29Z",
+   "purpose": "integration",
+   "prompt_tokens": 2491,
+   "completion_tokens": 172,
+   "cost_usd": 0.000335,
+   "total_after_usd": 0.031042,
+   "note": "propose:ui-live"
+  },
+  {
+   "ts": "2026-11-26T14:31:34Z",
+   "purpose": "integration",
+   "prompt_tokens": 3092,
+   "completion_tokens": 166,
+   "cost_usd": 0.000392,
+   "total_after_usd": 0.031434,
+   "note": "compose-final:ui-live"
+  },
+  {
+   "ts": "2026-11-26T14:33:45Z",
+   "purpose": "integration",
+   "prompt_tokens": 2489,
+   "completion_tokens": 69,
+   "cost_usd": 0.000283,
+   "total_after_usd": 0.031717,
+   "note": "propose:ui-live"
+  },
+  {
+   "ts": "2026-11-26T14:34:06Z",
+   "purpose": "integration",
+   "prompt_tokens": 2927,
+   "completion_tokens": 229,
+   "cost_usd": 0.000407,
+   "total_after_usd": 0.032124,
+   "note": "compose-final:ui-live"
+  },
+  {
+   "ts": "2026-11-26T14:34:33Z",
+   "purpose": "integration",
+   "prompt_tokens": 2491,
+   "completion_tokens": 149,
+   "cost_usd": 0.000324,
+   "total_after_usd": 0.032448,
+   "note": "propose:ui-live"
+  },
+  {
+   "ts": "2026-11-26T14:34:36Z",
+   "purpose": "integration",
+   "prompt_tokens": 3064,
+   "completion_tokens": 68,
+   "cost_usd": 0.00034,
+   "total_after_usd": 0.032788,
+   "note": "compose-final:ui-live"
+  },
+  {
+   "ts": "2026-11-26T14:34:58Z",
+   "purpose": "integration",
+   "prompt_tokens": 2503,
+   "completion_tokens": 194,
+   "cost_usd": 0.000347,
+   "total_after_usd": 0.033135,
+   "note": "propose:ui-live"
+  },
+  {
+   "ts": "2026-11-26T14:35:09Z",
+   "purpose": "integration",
+   "prompt_tokens": 3417,
+   "completion_tokens": 342,
+   "cost_usd": 0.000513,
+   "total_after_usd": 0.033648,
+   "note": "compose-final:ui-live"
+  },
+  {
+   "ts": "2026-11-26T14:36:10Z",
+   "purpose": "integration",
+   "prompt_tokens": 2490,
+   "completion_tokens": 64,
+   "cost_usd": 0.000281,
+   "total_after_usd": 0.033929,
+   "note": "propose:ui-live"
+  },
+  {
+   "ts": "2026-11-26T14:36:24Z",
+   "purpose": "integration",
+   "prompt_tokens": 2785,
+   "completion_tokens": 116,
+   "cost_usd": 0.000337,
+   "total_after_usd": 0.034266,
+   "note": "compose-final:ui-live"
+  },
+  {
+   "ts": "2026-11-26T14:37:03Z",
+   "purpose": "integration",
+   "prompt_tokens": 2490,
+   "completion_tokens": 75,
+   "cost_usd": 0.000287,
+   "total_after_usd": 0.034552,
+   "note": "propose:ui-live"
+  },
+  {
+   "ts": "2026-11-26T14:37:14Z",
+   "purpose": "integration",
+   "prompt_tokens": 3259,
+   "completion_tokens": 340,
+   "cost_usd": 0.000496,
+   "total_after_usd": 0.035048,
+   "note": "compose-final:ui-live"
+  },
+  {
+   "ts": "2026-11-26T14:38:10Z",
+   "purpose": "integration",
+   "prompt_tokens": 2489,
+   "completion_tokens": 83,
+   "cost_usd": 0.00029,
+   "total_after_usd": 0.035338,
+   "note": "propose:ui-live"
+  },
+  {
+   "ts": "2026-11-26T14:38:20Z",
+   "purpose": "integration",
+   "prompt_tokens": 3079,
+   "completion_tokens": 228,
+   "cost_usd": 0.000422,
+   "total_after_usd": 0.03576,
+   "note": "compose-final:ui-live"
+  },
+  {
+   "ts": "2026-11-26T14:39:04Z",
+   "purpose": "integration",
+   "prompt_tokens": 2487,
+   "completion_tokens": 100,
+   "cost_usd": 0.000299,
+   "total_after_usd": 0.036059,
+   "note": "propose:ui-live"
+  },
+  {
+   "ts": "2026-11-26T14:39:21Z",
+   "purpose": "integration",
+   "prompt_tokens": 3803,
+   "completion_tokens": 203,
+   "cost_usd": 0.000482,
+   "total_after_usd": 0.036541,
+   "note": "compose-final:ui-live"
+  },
+  {
+   "ts": "2026-11-26T14:39:48Z",
+   "purpose": "integration",
+   "prompt_tokens": 2494,
+   "completion_tokens": 158,
+   "cost_usd": 0.000328,
+   "total_after_usd": 0.036869,
+   "note": "propose:ui-live"
+  },
+  {
+   "ts": "2026-11-26T14:39:50Z",
+   "purpose": "integration",
+   "prompt_tokens": 2677,
+   "completion_tokens": 90,
+   "cost_usd": 0.000313,
+   "total_after_usd": 0.037182,
+   "note": "propose-retry:ui-live"
+  },
+  {
+   "ts": "2026-11-26T14:41:35Z",
+   "purpose": "integration",
+   "prompt_tokens": 2491,
+   "completion_tokens": 104,
+   "cost_usd": 0.000301,
+   "total_after_usd": 0.037483,
+   "note": "propose:ui-live"
+  },
+  {
+   "ts": "2026-11-26T14:57:26Z",
+   "purpose": "experiment",
+   "prompt_tokens": 22,
+   "completion_tokens": 59,
+   "cost_usd": 3.2e-05,
+   "total_after_usd": 0.037515,
+   "note": "multimodal-probe"
+  },
+  {
+   "ts": "2026-11-26T14:57:40Z",
+   "purpose": "integration",
+   "prompt_tokens": 3356,
+   "completion_tokens": 179,
+   "cost_usd": 0.000425,
+   "total_after_usd": 0.03794,
+   "note": "propose:ui-record-agent-builder"
+  },
+  {
+   "ts": "2026-11-26T14:57:43Z",
+   "purpose": "integration",
+   "prompt_tokens": 3656,
+   "completion_tokens": 144,
+   "cost_usd": 0.000438,
+   "total_after_usd": 0.038378,
+   "note": "compose-final:ui-record-agent-builder"
+  },
+  {
+   "ts": "2026-11-26T14:57:46Z",
+   "purpose": "integration",
+   "prompt_tokens": 5609,
+   "completion_tokens": 435,
+   "cost_usd": 0.000778,
+   "total_after_usd": 0.039156,
+   "note": "propose:ui-record-intake"
+  },
+  {
+   "ts": "2026-11-26T14:57:48Z",
+   "purpose": "integration",
+   "prompt_tokens": 3998,
+   "completion_tokens": 212,
+   "cost_usd": 0.000506,
+   "total_after_usd": 0.039662,
+   "note": "compose-final:ui-record-intake"
+  },
+  {
+   "ts": "2026-11-26T14:57:50Z",
+   "purpose": "integration",
+   "prompt_tokens": 3366,
+   "completion_tokens": 243,
+   "cost_usd": 0.000458,
+   "total_after_usd": 0.04012,
+   "note": "propose:ui-record-fullpicture"
+  },
+  {
+   "ts": "2026-11-26T14:57:52Z",
+   "purpose": "integration",
+   "prompt_tokens": 5734,
+   "completion_tokens": 512,
+   "cost_usd": 0.000829,
+   "total_after_usd": 0.040949,
+   "note": "compose-final:ui-record-fullpicture"
+  },
+  {
+   "ts": "2026-11-26T14:57:55Z",
+   "purpose": "integration",
+   "prompt_tokens": 24851,
+   "completion_tokens": 455,
+   "cost_usd": 0.002713,
+   "total_after_usd": 0.043662,
+   "note": "propose:ui-record-document"
+  },
+  {
+   "ts": "2026-11-26T14:57:57Z",
+   "purpose": "integration",
+   "prompt_tokens": 3806,
+   "completion_tokens": 75,
+   "cost_usd": 0.000418,
+   "total_after_usd": 0.04408,
+   "note": "compose-final:ui-record-document"
   }
  ]
 }

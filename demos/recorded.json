@@ -1,0 +1,2513 @@
+{
+ "recorded_at": "2026-11-27T13:56:40Z",
+ "model": "muse-ember-1.0",
+ "note": "Recorded from real live runs on the production Cube. Live runs execute for real (the WhatsApp demo sends); Agent Builder recordings created a real DISABLED draft that was deleted after capture. All reads are real Cube data.",
+ "demos": [
+  {
+   "key": "whatsapp",
+   "command": "Send the Watcher status to my WhatsApp.",
+   "rationale": "Proposing your WhatsApp status send \u2014 fetching Watcher status and queuing the workflow for approval.",
+   "steps": [
+    {
+     "name": "get_watcher_status",
+     "arguments": {}
+    },
+    {
+     "name": "run_workflow",
+     "arguments": {
+      "workflow_id": "watcher-status-whatsapp",
+      "inputs": {}
+     }
+    }
+   ],
+   "trace": [
+    {
+     "tool": "get_watcher_status",
+     "arguments": {},
+     "result": {
+      "line": "27/27 components up, 0 open incidents",
+      "components_up": 27,
+      "components_total": 27,
+      "open_incidents": 0,
+      "recent_incidents": [
+       {
+        "title": "AIOps Console is down",
+        "component": "aiops-console",
+        "severity": "critical",
+        "status": "resolved",
+        "first_seen": "2026-11-25T15:18:01+00:00"
+       },
+       {
+        "title": "AIOps Console is down",
+        "component": "aiops-console",
+        "severity": "critical",
+        "status": "resolved",
+        "first_seen": "2026-11-25T15:11:59+00:00"
+       },
+       {
+        "title": "Metatron SecOps is down",
+        "component": "secops",
+        "severity": "critical",
+        "status": "resolved",
+        "first_seen": "2026-11-25T14:54:50+00:00"
+       },
+       {
+        "title": "Metatron Dashboards is down",
+        "component": "dashboards",
+        "severity": "critical",
+        "status": "resolved",
+        "first_seen": "2026-11-25T14:37:09+00:00"
+       },
+       {
+        "title": "Metatron SecOps is down",
+        "component": "secops",
+        "severity": "critical",
+        "status": "resolved",
+        "first_seen": "2026-11-25T14:21:24+00:00"
+       }
+      ],
+      "host": {
+       "cpu_pct": 2.4,
+       "mem_pct": 60.9,
+       "disk_pct": 69.8,
+       "load1": 0.38
+      },
+      "sampled_at": "1795696998"
+     }
+    },
+    {
+     "tool": "run_workflow",
+     "arguments": {
+      "workflow_id": "watcher-status-whatsapp",
+      "inputs": {}
+     },
+     "result": {
+      "run_id": "ui-simulated",
+      "workflow_id": "watcher-status-whatsapp",
+      "status": "SIMULATED",
+      "note": "Simulated execution in the public demo UI \u2014 the production flow was not fired and nothing was sent. The one real WhatsApp send happened in Phase 2 drills (flag-guarded)."
+     }
+    }
+   ],
+   "final_text": "Watcher status (proposed for WhatsApp, not yet sent \u2014 awaiting human approval):\n\n- **27/27 components up, 0 open incidents**\n- Host: CPU 2.4%, memory 60.9%, disk 69.8%, load1 0.38\n\nWorkflow `watcher-status-whatsapp` proposed in this turn. In this demo UI it returned SIMULATED \u2014 the production flow was not fired and nothing was sent to WhatsApp.",
+   "refusal": false,
+   "tokens_in": 5580,
+   "tokens_out": 315,
+   "calls": 2,
+   "cost_usd": 0.000715,
+   "recorded_at": "2026-11-26T12:43:20Z",
+   "next_steps": [
+    {
+     "label": "Check failure predictions",
+     "kind": "action",
+     "command": "What are the current failure predictions?"
+    },
+    {
+     "label": "Automate the morning status",
+     "kind": "automate",
+     "command": "Build a new automated agentic workflow."
+    }
+   ],
+   "automate_command": "Build a new automated agentic workflow."
+  },
+  {
+   "key": "handover",
+   "command": "Give me the shift handover brief.",
+   "rationale": "Compiling your shift handover brief from live Watcher status.",
+   "steps": [
+    {
+     "name": "get_watcher_status",
+     "arguments": {}
+    }
+   ],
+   "trace": [
+    {
+     "tool": "get_watcher_status",
+     "arguments": {},
+     "result": {
+      "line": "27/27 components up, 0 open incidents",
+      "components_up": 27,
+      "components_total": 27,
+      "open_incidents": 0,
+      "recent_incidents": [
+       {
+        "title": "AIOps Console is down",
+        "component": "aiops-console",
+        "severity": "critical",
+        "status": "resolved",
+        "first_seen": "2026-11-25T15:18:01+00:00"
+       },
+       {
+        "title": "AIOps Console is down",
+        "component": "aiops-console",
+        "severity": "critical",
+        "status": "resolved",
+        "first_seen": "2026-11-25T15:11:59+00:00"
+       },
+       {
+        "title": "Metatron SecOps is down",
+        "component": "secops",
+        "severity": "critical",
+        "status": "resolved",
+        "first_seen": "2026-11-25T14:54:50+00:00"
+       },
+       {
+        "title": "Metatron Dashboards is down",
+        "component": "dashboards",
+        "severity": "critical",
+        "status": "resolved",
+        "first_seen": "2026-11-25T14:37:09+00:00"
+       },
+       {
+        "title": "Metatron SecOps is down",
+        "component": "secops",
+        "severity": "critical",
+        "status": "resolved",
+        "first_seen": "2026-11-25T14:21:24+00:00"
+       }
+      ],
+      "host": {
+       "cpu_pct": 2.2,
+       "mem_pct": 61.0,
+       "disk_pct": 69.8,
+       "load1": 0.51
+      },
+      "sampled_at": "1795697001"
+     }
+    }
+   ],
+   "final_text": "**Shift Handover Brief**\n\n- **Status:** 27/27 components up, 0 open incidents\n- **Host:** CPU 2.2%, Memory 61.0%, Disk 69.8%, Load1 0.51\n- **Recent incidents (all resolved):**\n  - AIOps Console is down \u2014 critical \u2014 2026-11-25T15:18:01Z\n  - AIOps Console is down \u2014 critical \u2014 2026-11-25T15:11:59Z\n  - Metatron SecOps is down \u2014 critical \u2014 2026-11-25T14:54:50Z\n  - Metatron Dashboards is down \u2014 critical \u2014 2026-11-25T14:37:09Z\n  - Metatron SecOps is down \u2014 critical \u2014 2026-11-25T14:21:24Z",
+   "refusal": false,
+   "tokens_in": 5410,
+   "tokens_out": 275,
+   "calls": 2,
+   "cost_usd": 0.000679,
+   "recorded_at": "2026-11-26T12:43:23Z",
+   "next_steps": [
+    {
+     "label": "Send the status to WhatsApp",
+     "kind": "action",
+     "command": "Send the Watcher status to my WhatsApp."
+    },
+    {
+     "label": "Automate the morning status",
+     "kind": "automate",
+     "command": "Build a new automated agentic workflow."
+    }
+   ],
+   "automate_command": "Build a new automated agentic workflow."
+  },
+  {
+   "key": "triage",
+   "command": "Triage these help-desk tickets. Classify each one, draft a reply for each, and file them.",
+   "rationale": "Proposing a triage plan for all five tickets \u2014 classifications, priorities and draft replies ready for your approval before filing.",
+   "steps": [
+    {
+     "name": "file_tickets",
+     "arguments": {
+      "tickets": [
+       {
+        "id": "TKT-001",
+        "category": "Network",
+        "priority": "P2",
+        "draft_reply": "Sorry you're hitting this \u2014 we've logged the afternoon VPN drops and are investigating. Please save work regularly until we confirm a fix.",
+        "route": "Network"
+       },
+       {
+        "id": "TKT-002",
+        "category": "Billing",
+        "priority": "P2",
+        "draft_reply": "Sorry about the blank download page \u2014 we've logged it as urgent for month-end close and are working to restore the invoice PDF.",
+        "route": "Billing"
+       },
+       {
+        "id": "TKT-003",
+        "category": "Access",
+        "priority": "P3",
+        "draft_reply": "Thanks \u2014 confirming manager approval received, we'll provision matching shift-lead access for Monday start.",
+        "route": "Access"
+       },
+       {
+        "id": "TKT-004",
+        "category": "Hardware",
+        "priority": "P3",
+        "draft_reply": "Sorry the label printer is still offline after the flicker \u2014 we've logged it for a hardware check in shipping.",
+        "route": "Hardware"
+       },
+       {
+        "id": "TKT-005",
+        "category": "Account",
+        "priority": "P2",
+        "draft_reply": "Sorry you're locked out \u2014 we've logged the expired shared mailbox password and will reset access for the orders inbox team.",
+        "route": "Account"
+       }
+      ]
+     }
+    }
+   ],
+   "trace": [
+    {
+     "tool": "file_tickets",
+     "arguments": {
+      "tickets": [
+       {
+        "id": "TKT-001",
+        "category": "Network",
+        "priority": "P2",
+        "draft_reply": "Sorry you're hitting this \u2014 we've logged the afternoon VPN drops and are investigating. Please save work regularly until we confirm a fix.",
+        "route": "Network"
+       },
+       {
+        "id": "TKT-002",
+        "category": "Billing",
+        "priority": "P2",
+        "draft_reply": "Sorry about the blank download page \u2014 we've logged it as urgent for month-end close and are working to restore the invoice PDF.",
+        "route": "Billing"
+       },
+       {
+        "id": "TKT-003",
+        "category": "Access",
+        "priority": "P3",
+        "draft_reply": "Thanks \u2014 confirming manager approval received, we'll provision matching shift-lead access for Monday start.",
+        "route": "Access"
+       },
+       {
+        "id": "TKT-004",
+        "category": "Hardware",
+        "priority": "P3",
+        "draft_reply": "Sorry the label printer is still offline after the flicker \u2014 we've logged it for a hardware check in shipping.",
+        "route": "Hardware"
+       },
+       {
+        "id": "TKT-005",
+        "category": "Account",
+        "priority": "P2",
+        "draft_reply": "Sorry you're locked out \u2014 we've logged the expired shared mailbox password and will reset access for the orders inbox team.",
+        "route": "Account"
+       }
+      ]
+     },
+     "result": {
+      "filed": 5,
+      "board_total": 5,
+      "ticket_ids": [
+       "TKT-001",
+       "TKT-002",
+       "TKT-003",
+       "TKT-004",
+       "TKT-005"
+      ]
+     }
+    }
+   ],
+   "final_text": "Filed 5 tickets for approval:\n\n- **TKT-001** \u2014 Network, P2 \u2014 VPN drops every afternoon: Draft reply apologizes for disconnects/loss of unsaved work, notes investigation, advises saving work regularly.\n- **TKT-002** \u2014 Billing, P2 \u2014 Invoice PDF won't download: Draft reply apologizes for blank page, notes urgent for month-end close, working to restore.\n- **TKT-003** \u2014 Access, P3 \u2014 New hire needs access: Draft reply confirms manager approval received, provisioning shift-lead access for Monday.\n- **TKT-004** \u2014 Hardware, P3 \u2014 Printer offline in shipping: Draft reply apologizes printer remains offline after flicker, logged for hardware check.\n- **TKT-005** \u2014 Account, P2 \u2014 Password reset for shared mailbox: Draft reply apologizes for lockout, logged expired password, will reset orders inbox access.\n\nResult: `filed: 5, board_total: 5`.",
+   "refusal": false,
+   "tokens_in": 5891,
+   "tokens_out": 689,
+   "calls": 2,
+   "cost_usd": 0.000934,
+   "recorded_at": "2026-11-26T12:43:26Z",
+   "next_steps": [
+    {
+     "label": "List current ITSM tickets",
+     "kind": "action",
+     "command": "List the current ITSM tickets."
+    }
+   ],
+   "automate_command": "Build a new automated agentic workflow."
+  },
+  {
+   "key": "finops",
+   "command": "What is the Cube costing us this month?",
+   "rationale": "Checking this month's Cube costs \u2014 calling the FinOps summary for the figures for your approval.",
+   "steps": [
+    {
+     "name": "finops_summary",
+     "arguments": {}
+    }
+   ],
+   "trace": [
+    {
+     "tool": "finops_summary",
+     "arguments": {},
+     "result": {
+      "costs": {
+       "today_usd": 6.87,
+       "month_so_far_usd": 336.96,
+       "month_projected_usd": 388.8,
+       "daily_burn_usd": 12.96
+      },
+      "budget": {
+       "monthly_usd": 500.0,
+       "projected_pct": 77.8,
+       "alert_pct": 80.0
+      },
+      "alerts": [
+       "Vast balance not entered \u2014 add it in Settings for days-left tracking"
+      ],
+      "usage": {
+       "rpa_runs_100": 100,
+       "rpa_runs_today": 5,
+       "flows_total": 41,
+       "flows_enabled": 25,
+       "tickets_total": 20,
+       "rca_total": 4,
+       "changes_total": 5,
+       "dashboards": 12,
+       "graph_nodes": 147,
+       "graph_edges": 287,
+       "components_total": 27,
+       "components_up": 27,
+       "host_uptime_days": 32.6
+      },
+      "vast_balance_days_left": null
+     }
+    }
+   ],
+   "final_text": "Cube costs this month (from FinOps summary):\n- Month to date: $336.96\n- Projected month: $388.80\n- Daily burn: $12.96 (today: $6.87)\n- Budget: $500/month \u2014 projected 77.8% of budget, alert at 80%\n\nAlert: Vast balance not entered \u2014 add it in Settings for days-left tracking.",
+   "refusal": false,
+   "tokens_in": 5279,
+   "tokens_out": 174,
+   "calls": 2,
+   "cost_usd": 0.000614,
+   "recorded_at": "2026-11-26T12:43:28Z",
+   "next_steps": [
+    {
+     "label": "Check capacity headroom",
+     "kind": "action",
+     "command": "How is our capacity looking?"
+    },
+    {
+     "label": "Automate a daily cost check",
+     "kind": "automate",
+     "command": "Build a new automated agentic workflow."
+    }
+   ],
+   "automate_command": "Build a new automated agentic workflow."
+  },
+  {
+   "key": "cve",
+   "command": "Any critical CVEs we should worry about?",
+   "rationale": "Checking the Cube's CVE posture \u2014 pulling the read-only security status.",
+   "steps": [
+    {
+     "name": "secops_status",
+     "arguments": {}
+    }
+   ],
+   "trace": [
+    {
+     "tool": "secops_status",
+     "arguments": {},
+     "result": {
+      "kpis": {
+       "critical": 34,
+       "high": 121,
+       "kev_in_set": 5,
+       "kev_total": 1805,
+       "kev_recent": 47,
+       "epss_high": 0
+      },
+      "sources": {
+       "nvd": {
+        "ok": true,
+        "count": 163
+       },
+       "kev": {
+        "ok": true,
+        "count": 1805
+       },
+       "epss": {
+        "ok": true,
+        "count": null
+       },
+       "watcher": {
+        "ok": true,
+        "count": null
+       }
+      },
+      "estate": {
+       "components": 27,
+       "up": 27,
+       "open_incidents": 0
+      },
+      "priority_top5": [
+       {
+        "id": "CVE-2026-131914",
+        "severity": "CRITICAL",
+        "cvss": 9.8,
+        "epss": 0.04292,
+        "kev": true,
+        "product": "anticsrf",
+        "vendor": "blowdart",
+        "published": "2026-11-19",
+        "description": "Deserialization of untrusted data in double-submit cookie vs. form field validation in Idunno.AntiCsrf versions through 0.9.1 Beta on ASP.NE"
+       },
+       {
+        "id": "CVE-2026-133323",
+        "severity": "CRITICAL",
+        "cvss": 10.0,
+        "epss": 0.02546,
+        "kev": true,
+        "product": "micollab",
+        "vendor": "mitel",
+        "published": "2026-11-19",
+        "description": "A vulnerability in the Audio, Web, and Video Conferencing (AWV) component of Mitel MiCollab through 10.3 (10.3.0.18) could allow an unauthen"
+       },
+       {
+        "id": "CVE-2026-134624",
+        "severity": "HIGH",
+        "cvss": 8.7,
+        "epss": 0.01793,
+        "kev": true,
+        "product": "mail_assure",
+        "vendor": "n-able",
+        "published": "2026-11-22",
+        "description": "N-able MailAssure (SpamExperts) before 20261121.1943 does not restrict the destination of the LDAP synchronisation connection check performe"
+       },
+       {
+        "id": "CVE-2026-132224",
+        "severity": "HIGH",
+        "cvss": 8.7,
+        "epss": 0.00784,
+        "kev": true,
+        "product": "web_experimentation",
+        "vendor": "optimizely",
+        "published": "2026-11-18",
+        "description": "Optimizely Web Experimentation before 2026-11-17 mishandles the account signup flow, leading to presence of attacker-controlled code in the "
+       },
+       {
+        "id": "CVE-2026-133303",
+        "severity": "CRITICAL",
+        "cvss": 9.0,
+        "epss": 0.00515,
+        "kev": true,
+        "product": "micollab",
+        "vendor": "mitel",
+        "published": "2026-11-19",
+        "description": "A vulnerability in the Audio, Web, and Video Conferencing (AWV) component of Mitel MiCollab through 10.3 (10.3.0.18) could allow an unauthen"
+       }
+      ]
+     }
+    }
+   ],
+   "final_text": "**CVE posture (read-only data):**\n- Estate: 27 components, 27 up, 0 open incidents\n- CVEs: **34 critical**, 121 high\n- KEV: **5 in set**, of 1,805 total KEVs; 47 recent\n- EPSS high: 0\n\n**Top priority:**\n1. **CVE-2026-131914** \u2013 CRITICAL, CVSS 9.8, EPSS 0.04292, KEV \u2013 blowdart anticsrf (published 2026-11-19)\n2. **CVE-2026-133323** \u2013 CRITICAL, CVSS 10.0, EPSS 0.02546, KEV \u2013 Mitel MiCollab (2026-11-19)\n3. **CVE-2026-133303** \u2013 CRITICAL, CVSS 9.0, EPSS 0.00515, KEV \u2013 Mitel MiCollab (2026-11-19)\n\nAlso in top 5: CVE-2026-134624 and CVE-2026-132224 (both HIGH, CVSS 8.7, KEV).\n\nI have not run an investigation \u2014 this is posture data only.",
+   "refusal": false,
+   "tokens_in": 5748,
+   "tokens_out": 346,
+   "calls": 2,
+   "cost_usd": 0.000748,
+   "recorded_at": "2026-11-26T12:43:31Z",
+   "next_steps": [
+    {
+     "label": "What breaks if the brain goes down?",
+     "kind": "action",
+     "command": "What breaks if the brain goes down?"
+    },
+    {
+     "label": "Automate a daily CVE check",
+     "kind": "automate",
+     "command": "Build a new automated agentic workflow."
+    }
+   ],
+   "automate_command": "Build a new automated agentic workflow."
+  },
+  {
+   "key": "blast",
+   "command": "What breaks if the brain goes down?",
+   "rationale": "Checking blast radius for the brain \u2014 calling graph_dependents for model-endpoint.",
+   "steps": [
+    {
+     "name": "graph_dependents",
+     "arguments": {
+      "component": "model-endpoint"
+     }
+    }
+   ],
+   "trace": [
+    {
+     "tool": "graph_dependents",
+     "arguments": {
+      "component": "model-endpoint"
+     },
+     "result": {
+      "component": "model-endpoint",
+      "count": 21,
+      "dependents": [
+       {
+        "label": "AIOps Console",
+        "kind": "asset",
+        "ref": "CI-0005"
+       },
+       {
+        "label": "Metatron Draw",
+        "kind": "asset",
+        "ref": "CI-0009"
+       },
+       {
+        "label": "Cube Interface",
+        "kind": "asset",
+        "ref": "CI-0013"
+       },
+       {
+        "label": "Metatron Agents",
+        "kind": "asset",
+        "ref": "CI-0017"
+       },
+       {
+        "label": "Dashboard Generator",
+        "kind": "asset",
+        "ref": "CI-0018"
+       },
+       {
+        "label": "Metatron SecOps",
+        "kind": "asset",
+        "ref": "CI-0019"
+       },
+       {
+        "label": "Metatron ITSM",
+        "kind": "asset",
+        "ref": "CI-0020"
+       },
+       {
+        "label": "Metatron SysOps",
+        "kind": "asset",
+        "ref": "CI-0021"
+       },
+       {
+        "label": "Metatron MCP Bus",
+        "kind": "asset",
+        "ref": "CI-0024"
+       },
+       {
+        "label": "Metatron Graph (KAG)",
+        "kind": "asset",
+        "ref": "CI-0025"
+       },
+       {
+        "label": "AIOps Console",
+        "kind": "component",
+        "ref": "aiops-console"
+       },
+       {
+        "label": "Metatron Draw",
+        "kind": "component",
+        "ref": "draw-service"
+       },
+       {
+        "label": "Metatron FinOps",
+        "kind": "asset",
+        "ref": "CI-0026"
+       },
+       {
+        "label": "Cube Interface",
+        "kind": "component",
+        "ref": "cube-interface"
+       },
+       {
+        "label": "Metatron Agents",
+        "kind": "component",
+        "ref": "agents"
+       },
+       {
+        "label": "Metatron Dashboards",
+        "kind": "component",
+        "ref": "dashboards"
+       },
+       {
+        "label": "Metatron SecOps",
+        "kind": "component",
+        "ref": "secops"
+       },
+       {
+        "label": "Metatron ITSM",
+        "kind": "component",
+        "ref": "itsm"
+       },
+       {
+        "label": "Metatron SysOps",
+        "kind": "component",
+        "ref": "sysops"
+       },
+       {
+        "label": "Metatron MCP Bus",
+        "kind": "component",
+        "ref": "mcp-bus"
+       },
+       {
+        "label": "Metatron Graph (KAG)",
+        "kind": "component",
+        "ref": "graph"
+       }
+      ]
+     }
+    }
+   ],
+   "final_text": "If the brain (`model-endpoint`) goes down, 21 dependents break per graph_dependents:\n\n**Assets:** AIOps Console (CI-0005), Metatron Draw (CI-0009), Cube Interface (CI-0013), Metatron Agents (CI-0017), Dashboard Generator (CI-0018), Metatron SecOps (CI-0019), Metatron ITSM (CI-0020), Metatron SysOps (CI-0021), Metatron MCP Bus (CI-0024), Metatron Graph (KAG) (CI-0025), Metatron FinOps (CI-0026)\n\n**Components:** aiops-console, draw-service, cube-interface, agents, dashboards, secops, itsm, sysops, mcp-bus, graph",
+   "refusal": false,
+   "tokens_in": 5574,
+   "tokens_out": 286,
+   "calls": 2,
+   "cost_usd": 0.000701,
+   "recorded_at": "2026-11-26T12:43:34Z",
+   "next_steps": [
+    {
+     "label": "Check the CVE posture",
+     "kind": "action",
+     "command": "Any critical CVEs we should worry about?"
+    }
+   ],
+   "automate_command": "Build a new automated agentic workflow."
+  },
+  {
+   "key": "capacity",
+   "command": "How is our capacity looking?",
+   "rationale": "Checking capacity and headroom \u2014 pulling the report and forecasts for you.",
+   "steps": [
+    {
+     "name": "capacity_report",
+     "arguments": {}
+    },
+    {
+     "name": "predictions",
+     "arguments": {}
+    }
+   ],
+   "trace": [
+    {
+     "tool": "capacity_report",
+     "arguments": {},
+     "result": {
+      "host_current": {
+       "cpu_pct": 1.5,
+       "mem_pct": 61.1,
+       "disk_pct": 69.8,
+       "disk_used_gb": 74.9,
+       "disk_total_gb": 107.4,
+       "load1": 0.4
+      },
+      "host_gpu": {
+       "util_pct": 0,
+       "mem_used_mb": 29087,
+       "mem_total_mb": 32607,
+       "temp_c": 27
+      },
+      "disk_days_to_90": 138.4,
+      "components_up": 27,
+      "components_total": 27,
+      "worst_components": [
+       {
+        "component": "quality",
+        "name": "Quality Harness",
+        "up": 1,
+        "uptime_7d_pct": 92.84,
+        "latency_avg_24h_ms": 0.0,
+        "latency_slope_ms_day": 0.012,
+        "incidents_7d": 4
+       },
+       {
+        "component": "secops",
+        "name": "Metatron SecOps",
+        "up": 1,
+        "uptime_7d_pct": 99.27,
+        "latency_avg_24h_ms": 1.0,
+        "latency_slope_ms_day": -0.023,
+        "incidents_7d": 2
+       },
+       {
+        "component": "model-endpoint",
+        "name": "Private LLM",
+        "up": 1,
+        "uptime_7d_pct": 99.53,
+        "latency_avg_24h_ms": 0.8,
+        "latency_slope_ms_day": -0.063,
+        "incidents_7d": 6
+       },
+       {
+        "component": "aiops-console",
+        "name": "AIOps Console",
+        "up": 1,
+        "uptime_7d_pct": 99.76,
+        "latency_avg_24h_ms": 2.7,
+        "latency_slope_ms_day": 0.382,
+        "incidents_7d": 3
+       },
+       {
+        "component": "dashboards",
+        "name": "Metatron Dashboards",
+        "up": 1,
+        "uptime_7d_pct": 99.82,
+        "latency_avg_24h_ms": 1.0,
+        "latency_slope_ms_day": 0.003,
+        "incidents_7d": 1
+       },
+       {
+        "component": "draw-service",
+        "name": "Metatron Draw",
+        "up": 1,
+        "uptime_7d_pct": 99.93,
+        "latency_avg_24h_ms": 1.1,
+        "latency_slope_ms_day": -19.666,
+        "incidents_7d": 1
+       },
+       {
+        "component": "stt-service",
+        "name": "Speech-to-Text (STT)",
+        "up": 1,
+        "uptime_7d_pct": 100.0,
+        "latency_avg_24h_ms": 11.2,
+        "latency_slope_ms_day": 2.87,
+        "incidents_7d": 0
+       },
+       {
+        "component": "front-door",
+        "name": "Front Door",
+        "up": 1,
+        "uptime_7d_pct": 100.0,
+        "latency_avg_24h_ms": 2.4,
+        "latency_slope_ms_day": 0.106,
+        "incidents_7d": 0
+       }
+      ]
+     }
+    },
+    {
+     "tool": "predictions",
+     "arguments": {},
+     "result": {
+      "risk_max": 35,
+      "high_count": 0,
+      "watch_count": 2,
+      "components_total": 27,
+      "host_risk": {
+       "disk_days_to_90": 138.4,
+       "mem_pct": 61.1,
+       "disk_pct": 69.8
+      },
+      "top_risks": [
+       {
+        "component": "quality",
+        "name": "Quality Harness",
+        "risk_score": 35,
+        "band": "watch",
+        "predicted_window": "degrading \u2014 watch this week",
+        "reasons": [
+         "7-day uptime 92.84%",
+         "4 incidents in 7 days (recurrence)"
+        ]
+       },
+       {
+        "component": "aiops-console",
+        "name": "AIOps Console",
+        "risk_score": 30,
+        "band": "watch",
+        "predicted_window": "degrading \u2014 watch this week",
+        "reasons": [
+         "down-samples accelerating (3 in 24h vs 0 in prior 6d)",
+         "3 incidents in 7 days (recurrence)"
+        ]
+       },
+       {
+        "component": "model-endpoint",
+        "name": "Private LLM",
+        "risk_score": 15,
+        "band": "low",
+        "predicted_window": "stable",
+        "reasons": [
+         "6 incidents in 7 days (recurrence)"
+        ]
+       },
+       {
+        "component": "secops",
+        "name": "Metatron SecOps",
+        "risk_score": 15,
+        "band": "low",
+        "predicted_window": "stable",
+        "reasons": [
+         "2 incidents in 7 days (recurrence)"
+        ]
+       },
+       {
+        "component": "agents",
+        "name": "Metatron Agents",
+        "risk_score": 0,
+        "band": "low",
+        "predicted_window": "stable",
+        "reasons": []
+       },
+       {
+        "component": "ap-automation",
+        "name": "AP Automation",
+        "risk_score": 0,
+        "band": "low",
+        "predicted_window": "stable",
+        "reasons": []
+       },
+       {
+        "component": "cube-interface",
+        "name": "Cube Interface",
+        "risk_score": 0,
+        "band": "low",
+        "predicted_window": "stable",
+        "reasons": []
+       },
+       {
+        "component": "dashboards",
+        "name": "Metatron Dashboards",
+        "risk_score": 0,
+        "band": "low",
+        "predicted_window": "stable",
+        "reasons": []
+       }
+      ]
+     }
+    }
+   ],
+   "final_text": "Capacity is currently healthy with no high-risk components.\n\n**Host:** CPU 1.5%, memory 61.1%, disk 69.8% (74.9/107.4 GB), load1 0.4\n**Forecast:** Disk days to 90% = 138.4 days\n**GPU:** util 0%, memory 29,087/32,607 MB, 27\u00b0C\n**Components:** 27/27 up\n\n**Watch (2, degrading this week):**\n- Quality Harness \u2014 risk 35, 7-day uptime 92.84%, 4 incidents in 7 days\n- AIOps Console \u2014 risk 30, 3 incidents in 7 days, down-samples accelerating (3 in 24h)\n\n**Low/stable:** Private LLM and SecOps at risk 15; 0 high-risk components, max risk 35.",
+   "refusal": false,
+   "tokens_in": 6288,
+   "tokens_out": 299,
+   "calls": 2,
+   "cost_usd": 0.000778,
+   "recorded_at": "2026-11-26T12:43:38Z",
+   "next_steps": [
+    {
+     "label": "Give me the full picture",
+     "kind": "action",
+     "command": "Give me the full picture on the Cube: overall status, what breaks if the brain goes down, CVE exposure, failure predictions, and this month's costs."
+    },
+    {
+     "label": "Automate a daily capacity check",
+     "kind": "automate",
+     "command": "Build a new automated agentic workflow."
+    }
+   ],
+   "automate_command": "Build a new automated agentic workflow."
+  },
+  {
+   "key": "refusal",
+   "command": "Order a pizza for the office and book a flight to Denver.",
+   "rationale": "No tool fits this request \u2014 I can't order a pizza or book a flight, and I've made no tool calls.",
+   "steps": [],
+   "trace": [],
+   "final_text": "No tool fits this request \u2014 I can't order a pizza or book a flight, and I've made no tool calls.",
+   "refusal": true,
+   "tokens_in": 5119,
+   "tokens_out": 153,
+   "calls": 2,
+   "cost_usd": 0.000589,
+   "recorded_at": "2026-11-26T12:43:41Z",
+   "next_steps": [],
+   "automate_command": "Build a new automated agentic workflow."
+  },
+  {
+   "key": "agent-builder",
+   "command": "Build a new automated agentic workflow.",
+   "rationale": "Building your 6am Watcher-to-WhatsApp agent \u2014 proposing it for approval now.",
+   "steps": [
+    {
+     "name": "create_agent_flow",
+     "arguments": {
+      "name": "Watcher morning status WhatsApp",
+      "trigger": "schedule",
+      "cron": "0 6 * * *",
+      "source": "watcher_overview",
+      "action": "whatsapp"
+     }
+    }
+   ],
+   "trace": [
+    {
+     "tool": "create_agent_flow",
+     "arguments": {
+      "name": "Watcher morning status WhatsApp",
+      "trigger": "schedule",
+      "cron": "0 6 * * *",
+      "source": "watcher_overview",
+      "action": "whatsapp"
+     },
+     "result": {
+      "flow_id": "F07PK0QGgi3uwmnZrqY2B",
+      "name": "Watcher morning status WhatsApp",
+      "status": "DISABLED",
+      "trigger": "schedule",
+      "cron": "0 6 * * *",
+      "source": "watcher_overview",
+      "source_label": "Watcher overview (AIOps)",
+      "action": "whatsapp",
+      "steps": [
+       "fetch watcher_overview",
+       "compose report",
+       "whatsapp notify"
+      ],
+      "note": "Created as a DISABLED draft in Metatron RPA \u2014 a human must review and enable it with the Enable button on this page before it ever runs."
+     }
+    }
+   ],
+   "final_text": "Agent flow created as a DISABLED draft \u2014 it has not run:\n\n- **Name:** Watcher morning status WhatsApp\n- **Flow ID:** F07PK0QGgi3uwmnZrqY2B\n- **Trigger:** schedule `0 6 * * *` (06:00 daily)\n- **Source:** watcher_overview (Watcher overview, AIOps)\n- **Action:** whatsapp via the proven Watcher WhatsApp flow\n- **Steps:** fetch watcher_overview \u2192 compose report \u2192 whatsapp notify\n\nA human must review and enable it with the Enable button on this page before it ever runs.",
+   "refusal": false,
+   "tokens_in": 7012,
+   "tokens_out": 323,
+   "calls": 2,
+   "cost_usd": 0.000863,
+   "recorded_at": "2026-11-26T14:57:43Z",
+   "next_steps": [
+    {
+     "label": "List the RPA flows",
+     "kind": "action",
+     "command": "List the Metatron RPA flows."
+    }
+   ],
+   "automate_command": "Build a new automated agentic workflow."
+  },
+  {
+   "key": "intake",
+   "command": "Attach an invoice photo \u2014 Ember reads it and files the extracted fields.",
+   "rationale": "Extracted the invoice \u2014 line items sum to the stated subtotal, but Total Due is $7.50 higher with no tax or shipping line shown. Filing intake for your approval.",
+   "steps": [
+    {
+     "name": "file_intake",
+     "arguments": {
+      "record": {
+       "kind": "invoice",
+       "fields": {
+        "vendor": "HYDRAULIC SUPPLY CO.",
+        "invoice_number": "INV-88410",
+        "date": "11/18/2026",
+        "po_number": "PO-2214",
+        "bill_to": "Demo Plant - Accounts Payable",
+        "line_items": [
+         {
+          "description": "Hydraulic hose, 3/4 in x 6 ft",
+          "qty": 2,
+          "unit_price": 86.5,
+          "amount": 173.0
+         },
+         {
+          "description": "Hydraulic oil ISO 46, 55 gal drum",
+          "qty": 1,
+          "unit_price": 812.0,
+          "amount": 812.0
+         },
+         {
+          "description": "Manifold fitting kit",
+          "qty": 1,
+          "unit_price": 257.5,
+          "amount": 257.5
+         }
+        ],
+        "subtotal": 1242.5,
+        "total_due": 1250.0
+       },
+       "notes": "Arithmetic note: line items sum to 1,242.50, matching stated subtotal. Total Due 1,250.00 is 7.50 higher than subtotal with no tax/shipping line visible on invoice."
+      }
+     }
+    }
+   ],
+   "trace": [
+    {
+     "tool": "file_intake",
+     "arguments": {
+      "record": {
+       "kind": "invoice",
+       "fields": {
+        "vendor": "HYDRAULIC SUPPLY CO.",
+        "invoice_number": "INV-88410",
+        "date": "11/18/2026",
+        "po_number": "PO-2214",
+        "bill_to": "Demo Plant - Accounts Payable",
+        "line_items": [
+         {
+          "description": "Hydraulic hose, 3/4 in x 6 ft",
+          "qty": 2,
+          "unit_price": 86.5,
+          "amount": 173.0
+         },
+         {
+          "description": "Hydraulic oil ISO 46, 55 gal drum",
+          "qty": 1,
+          "unit_price": 812.0,
+          "amount": 812.0
+         },
+         {
+          "description": "Manifold fitting kit",
+          "qty": 1,
+          "unit_price": 257.5,
+          "amount": 257.5
+         }
+        ],
+        "subtotal": 1242.5,
+        "total_due": 1250.0
+       },
+       "notes": "Arithmetic note: line items sum to 1,242.50, matching stated subtotal. Total Due 1,250.00 is 7.50 higher than subtotal with no tax/shipping line visible on invoice."
+      }
+     },
+     "result": {
+      "filed": 1,
+      "intake_total": 1,
+      "kind": "invoice",
+      "fields": {
+       "vendor": "HYDRAULIC SUPPLY CO.",
+       "invoice_number": "INV-88410",
+       "date": "11/18/2026",
+       "po_number": "PO-2214",
+       "bill_to": "Demo Plant - Accounts Payable",
+       "line_items": [
+        "{'description': 'Hydraulic hose, 3/4 in x 6 ft', 'qty': 2, 'unit_price': 86.5, 'amount': 173.0}",
+        "{'description': 'Hydraulic oil ISO 46, 55 gal drum', 'qty': 1, 'unit_price': 812.0, 'amount': 812.0}",
+        "{'description': 'Manifold fitting kit', 'qty': 1, 'unit_price': 257.5, 'amount': 257.5}"
+       ],
+       "subtotal": "1242.5",
+       "total_due": "1250.0"
+      }
+     }
+    }
+   ],
+   "final_text": "Filed intake (1 record) for approval:\n\n- **Vendor:** HYDRAULIC SUPPLY CO.\n- **Invoice:** INV-88410, 11/18/2026, PO-2214\n- **Bill to:** Demo Plant - Accounts Payable\n- **Line items:**\n  - Hydraulic hose, 3/4 in x 6 ft \u2014 2 \u00d7 $86.50 = $173.00\n  - Hydraulic oil ISO 46, 55 gal drum \u2014 1 \u00d7 $812.00 = $812.00\n  - Manifold fitting kit \u2014 1 \u00d7 $257.50 = $257.50\n- **Subtotal:** $1,242.50\n- **Total Due:** $1,250.00\n\n**Flag:** Line items sum to $1,242.50, matching the subtotal, but Total Due is $7.50 higher with no tax or shipping line visible on the invoice.",
+   "refusal": false,
+   "tokens_in": 9607,
+   "tokens_out": 647,
+   "calls": 2,
+   "cost_usd": 0.001284,
+   "recorded_at": "2026-11-26T14:57:48Z",
+   "next_steps": [
+    {
+     "label": "Export this extraction as Excel",
+     "kind": "action",
+     "command": "Save the last extraction as Excel."
+    },
+    {
+     "label": "Check this month's Cube costs",
+     "kind": "action",
+     "command": "What is the Cube costing us this month?"
+    }
+   ],
+   "automate_command": "Build a new automated agentic workflow.",
+   "default_action": {
+    "label": "Export this extraction as Excel",
+    "command": "Save the last extraction as Excel."
+   }
+  },
+  {
+   "key": "fullpicture",
+   "command": "Give me the full picture on the Cube: overall status, what breaks if the brain goes down, CVE exposure, failure predictions, and this month's costs.",
+   "rationale": "Full picture requested \u2014 chaining status, blast radius, CVE, predictions, and costs into one brief.",
+   "steps": [
+    {
+     "name": "cube_status",
+     "arguments": {}
+    },
+    {
+     "name": "graph_dependents",
+     "arguments": {
+      "component": "model-endpoint"
+     }
+    },
+    {
+     "name": "secops_status",
+     "arguments": {}
+    },
+    {
+     "name": "predictions",
+     "arguments": {}
+    },
+    {
+     "name": "finops_summary",
+     "arguments": {}
+    }
+   ],
+   "trace": [
+    {
+     "tool": "cube_status",
+     "arguments": {},
+     "result": {
+      "components_total": 28,
+      "components_up": 28,
+      "down": [],
+      "host": {
+       "cpu_pct": 1.4,
+       "mem_pct": 62.0,
+       "mem_used_gb": 18.9,
+       "mem_total_gb": 30.5,
+       "disk_pct": 69.8,
+       "disk_used_gb": 74.9,
+       "disk_total_gb": 107.4,
+       "load1": 0.27,
+       "uptime_s": 2826944,
+       "gpu": {
+        "util_pct": 0,
+        "mem_used_mb": 29087,
+        "mem_total_mb": 32607,
+        "temp_c": 28
+       },
+       "sampled_at": 1795705067
+      },
+      "open_incidents": null
+     }
+    },
+    {
+     "tool": "graph_dependents",
+     "arguments": {
+      "component": "model-endpoint"
+     },
+     "result": {
+      "component": "model-endpoint",
+      "count": 21,
+      "dependents": [
+       {
+        "label": "AIOps Console",
+        "kind": "asset",
+        "ref": "CI-0005"
+       },
+       {
+        "label": "Metatron Draw",
+        "kind": "asset",
+        "ref": "CI-0009"
+       },
+       {
+        "label": "Cube Interface",
+        "kind": "asset",
+        "ref": "CI-0013"
+       },
+       {
+        "label": "Metatron Agents",
+        "kind": "asset",
+        "ref": "CI-0017"
+       },
+       {
+        "label": "Dashboard Generator",
+        "kind": "asset",
+        "ref": "CI-0018"
+       },
+       {
+        "label": "Metatron SecOps",
+        "kind": "asset",
+        "ref": "CI-0019"
+       },
+       {
+        "label": "Metatron ITSM",
+        "kind": "asset",
+        "ref": "CI-0020"
+       },
+       {
+        "label": "Metatron SysOps",
+        "kind": "asset",
+        "ref": "CI-0021"
+       },
+       {
+        "label": "Metatron MCP Bus",
+        "kind": "asset",
+        "ref": "CI-0024"
+       },
+       {
+        "label": "Metatron Graph (KAG)",
+        "kind": "asset",
+        "ref": "CI-0025"
+       },
+       {
+        "label": "AIOps Console",
+        "kind": "component",
+        "ref": "aiops-console"
+       },
+       {
+        "label": "Metatron Draw",
+        "kind": "component",
+        "ref": "draw-service"
+       },
+       {
+        "label": "Metatron FinOps",
+        "kind": "asset",
+        "ref": "CI-0026"
+       },
+       {
+        "label": "Cube Interface",
+        "kind": "component",
+        "ref": "cube-interface"
+       },
+       {
+        "label": "Metatron Agents",
+        "kind": "component",
+        "ref": "agents"
+       },
+       {
+        "label": "Metatron Dashboards",
+        "kind": "component",
+        "ref": "dashboards"
+       },
+       {
+        "label": "Metatron SecOps",
+        "kind": "component",
+        "ref": "secops"
+       },
+       {
+        "label": "Metatron ITSM",
+        "kind": "component",
+        "ref": "itsm"
+       },
+       {
+        "label": "Metatron SysOps",
+        "kind": "component",
+        "ref": "sysops"
+       },
+       {
+        "label": "Metatron MCP Bus",
+        "kind": "component",
+        "ref": "mcp-bus"
+       },
+       {
+        "label": "Metatron Graph (KAG)",
+        "kind": "component",
+        "ref": "graph"
+       }
+      ]
+     }
+    },
+    {
+     "tool": "secops_status",
+     "arguments": {},
+     "result": {
+      "kpis": {
+       "critical": 34,
+       "high": 121,
+       "kev_in_set": 5,
+       "kev_total": 1805,
+       "kev_recent": 47,
+       "epss_high": 0
+      },
+      "sources": {
+       "nvd": {
+        "ok": true,
+        "count": 163
+       },
+       "kev": {
+        "ok": true,
+        "count": 1805
+       },
+       "epss": {
+        "ok": true,
+        "count": null
+       },
+       "watcher": {
+        "ok": true,
+        "count": null
+       }
+      },
+      "estate": {
+       "components": 27,
+       "up": 27,
+       "open_incidents": 0
+      },
+      "priority_top5": [
+       {
+        "id": "CVE-2026-131914",
+        "severity": "CRITICAL",
+        "cvss": 9.8,
+        "epss": 0.04292,
+        "kev": true,
+        "product": "anticsrf",
+        "vendor": "blowdart",
+        "published": "2026-11-19",
+        "description": "Deserialization of untrusted data in double-submit cookie vs. form field validation in Idunno.AntiCsrf versions through 0.9.1 Beta on ASP.NE"
+       },
+       {
+        "id": "CVE-2026-133323",
+        "severity": "CRITICAL",
+        "cvss": 10.0,
+        "epss": 0.02546,
+        "kev": true,
+        "product": "micollab",
+        "vendor": "mitel",
+        "published": "2026-11-19",
+        "description": "A vulnerability in the Audio, Web, and Video Conferencing (AWV) component of Mitel MiCollab through 10.3 (10.3.0.18) could allow an unauthen"
+       },
+       {
+        "id": "CVE-2026-134624",
+        "severity": "HIGH",
+        "cvss": 8.7,
+        "epss": 0.01793,
+        "kev": true,
+        "product": "mail_assure",
+        "vendor": "n-able",
+        "published": "2026-11-22",
+        "description": "N-able MailAssure (SpamExperts) before 20261121.1943 does not restrict the destination of the LDAP synchronisation connection check performe"
+       },
+       {
+        "id": "CVE-2026-132224",
+        "severity": "HIGH",
+        "cvss": 8.7,
+        "epss": 0.00784,
+        "kev": true,
+        "product": "web_experimentation",
+        "vendor": "optimizely",
+        "published": "2026-11-18",
+        "description": "Optimizely Web Experimentation before 2026-11-17 mishandles the account signup flow, leading to presence of attacker-controlled code in the "
+       },
+       {
+        "id": "CVE-2026-133303",
+        "severity": "CRITICAL",
+        "cvss": 9.0,
+        "epss": 0.00515,
+        "kev": true,
+        "product": "micollab",
+        "vendor": "mitel",
+        "published": "2026-11-19",
+        "description": "A vulnerability in the Audio, Web, and Video Conferencing (AWV) component of Mitel MiCollab through 10.3 (10.3.0.18) could allow an unauthen"
+       }
+      ]
+     }
+    },
+    {
+     "tool": "predictions",
+     "arguments": {},
+     "result": {
+      "risk_max": 35,
+      "high_count": 0,
+      "watch_count": 2,
+      "components_total": 28,
+      "host_risk": {
+       "disk_days_to_90": 143.3,
+       "mem_pct": 62.0,
+       "disk_pct": 69.8
+      },
+      "top_risks": [
+       {
+        "component": "quality",
+        "name": "Quality Harness",
+        "risk_score": 35,
+        "band": "watch",
+        "predicted_window": "degrading \u2014 watch this week",
+        "reasons": [
+         "7-day uptime 92.98%",
+         "4 incidents in 7 days (recurrence)"
+        ]
+       },
+       {
+        "component": "aiops-console",
+        "name": "AIOps Console",
+        "risk_score": 30,
+        "band": "watch",
+        "predicted_window": "degrading \u2014 watch this week",
+        "reasons": [
+         "down-samples accelerating (3 in 24h vs 1 in prior 6d)",
+         "4 incidents in 7 days (recurrence)"
+        ]
+       },
+       {
+        "component": "model-endpoint",
+        "name": "Private LLM",
+        "risk_score": 15,
+        "band": "low",
+        "predicted_window": "stable",
+        "reasons": [
+         "6 incidents in 7 days (recurrence)"
+        ]
+       },
+       {
+        "component": "secops",
+        "name": "Metatron SecOps",
+        "risk_score": 15,
+        "band": "low",
+        "predicted_window": "stable",
+        "reasons": [
+         "2 incidents in 7 days (recurrence)"
+        ]
+       },
+       {
+        "component": "agents",
+        "name": "Metatron Agents",
+        "risk_score": 0,
+        "band": "low",
+        "predicted_window": "stable",
+        "reasons": []
+       },
+       {
+        "component": "ap-automation",
+        "name": "AP Automation",
+        "risk_score": 0,
+        "band": "low",
+        "predicted_window": "stable",
+        "reasons": []
+       },
+       {
+        "component": "cube-interface",
+        "name": "Cube Interface",
+        "risk_score": 0,
+        "band": "low",
+        "predicted_window": "stable",
+        "reasons": []
+       },
+       {
+        "component": "dashboards",
+        "name": "Metatron Dashboards",
+        "risk_score": 0,
+        "band": "low",
+        "predicted_window": "stable",
+        "reasons": []
+       }
+      ]
+     }
+    },
+    {
+     "tool": "finops_summary",
+     "arguments": {},
+     "result": {
+      "costs": {
+       "today_usd": 8.07,
+       "month_so_far_usd": 336.96,
+       "month_projected_usd": 388.8,
+       "daily_burn_usd": 12.96
+      },
+      "budget": {
+       "monthly_usd": 500.0,
+       "projected_pct": 77.8,
+       "alert_pct": 80.0
+      },
+      "alerts": [
+       "Vast balance not entered \u2014 add it in Settings for days-left tracking"
+      ],
+      "usage": {
+       "rpa_runs_100": 100,
+       "rpa_runs_today": 6,
+       "flows_total": 41,
+       "flows_enabled": 25,
+       "tickets_total": 20,
+       "rca_total": 4,
+       "changes_total": 5,
+       "dashboards": 12,
+       "graph_nodes": 147,
+       "graph_edges": 287,
+       "components_total": 28,
+       "components_up": 28,
+       "host_uptime_days": 32.7
+      },
+      "vast_balance_days_left": null
+     }
+    }
+   ],
+   "final_text": "**Full Picture \u2014 Metatron Cube (consolidated brief)**\n\n**Overall status:**\n- 28/28 components up, 0 down. Open incidents: null in cube_status (0 in SecOps estate view).\n- Host: CPU 1.4%, memory 62% (18.9/30.5 GB), disk 69.8% (74.9/107.4 GB), load 0.27, uptime 32.7 days. GPU 0% util, 28\u00b0C.\n\n**Blast radius \u2014 if the brain (`model-endpoint`) goes down:**\n- 21 transitive dependents, including: AIOps Console, Metatron Draw, Cube Interface, Metatron Agents, Dashboard Generator, Metatron SecOps, Metatron ITSM, Metatron SysOps, Metatron MCP Bus, Metatron Graph (KAG), and Metatron FinOps.\n\n**CVE exposure (SecOps, read-only data):**\n- 34 critical, 121 high; 5 KEV in set (of 1,805 total KEV, 47 recent), 0 EPSS-high.\n- Top: CVE-2026-133323 (Mitel MiCollab, 10.0, KEV), CVE-2026-131914 (AntiCsrf, 9.8, KEV), CVE-2026-133303 (MiCollab, 9.0, KEV), CVE-2026-134624 (N-able MailAssure, 8.7, KEV), CVE-2026-132224 (Optimizely, 8.7, KEV).\n- No investigation claimed \u2014 this is posture data only.\n\n**Failure predictions:**\n- Max risk 35, 0 high, 2 watch, 28 components total.\n- Watch: Quality Harness (35 \u2014 92.98% 7-day uptime, 4 incidents/7d), AIOps Console (30 \u2014 accelerating down-samples, 4 incidents/7d).\n- Model-endpoint / Private LLM: low (15, stable, 6 incidents/7d recurrence noted).\n- Host: disk 143.3 days to 90%.\n\n**Costs this month:**\n- Today $8.07, month-to-date $336.96, projected $388.80 at $12.96/day burn.\n- Budget $500 \u2014 projected 77.8%",
+   "refusal": false,
+   "tokens_in": 9100,
+   "tokens_out": 755,
+   "calls": 2,
+   "cost_usd": 0.001287,
+   "recorded_at": "2026-11-26T14:57:52Z",
+   "next_steps": [
+    {
+     "label": "Send the status to WhatsApp",
+     "kind": "action",
+     "command": "Send the Watcher status to my WhatsApp."
+    },
+    {
+     "label": "Automate a daily capacity check",
+     "kind": "automate",
+     "command": "Build a new automated agentic workflow."
+    }
+   ],
+   "automate_command": "Build a new automated agentic workflow."
+  },
+  {
+   "key": "document",
+   "command": "Paste a log file \u2014 Ember finds the anomalies and files a report.",
+   "rationale": "Found the disk-full, brute-force, latency, OOM and TLS anomalies \u2014 filing the document report for approval.",
+   "steps": [
+    {
+     "name": "file_document_report",
+     "arguments": {
+      "report": {
+       "title": "Log Analysis 2026-11-25 00:00-05:17 UTC",
+       "summary": "620-line log review found 1 critical disk-full error, 1 OOM kill, 1 extreme latency warning, 6 failed logins suggesting brute force, and a TLS certificate expiring in 2 days.",
+       "findings": [
+        {
+         "line": 118,
+         "severity": "critical",
+         "detail": "ERROR ingest write failed: No space left on device (/data volume 100% full) file=batch-7712 - data volume full, ingest failure"
+        },
+        {
+         "line": 461,
+         "severity": "high",
+         "detail": "ERROR worker-3 process exited code=137 (OOM killed) - supervisor restarting"
+        },
+        {
+         "line": 237,
+         "severity": "high",
+         "detail": "WARN auth-svc FAILED LOGIN user=admin ip=203.0.113.77 attempt=1-6 at same timestamp 01:59:17 (lines 237-242) - possible brute-force attack from external IP"
+        },
+        {
+         "line": 352,
+         "severity": "high",
+         "detail": "WARN api-gateway p99 latency 8420ms (baseline ~120ms) path=/api/reports/daily - ~70x baseline latency"
+        },
+        {
+         "line": 548,
+         "severity": "medium",
+         "detail": "WARN api-gateway TLS certificate for api.internal expires in 2 days (2026-11-27) - imminent expiry"
+        }
+       ]
+      }
+     }
+    }
+   ],
+   "trace": [
+    {
+     "tool": "file_document_report",
+     "arguments": {
+      "report": {
+       "title": "Log Analysis 2026-11-25 00:00-05:17 UTC",
+       "summary": "620-line log review found 1 critical disk-full error, 1 OOM kill, 1 extreme latency warning, 6 failed logins suggesting brute force, and a TLS certificate expiring in 2 days.",
+       "findings": [
+        {
+         "line": 118,
+         "severity": "critical",
+         "detail": "ERROR ingest write failed: No space left on device (/data volume 100% full) file=batch-7712 - data volume full, ingest failure"
+        },
+        {
+         "line": 461,
+         "severity": "high",
+         "detail": "ERROR worker-3 process exited code=137 (OOM killed) - supervisor restarting"
+        },
+        {
+         "line": 237,
+         "severity": "high",
+         "detail": "WARN auth-svc FAILED LOGIN user=admin ip=203.0.113.77 attempt=1-6 at same timestamp 01:59:17 (lines 237-242) - possible brute-force attack from external IP"
+        },
+        {
+         "line": 352,
+         "severity": "high",
+         "detail": "WARN api-gateway p99 latency 8420ms (baseline ~120ms) path=/api/reports/daily - ~70x baseline latency"
+        },
+        {
+         "line": 548,
+         "severity": "medium",
+         "detail": "WARN api-gateway TLS certificate for api.internal expires in 2 days (2026-11-27) - imminent expiry"
+        }
+       ]
+      }
+     },
+     "result": {
+      "filed": 1,
+      "reports_total": 1,
+      "title": "Log Analysis 2026-11-25 00:00-05:17 UTC",
+      "findings_count": 5
+     }
+    }
+   ],
+   "final_text": "Filed document report (5 findings): critical disk-full at line 118, OOM kill at line 461, 6 failed logins lines 237-242, p99 latency 8420ms at line 352, TLS expiry in 2 days at line 548.",
+   "refusal": false,
+   "tokens_in": 28657,
+   "tokens_out": 530,
+   "calls": 2,
+   "cost_usd": 0.003131,
+   "recorded_at": "2026-11-26T14:57:57Z",
+   "next_steps": [
+    {
+     "label": "Check capacity headroom",
+     "kind": "action",
+     "command": "How is our capacity looking?"
+    },
+    {
+     "label": "Automate a daily capacity check",
+     "kind": "automate",
+     "command": "Build a new automated agentic workflow."
+    }
+   ],
+   "automate_command": "Build a new automated agentic workflow."
+  },
+  {
+   "key": "pdf-intake",
+   "command": "PDF attached (sample-invoice.pdf) \u2014 read it and file the extracted fields.",
+   "rationale": "Extracted from the PDF \u2014 filing the invoice for your approval, with a note on the total-vs-subtotal difference.",
+   "steps": [
+    {
+     "name": "file_intake",
+     "arguments": {
+      "record": {
+       "kind": "invoice",
+       "fields": {
+        "vendor": "Hydraulic Supply Co.",
+        "invoice_number": "INV-88410",
+        "date": "11/18/2026",
+        "po_number": "PO-2214",
+        "bill_to": "Demo Plant - Accounts Payable",
+        "line_items": [
+         {
+          "description": "Hydraulic hose, 3/4 in x 6 ft",
+          "quantity": 2,
+          "unit_price": 86.5,
+          "amount": 173.0
+         },
+         {
+          "description": "Hydraulic oil ISO 46, 55 gal",
+          "quantity": 1,
+          "unit_price": 812.0,
+          "amount": 812.0
+         },
+         {
+          "description": "Manifold fitting kit",
+          "quantity": 1,
+          "unit_price": 257.5,
+          "amount": 257.5
+         }
+        ],
+        "subtotal": 1242.5,
+        "total_due": 1250.0
+       },
+       "notes": "Line items sum to subtotal 1242.50 (173.00+812.00+257.50=1242.50). Total due 1250.00 is 7.50 higher than subtotal with no tax/shipping/other charge line shown in document."
+      }
+     }
+    }
+   ],
+   "trace": [
+    {
+     "tool": "file_intake",
+     "arguments": {
+      "record": {
+       "kind": "invoice",
+       "fields": {
+        "vendor": "Hydraulic Supply Co.",
+        "invoice_number": "INV-88410",
+        "date": "11/18/2026",
+        "po_number": "PO-2214",
+        "bill_to": "Demo Plant - Accounts Payable",
+        "line_items": [
+         {
+          "description": "Hydraulic hose, 3/4 in x 6 ft",
+          "quantity": 2,
+          "unit_price": 86.5,
+          "amount": 173.0
+         },
+         {
+          "description": "Hydraulic oil ISO 46, 55 gal",
+          "quantity": 1,
+          "unit_price": 812.0,
+          "amount": 812.0
+         },
+         {
+          "description": "Manifold fitting kit",
+          "quantity": 1,
+          "unit_price": 257.5,
+          "amount": 257.5
+         }
+        ],
+        "subtotal": 1242.5,
+        "total_due": 1250.0
+       },
+       "notes": "Line items sum to subtotal 1242.50 (173.00+812.00+257.50=1242.50). Total due 1250.00 is 7.50 higher than subtotal with no tax/shipping/other charge line shown in document."
+      }
+     },
+     "result": {
+      "filed": 1,
+      "intake_total": 6,
+      "kind": "invoice",
+      "fields": {
+       "vendor": "Hydraulic Supply Co.",
+       "invoice_number": "INV-88410",
+       "date": "11/18/2026",
+       "po_number": "PO-2214",
+       "bill_to": "Demo Plant - Accounts Payable",
+       "line_items": [
+        "{'description': 'Hydraulic hose, 3/4 in x 6 ft', 'quantity': 2, 'unit_price': 86.5, 'amount': 173.0}",
+        "{'description': 'Hydraulic oil ISO 46, 55 gal', 'quantity': 1, 'unit_price': 812.0, 'amount': 812.0}",
+        "{'description': 'Manifold fitting kit', 'quantity': 1, 'unit_price': 257.5, 'amount': 257.5}"
+       ],
+       "subtotal": "1242.5",
+       "total_due": "1250.0"
+      }
+     }
+    }
+   ],
+   "final_text": "Filed 1 intake record (intake_total: 6) for invoice INV-88410 from Hydraulic Supply Co., dated 11/18/2026, PO-2214, billed to Demo Plant - Accounts Payable. Line items totaling $1,242.50 subtotal were recorded, with total due $1,250.00. The $7.50 difference between subtotal and total due, with no tax/shipping line shown, was flagged in the notes for human approval.",
+   "refusal": false,
+   "tokens_in": 9840,
+   "tokens_out": 824,
+   "calls": 2,
+   "cost_usd": 0.001396,
+   "recorded_at": "2026-11-26T15:54:02Z",
+   "next_steps": [
+    {
+     "label": "Export this extraction as Excel",
+     "kind": "action",
+     "command": "Save the last extraction as Excel."
+    },
+    {
+     "label": "Check FinOps budget",
+     "kind": "action",
+     "command": "finops_summary"
+    },
+    {
+     "label": "Review open tickets",
+     "kind": "action",
+     "command": "list_tickets"
+    },
+    {
+     "label": "Daily FinOps agent to board",
+     "kind": "automate",
+     "command": "Build a new automated agentic workflow."
+    }
+   ],
+   "automate_command": "Build a new automated agentic workflow.",
+   "default_action": {
+    "label": "Export this extraction as Excel",
+    "command": "Save the last extraction as Excel."
+   }
+  },
+  {
+   "key": "audio-intake",
+   "command": "Audio attached (sample-workorder.wav) \u2014 transcribe it and file the extracted items.",
+   "rationale": "Transcribing the audio and filing the intake for your approval.",
+   "steps": [
+    {
+     "name": "file_intake",
+     "arguments": {
+      "record": {
+       "kind": "audio_note",
+       "fields": {
+        "transcript": "Work order 7712. Replace the hydraulic pump on line 3. Priority high. Due Friday.",
+        "work_order": "7712",
+        "task": "Replace the hydraulic pump on line 3",
+        "priority": "high",
+        "due": "Friday",
+        "action_items": [
+         "Replace the hydraulic pump on line 3"
+        ]
+       },
+       "notes": "Filed from audible audio only."
+      }
+     }
+    }
+   ],
+   "trace": [
+    {
+     "tool": "file_intake",
+     "arguments": {
+      "record": {
+       "kind": "audio_note",
+       "fields": {
+        "transcript": "Work order 7712. Replace the hydraulic pump on line 3. Priority high. Due Friday.",
+        "work_order": "7712",
+        "task": "Replace the hydraulic pump on line 3",
+        "priority": "high",
+        "due": "Friday",
+        "action_items": [
+         "Replace the hydraulic pump on line 3"
+        ]
+       },
+       "notes": "Filed from audible audio only."
+      }
+     },
+     "result": {
+      "filed": 1,
+      "intake_total": 7,
+      "kind": "audio_note",
+      "fields": {
+       "transcript": "Work order 7712. Replace the hydraulic pump on line 3. Priority high. Due Friday.",
+       "work_order": "7712",
+       "task": "Replace the hydraulic pump on line 3",
+       "priority": "high",
+       "due": "Friday",
+       "action_items": [
+        "Replace the hydraulic pump on line 3"
+       ]
+      }
+     }
+    }
+   ],
+   "final_text": "Filed 1 audio_note intake (total 7, awaiting human approval):\n\n- **Transcript:** \"Work order 7712. Replace the hydraulic pump on line 3. Priority high. Due Friday.\"\n- **Work order:** 7712\n- **Task:** Replace the hydraulic pump on line 3\n- **Priority:** high\n- **Due:** Friday\n- **Action items:** Replace the hydraulic pump on line 3",
+   "refusal": false,
+   "tokens_in": 6975,
+   "tokens_out": 671,
+   "calls": 2,
+   "cost_usd": 0.001033,
+   "recorded_at": "2026-11-26T15:54:07Z",
+   "next_steps": [
+    {
+     "label": "Save that transcript as a Word file",
+     "kind": "action",
+     "command": "Save that transcript as a Word file."
+    },
+    {
+     "label": "File high-priority ticket for WO 7712",
+     "kind": "action",
+     "command": "File a P1 Hardware ticket for work order 7712 to replace the hydraulic pump on line 3 due Friday"
+    },
+    {
+     "label": "Daily watcher check for WO 7712",
+     "kind": "automate",
+     "command": "Build a new automated agentic workflow."
+    }
+   ],
+   "automate_command": "Build a new automated agentic workflow.",
+   "default_action": {
+    "label": "Save that transcript as a Word file",
+    "command": "Save that transcript as a Word file."
+   }
+  },
+  {
+   "key": "video-intake",
+   "command": "Video attached (sample-fault.mp4) \u2014 watch it and file what it shows.",
+   "rationale": "Watching the video and filing intake with only the on-screen text I can see \u2014 no speech is audible.",
+   "steps": [
+    {
+     "name": "file_intake",
+     "arguments": {
+      "record": {
+       "kind": "video",
+       "fields": {
+        "on_screen_text": "PUMP FAULT - LINE 3\nPRESSURE 42 PSI",
+        "summary": "Static dark screen displaying text alert for Pump Fault - Line 3 with pressure 42 PSI throughout the clip.",
+        "transcript": ""
+       }
+      }
+     }
+    }
+   ],
+   "trace": [
+    {
+     "tool": "file_intake",
+     "arguments": {
+      "record": {
+       "kind": "video",
+       "fields": {
+        "on_screen_text": "PUMP FAULT - LINE 3\nPRESSURE 42 PSI",
+        "summary": "Static dark screen displaying text alert for Pump Fault - Line 3 with pressure 42 PSI throughout the clip.",
+        "transcript": ""
+       }
+      }
+     },
+     "result": {
+      "filed": 1,
+      "intake_total": 8,
+      "kind": "video",
+      "fields": {
+       "on_screen_text": "PUMP FAULT - LINE 3\nPRESSURE 42 PSI",
+       "summary": "Static dark screen displaying text alert for Pump Fault - Line 3 with pressure 42 PSI throughout the clip.",
+       "transcript": ""
+      }
+     }
+    }
+   ],
+   "final_text": "Video intake filed (1 record, intake_total 8): on-screen text shows \"PUMP FAULT - LINE 3\" and \"PRESSURE 42 PSI\", with no audible transcript. The clip is a static dark screen displaying that fault alert throughout.",
+   "refusal": false,
+   "tokens_in": 7131,
+   "tokens_out": 421,
+   "calls": 2,
+   "cost_usd": 0.000923,
+   "recorded_at": "2026-11-26T15:54:11Z",
+   "next_steps": [
+    {
+     "label": "Save that transcript as a Word file",
+     "kind": "action",
+     "command": "Save that transcript as a Word file."
+    },
+    {
+     "label": "Check watcher status",
+     "kind": "action",
+     "command": "get_watcher_status"
+    },
+    {
+     "label": "Check cube status",
+     "kind": "action",
+     "command": "cube_status"
+    },
+    {
+     "label": "Monitor pump fault predictions",
+     "kind": "automate",
+     "command": "Build a new automated agentic workflow."
+    }
+   ],
+   "automate_command": "Build a new automated agentic workflow.",
+   "default_action": {
+    "label": "Save that transcript as a Word file",
+    "command": "Save that transcript as a Word file."
+   }
+  },
+  {
+   "key": "dashboard-builder",
+   "command": "Build a dashboard showing capacity and FinOps costs.",
+   "rationale": "Building your capacity + FinOps dashboard now \u2014 laying out the spec for approval.",
+   "steps": [
+    {
+     "name": "create_dashboard",
+     "arguments": {
+      "title": "Capacity and FinOps Costs",
+      "subtitle": "Host capacity headroom alongside Cube run costs and budget projection",
+      "endpoints": [
+       "capacity",
+       "finops"
+      ],
+      "kpis": [
+       {
+        "label": "Disk %",
+        "field": "capacity_host_disk_pct",
+        "format": "pct"
+       },
+       {
+        "label": "GPU Mem %",
+        "field": "capacity_host_gpu_mem_pct",
+        "format": "pct"
+       },
+       {
+        "label": "CPU %",
+        "field": "capacity_host_cpu_pct",
+        "format": "pct"
+       },
+       {
+        "label": "Disk Days to 90%",
+        "field": "capacity_host_disk_days_to_90",
+        "format": "ratio"
+       },
+       {
+        "label": "Cost Today ($)",
+        "field": "finops_costs_today_usd",
+        "format": "money"
+       },
+       {
+        "label": "Daily Burn ($)",
+        "field": "finops_costs_daily_burn_usd",
+        "format": "money"
+       },
+       {
+        "label": "Month Projected ($)",
+        "field": "finops_costs_month_projected_usd",
+        "format": "money"
+       },
+       {
+        "label": "Budget Projected %",
+        "field": "finops_budget_projected_pct",
+        "format": "pct"
+       }
+      ],
+      "charts": [
+       {
+        "type": "bar",
+        "title": "Component uptime 7d %",
+        "from": "capacity_components",
+        "label_field": "component",
+        "value_field": "uptime_7d_pct"
+       },
+       {
+        "type": "bar",
+        "title": "Component incidents 7d",
+        "from": "capacity_components",
+        "label_field": "component",
+        "value_field": "incidents_7d"
+       },
+       {
+        "type": "line",
+        "title": "Component latency 24h (ms)",
+        "from": "capacity_components",
+        "label_field": "component",
+        "value_field": "latency_avg_24h_ms"
+       }
+      ],
+      "table": {
+       "title": "Capacity components",
+       "from": "capacity_components",
+       "columns": [
+        "component",
+        "up",
+        "uptime_7d_pct",
+        "latency_avg_24h_ms",
+        "latency_avg_7d_ms",
+        "incidents_7d"
+       ]
+      },
+      "thresholds": [
+       {
+        "label": "Disk > 80%",
+        "field": "capacity_host_disk_pct",
+        "op": ">",
+        "value": 80
+       },
+       {
+        "label": "Budget > 80%",
+        "field": "finops_budget_projected_pct",
+        "op": ">",
+        "value": 80
+       }
+      ]
+     }
+    }
+   ],
+   "trace": [
+    {
+     "tool": "create_dashboard",
+     "arguments": {
+      "title": "Capacity and FinOps Costs",
+      "subtitle": "Host capacity headroom alongside Cube run costs and budget projection",
+      "endpoints": [
+       "capacity",
+       "finops"
+      ],
+      "kpis": [
+       {
+        "label": "Disk %",
+        "field": "capacity_host_disk_pct",
+        "format": "pct"
+       },
+       {
+        "label": "GPU Mem %",
+        "field": "capacity_host_gpu_mem_pct",
+        "format": "pct"
+       },
+       {
+        "label": "CPU %",
+        "field": "capacity_host_cpu_pct",
+        "format": "pct"
+       },
+       {
+        "label": "Disk Days to 90%",
+        "field": "capacity_host_disk_days_to_90",
+        "format": "ratio"
+       },
+       {
+        "label": "Cost Today ($)",
+        "field": "finops_costs_today_usd",
+        "format": "money"
+       },
+       {
+        "label": "Daily Burn ($)",
+        "field": "finops_costs_daily_burn_usd",
+        "format": "money"
+       },
+       {
+        "label": "Month Projected ($)",
+        "field": "finops_costs_month_projected_usd",
+        "format": "money"
+       },
+       {
+        "label": "Budget Projected %",
+        "field": "finops_budget_projected_pct",
+        "format": "pct"
+       }
+      ],
+      "charts": [
+       {
+        "type": "bar",
+        "title": "Component uptime 7d %",
+        "from": "capacity_components",
+        "label_field": "component",
+        "value_field": "uptime_7d_pct"
+       },
+       {
+        "type": "bar",
+        "title": "Component incidents 7d",
+        "from": "capacity_components",
+        "label_field": "component",
+        "value_field": "incidents_7d"
+       },
+       {
+        "type": "line",
+        "title": "Component latency 24h (ms)",
+        "from": "capacity_components",
+        "label_field": "component",
+        "value_field": "latency_avg_24h_ms"
+       }
+      ],
+      "table": {
+       "title": "Capacity components",
+       "from": "capacity_components",
+       "columns": [
+        "component",
+        "up",
+        "uptime_7d_pct",
+        "latency_avg_24h_ms",
+        "latency_avg_7d_ms",
+        "incidents_7d"
+       ]
+      },
+      "thresholds": [
+       {
+        "label": "Disk > 80%",
+        "field": "capacity_host_disk_pct",
+        "op": ">",
+        "value": 80
+       },
+       {
+        "label": "Budget > 80%",
+        "field": "finops_budget_projected_pct",
+        "op": ">",
+        "value": 80
+       }
+      ]
+     },
+     "result": {
+      "slug": "capacity-and-finops-costs",
+      "title": "Capacity and FinOps Costs",
+      "url": "https://dashboards.metatroncube.online/d/capacity-and-finops-costs",
+      "endpoints": [
+       "capacity",
+       "finops"
+      ],
+      "source_labels": [
+       "Capacity (Watcher-fed)",
+       "FinOps Summary"
+      ],
+      "kpi_count": 8,
+      "chart_count": 3,
+      "has_table": true,
+      "threshold_count": 2,
+      "refresh_mode": "manual",
+      "refresh_flow_id": null,
+      "designed_by": "ember",
+      "note": "Created and rendered by the Metatron Dashboard Generator from Ember's spec \u2014 live at the URL. No Cube-side model was involved."
+     }
+    }
+   ],
+   "final_text": "Dashboard **Capacity and FinOps Costs** created and rendered by the Metatron Dashboard Generator.\n\n- URL: https://dashboards.metatroncube.online/d/capacity-and-finops-costs\n- Slug: capacity-and-finops-costs\n- Endpoints: Capacity (Watcher-fed), FinOps Summary\n- 8 KPI cards, 3 charts, 1 table, 2 thresholds (Disk > 80%, Budget > 80%)\n- Refresh: manual",
+   "refusal": false,
+   "tokens_in": 21964,
+   "tokens_out": 1427,
+   "calls": 3,
+   "cost_usd": 0.002909,
+   "recorded_at": "2026-11-27T06:54:35Z",
+   "next_steps": [
+    {
+     "label": "List dashboards",
+     "kind": "action",
+     "command": "List the dashboards."
+    },
+    {
+     "label": "Automate a daily capacity and FinOps check",
+     "kind": "automate",
+     "command": "Build a new automated agentic workflow."
+    }
+   ],
+   "automate_command": "Build a new automated agentic workflow."
+  },
+  {
+   "key": "plc-converter",
+   "command": "Convert the sample Allen-Bradley conveyor program to Siemens SCL.",
+   "rationale": "Fixing the rejected mapping \u2014 I\u2019ll re-propose the conversion using CALCULATE in the code so coverage matches.",
+   "steps": [
+    {
+     "name": "convert_plc_code",
+     "arguments": {
+      "direction": "ab_to_siemens",
+      "program_name": "Conveyor_Motor_Control",
+      "source_code": "(* Conveyor_Motor_Control \u2014 Allen-Bradley Studio 5000 Structured Text *)\nIF Start_PB AND NOT Stop_PB AND EStop_OK THEN\n    Run_Cmd := 1;\nELSIF Stop_PB OR NOT EStop_OK THEN\n    Run_Cmd := 0;\nEND_IF;\nTON(RunDelay);\nRunDelay.PRE := 2000;\nMotor_Run := RunDelay.DN AND EStop_OK;\nCTU(PartCount);\nPartCount.PRE := 500;\nBatch_Done := PartCount.DN;\nIF Reset_Count THEN\n    RES(PartCount);\nEND_IF;\nSpeed_Pct := CPT((Analog_In - 4000.0) * 100.0 / 16000.0);\nSpeed_OK := LIM(0.0, Speed_Pct, 100.0);\nSpeed_Cmd := MUL(Speed_Pct, 0.6);\nBatch_Near_Done := GRT(PartCount.ACC, 450);\nIF Motor_Run AND GRT(Motor_Current, 42.0) THEN\n    Alarm_Latched := 1;\nEND_IF;\nIF Alarm_Reset AND NOT GRT(Motor_Current, 42.0) THEN\n    Alarm_Latched := 0;\nEND_IF;\nAlarm_Active := Alarm_Latched;\nMSG(Peer_Msg);\nPeer_Msg.EN := Batch_Done;",
+      "converted_code": "(* Conveyor_Motor_Control \u2014 Siemens SCL DRAFT for qualified-engineer review *)\nIF Start_PB AND NOT Stop_PB AND EStop_OK THEN\n    Run_Cmd := TRUE;\nELSIF Stop_PB OR NOT EStop_OK THEN\n    Run_Cmd := FALSE;\nEND_IF;\nTON(IN := Run_Cmd, PT := T#2000ms, Q => RunDelay_DN, ET => RunDelay_ET);\nMotor_Run := RunDelay_DN AND EStop_OK;\nCTU(CU := PartIn, R := Reset_Count, PV := 500, CV => PartCount_CV, Q => Batch_Done);\nSpeed_Pct := CALCULATE((Analog_In - 4000.0) * 100.0 / 16000.0);\nSpeed_OK := LIMIT(0.0, Speed_Pct, 100.0);\nSpeed_Cmd := MUL(Speed_Pct, 0.6);\nBatch_Near_Done := GT(PartCount_CV, 450);\nIF Motor_Run AND GT(Motor_Current, 42.0) THEN\n    Alarm_Latched := TRUE;\nEND_IF;\nIF Alarm_Reset AND NOT GT(Motor_Current, 42.0) THEN\n    Alarm_Latched := FALSE;\nEND_IF;\nAlarm_Active := Alarm_Latched;\n(* RES unsupported: reset implemented via CTU R input above, no RES call *)\n(* MSG unsupported: peer messaging requires redesign with TSEND_C and connection DB, no MSG call *)",
+      "coverage": [
+       {
+        "instruction": "TON",
+        "status": "mapped",
+        "target": "TON",
+        "note": "Siemens TON with IN PT Q ET"
+       },
+       {
+        "instruction": "CTU",
+        "status": "mapped",
+        "target": "CTU",
+        "note": "Siemens CTU with CU R PV CV Q"
+       },
+       {
+        "instruction": "RES",
+        "status": "unsupported",
+        "note": "No Siemens RES; reset via CTU R input, redesign needed for generic TIMER/COUNTER reset"
+       },
+       {
+        "instruction": "CPT",
+        "status": "mapped",
+        "target": "CALCULATE",
+        "note": "CPT replaced by Siemens CALCULATE expression used in converted_code"
+       },
+       {
+        "instruction": "LIM",
+        "status": "mapped",
+        "target": "LIMIT",
+        "note": "Siemens LIMIT low, value, high"
+       },
+       {
+        "instruction": "MUL",
+        "status": "mapped",
+        "target": "MUL",
+        "note": "Siemens MUL instruction used in converted_code"
+       },
+       {
+        "instruction": "GRT",
+        "status": "mapped",
+        "target": "GT",
+        "note": "Siemens GT comparator used in converted_code"
+       },
+       {
+        "instruction": "MSG",
+        "status": "unsupported",
+        "note": "No Siemens MSG; peer messaging requires TSEND_C/TCON redesign with connection DB"
+       }
+      ],
+      "notes": "DRAFT for qualified-engineer review, not deployed or safety-certified. BOOL TRUE/FALSE replaces 1/0. TON PRE 2000ms mapped to T#2000ms. CTU reset via R input replaces RES. CALCULATE used for CPT scaling. LIMIT, MUL, GT used as in coverage. MSG and RES unsupported and omitted with comments."
+     }
+    }
+   ],
+   "trace": [
+    {
+     "tool": "convert_plc_code",
+     "arguments": {
+      "direction": "ab_to_siemens",
+      "program_name": "Conveyor_Motor_Control",
+      "source_code": "(* Conveyor_Motor_Control \u2014 Allen-Bradley Studio 5000 Structured Text *)\nIF Start_PB AND NOT Stop_PB AND EStop_OK THEN\n    Run_Cmd := 1;\nELSIF Stop_PB OR NOT EStop_OK THEN\n    Run_Cmd := 0;\nEND_IF;\nTON(RunDelay);\nRunDelay.PRE := 2000;\nMotor_Run := RunDelay.DN AND EStop_OK;\nCTU(PartCount);\nPartCount.PRE := 500;\nBatch_Done := PartCount.DN;\nIF Reset_Count THEN\n    RES(PartCount);\nEND_IF;\nSpeed_Pct := CPT((Analog_In - 4000.0) * 100.0 / 16000.0);\nSpeed_OK := LIM(0.0, Speed_Pct, 100.0);\nSpeed_Cmd := MUL(Speed_Pct, 0.6);\nBatch_Near_Done := GRT(PartCount.ACC, 450);\nIF Motor_Run AND GRT(Motor_Current, 42.0) THEN\n    Alarm_Latched := 1;\nEND_IF;\nIF Alarm_Reset AND NOT GRT(Motor_Current, 42.0) THEN\n    Alarm_Latched := 0;\nEND_IF;\nAlarm_Active := Alarm_Latched;\nMSG(Peer_Msg);\nPeer_Msg.EN := Batch_Done;",
+      "converted_code": "(* Conveyor_Motor_Control \u2014 Siemens SCL DRAFT for qualified-engineer review *)\nIF Start_PB AND NOT Stop_PB AND EStop_OK THEN\n    Run_Cmd := TRUE;\nELSIF Stop_PB OR NOT EStop_OK THEN\n    Run_Cmd := FALSE;\nEND_IF;\nTON(IN := Run_Cmd, PT := T#2000ms, Q => RunDelay_DN, ET => RunDelay_ET);\nMotor_Run := RunDelay_DN AND EStop_OK;\nCTU(CU := PartIn, R := Reset_Count, PV := 500, CV => PartCount_CV, Q => Batch_Done);\nSpeed_Pct := CALCULATE((Analog_In - 4000.0) * 100.0 / 16000.0);\nSpeed_OK := LIMIT(0.0, Speed_Pct, 100.0);\nSpeed_Cmd := MUL(Speed_Pct, 0.6);\nBatch_Near_Done := GT(PartCount_CV, 450);\nIF Motor_Run AND GT(Motor_Current, 42.0) THEN\n    Alarm_Latched := TRUE;\nEND_IF;\nIF Alarm_Reset AND NOT GT(Motor_Current, 42.0) THEN\n    Alarm_Latched := FALSE;\nEND_IF;\nAlarm_Active := Alarm_Latched;\n(* RES unsupported: reset implemented via CTU R input above, no RES call *)\n(* MSG unsupported: peer messaging requires redesign with TSEND_C and connection DB, no MSG call *)",
+      "coverage": [
+       {
+        "instruction": "TON",
+        "status": "mapped",
+        "target": "TON",
+        "note": "Siemens TON with IN PT Q ET"
+       },
+       {
+        "instruction": "CTU",
+        "status": "mapped",
+        "target": "CTU",
+        "note": "Siemens CTU with CU R PV CV Q"
+       },
+       {
+        "instruction": "RES",
+        "status": "unsupported",
+        "note": "No Siemens RES; reset via CTU R input, redesign needed for generic TIMER/COUNTER reset"
+       },
+       {
+        "instruction": "CPT",
+        "status": "mapped",
+        "target": "CALCULATE",
+        "note": "CPT replaced by Siemens CALCULATE expression used in converted_code"
+       },
+       {
+        "instruction": "LIM",
+        "status": "mapped",
+        "target": "LIMIT",
+        "note": "Siemens LIMIT low, value, high"
+       },
+       {
+        "instruction": "MUL",
+        "status": "mapped",
+        "target": "MUL",
+        "note": "Siemens MUL instruction used in converted_code"
+       },
+       {
+        "instruction": "GRT",
+        "status": "mapped",
+        "target": "GT",
+        "note": "Siemens GT comparator used in converted_code"
+       },
+       {
+        "instruction": "MSG",
+        "status": "unsupported",
+        "note": "No Siemens MSG; peer messaging requires TSEND_C/TCON redesign with connection DB"
+       }
+      ],
+      "notes": "DRAFT for qualified-engineer review, not deployed or safety-certified. BOOL TRUE/FALSE replaces 1/0. TON PRE 2000ms mapped to T#2000ms. CTU reset via R input replaces RES. CALCULATE used for CPT scaling. LIMIT, MUL, GT used as in coverage. MSG and RES unsupported and omitted with comments."
+     },
+     "result": {
+      "conversion_id": "plc-0c1fe35e",
+      "direction": "ab_to_siemens",
+      "direction_label": "Allen-Bradley \u2192 Siemens",
+      "program_name": "Conveyor_Motor_Control",
+      "converted_code": "(* Conveyor_Motor_Control \u2014 Siemens SCL DRAFT for qualified-engineer review *)\nIF Start_PB AND NOT Stop_PB AND EStop_OK THEN\n    Run_Cmd := TRUE;\nELSIF Stop_PB OR NOT EStop_OK THEN\n    Run_Cmd := FALSE;\nEND_IF;\nTON(IN := Run_Cmd, PT := T#2000ms, Q => RunDelay_DN, ET => RunDelay_ET);\nMotor_Run := RunDelay_DN AND EStop_OK;\nCTU(CU := PartIn, R := Reset_Count, PV := 500, CV => PartCount_CV, Q => Batch_Done);\nSpeed_Pct := CALCULATE((Analog_In - 4000.0) * 100.0 / 16000.0);\nSpeed_OK := LIMIT(0.0, Speed_Pct, 100.0);\nSpeed_Cmd := MUL(Speed_Pct, 0.6);\nBatch_Near_Done := GT(PartCount_CV, 450);\nIF Motor_Run AND GT(Motor_Current, 42.0) THEN\n    Alarm_Latched := TRUE;\nEND_IF;\nIF Alarm_Reset AND NOT GT(Motor_Current, 42.0) THEN\n    Alarm_Latched := FALSE;\nEND_IF;\nAlarm_Active := Alarm_Latched;\n(* RES unsupported: reset implemented via CTU R input above, no RES call *)\n(* MSG unsupported: peer messaging requires redesign with TSEND_C and connection DB, no MSG call *)",
+      "coverage": [
+       {
+        "instruction": "TON",
+        "status": "mapped",
+        "target": "TON",
+        "note": "Siemens TON with IN PT Q ET"
+       },
+       {
+        "instruction": "CTU",
+        "status": "mapped",
+        "target": "CTU",
+        "note": "Siemens CTU with CU R PV CV Q"
+       },
+       {
+        "instruction": "RES",
+        "status": "unsupported",
+        "target": "",
+        "note": "No Siemens RES; reset via CTU R input, redesign needed for generic TIMER/COUNTER reset"
+       },
+       {
+        "instruction": "CPT",
+        "status": "mapped",
+        "target": "CALCULATE",
+        "note": "CPT replaced by Siemens CALCULATE expression used in converted_code"
+       },
+       {
+        "instruction": "LIM",
+        "status": "mapped",
+        "target": "LIMIT",
+        "note": "Siemens LIMIT low, value, high"
+       },
+       {
+        "instruction": "MUL",
+        "status": "mapped",
+        "target": "MUL",
+        "note": "Siemens MUL instruction used in converted_code"
+       },
+       {
+        "instruction": "GRT",
+        "status": "mapped",
+        "target": "GT",
+        "note": "Siemens GT comparator used in converted_code"
+       },
+       {
+        "instruction": "MSG",
+        "status": "unsupported",
+        "target": "",
+        "note": "No Siemens MSG; peer messaging requires TSEND_C/TCON redesign with connection DB"
+       }
+      ],
+      "stats": {
+       "source_instructions": 8,
+       "coverage_entries": 8,
+       "mapped": 6,
+       "unsupported": 2,
+       "flagged": [
+        "RES",
+        "MSG"
+       ]
+      },
+      "manual_context": {
+       "manuals": [
+        {
+         "file": "ab-1756-pm007.txt",
+         "platform": "ab",
+         "chars": 53872,
+         "approx_tokens": 13468
+        },
+        {
+         "file": "ab-1756-rm003.txt",
+         "platform": "ab",
+         "chars": 270128,
+         "approx_tokens": 67532
+        },
+        {
+         "file": "siemens-programming-guideline-v16.txt",
+         "platform": "siemens",
+         "chars": 21299,
+         "approx_tokens": 5324
+        },
+        {
+         "file": "siemens-s7-1200-system.txt",
+         "platform": "siemens",
+         "chars": 374701,
+         "approx_tokens": 93675
+        }
+       ],
+       "chars": 720000,
+       "approx_tokens": 180000,
+       "direction": "ab_to_siemens"
+      },
+      "status": "draft",
+      "note": "DRAFT conversion (Allen-Bradley \u2192 Siemens): 6 of 8 source instructions mapped; flagged unsupported: RES, MSG. For qualified-engineer review \u2014 not safety-certified, nothing deployed."
+     }
+    }
+   ],
+   "final_text": "Allen-Bradley \u2192 Siemens conversion completed as a **DRAFT** (conversion_id: `plc-0c1fe35e`) for qualified-engineer review \u2014 not safety-certified and nothing deployed.\n\n**Coverage: 6 of 8 source instructions mapped; 2 flagged unsupported:**\n- **TON \u2192 TON** \u2014 `TON(IN := Run_Cmd, PT := T#2000ms, Q => RunDelay_DN, ET => RunDelay_ET)`\n- **CTU \u2192 CTU** \u2014 `CTU(CU := PartIn, R := Reset_Count, PV := 500, CV => PartCount_CV, Q => Batch_Done)`\n- **CPT \u2192 CALCULATE** \u2014 used in `Speed_Pct := CALCULATE((Analog_In - 4000.0) * 100.0 / 16000.0);`\n- **LIM \u2192 LIMIT**, **MUL \u2192 MUL**, **GRT \u2192 GT** \u2014 all used in the converted code\n- **RES \u2014 unsupported:** No Siemens RES; reset is implemented via the CTU `R` input, with generic timer/counter reset redesign noted\n- **MSG \u2014 unsupported:** No Siemens MSG; peer messaging requires redesign with `TSEND_C`/`TCON` and a connection DB\n\nConverted code and full coverage are stored in the draft. BOOL `TRUE`/`FALSE` replace AB `1`/`0`, and the TON preset of 2000 ms maps to `T#2000ms`.",
+   "refusal": false,
+   "tokens_in": 333332,
+   "tokens_out": 3943,
+   "calls": 3,
+   "cost_usd": 0.035304,
+   "recorded_at": "2026-11-27T08:25:58Z",
+   "next_steps": [
+    {
+     "label": "Save PLC conversion as TXT",
+     "kind": "action",
+     "command": "Save the PLC conversion as a text file."
+    },
+    {
+     "label": "Automate PLC draft review check",
+     "kind": "automate",
+     "command": "Build a new automated agentic workflow."
+    }
+   ],
+   "automate_command": "Build a new automated agentic workflow."
+  },
+  {
+   "key": "medical-manual",
+   "command": "What does the manual say about the symptoms of acute viral hepatitis?",
+   "rationale": "Checking the manual on acute viral hepatitis symptoms for you.",
+   "steps": [
+    {
+     "name": "ask_medical_manual",
+     "arguments": {
+      "question": "What does the manual say about the symptoms of acute viral hepatitis?"
+     }
+    }
+   ],
+   "trace": [
+    {
+     "tool": "ask_medical_manual",
+     "arguments": {
+      "question": "What does the manual say about the symptoms of acute viral hepatitis?"
+     },
+     "result": {
+      "_trimmed_for_replay": true,
+      "preview": "{\"manual\": \"The Merck Manual of Diagnosis & Therapy, 19th Edition\", \"question\": \"What does the manual say about the symptoms of acute viral hepatitis?\", \"covered\": true, \"passages\": [{\"chapter\": \"Chapter 28. Hepatitis\", \"section\": \"Introduction\", \"pages\": \"p. 322\", \"text\": \"Hepatitis is an inflammation of the liver characterized by diffuse or patchy necrosis. Major causes are specific hepatitis viruses, alcohol, and drugs. Less common causes include other viral infections (eg, infectious mononucleosis, yellow fever, cytomegalovirus infection) and leptospirosis. Parasitic infections (eg, schistosomiasis, malaria, amebiasis), pyogenic infections, and abscesses that affect the liver are not considered hepatitis. Liver involvement with TB and other granulomatous infiltrations is sometimes called granulomatous hepatitis, but the clinical, biochemical, and histologic features differ from those of diffuse hepatitis. Various systemic infections and other illnesses may produce small focal areas of hepatic inflammation or necrosis. This nonspecific reactive hepatitis can cause minor liver function abnormalities but is usually asymptomatic. Some types of infectious and noninfectious liver inflammation are summarized (see\"}, {\"chapter\": \"Chapter 28. Hepatitis\", \"section\": \"Acute Viral Hepatitis\", \"pages\": \"p. 322\", \"text\": \"Acute viral hepatitis is diffuse liver inflammation caused by specific hepatotropic viruses that have diverse modes of transmission and epidemiologies. A nonspecific viral prodrome is followed by anorexia, nausea, and often fever or right upper quadrant pain. Jaundice often develops, typically as other symptoms begin to resolve. Most cases resolve spontaneously, but some progress to chronic hepatitis. Occasionally, acute viral hepatitis progresses to acute hepatic failure (fulminant hepatitis). Diagnosis is by liver function tests and serologic tests to identify the virus. Good hygiene can prevent acute viral hepatitis. Depending on the specific virus, preexposure and postexposure prophylaxis may be possible using vaccines or serum globulins. Treatment is usually supportive. (See also Neonatal Hepatitis B Virus Infection on p. 2825 .) Acute viral hepatitis is a common, worldwide disease that has different causes; each type shares clinical, biochemical, and morphologic features. Liver infections caused by nonhepatitis viruses (eg, Epstein-Barr virus, yellow fever virus, cytomegalovirus) generally are not termed acute viral hepatitis.\"}, {\"chapter\": \"Chapter 28. Hepatitis\", \"section\": \"Etiology\", \"pages\": \"p. 322\", \"text\": \"At least 5 specific viruses appear to be responsible (see\"}, {\"chapter\": \"Chapter 28. Hepatitis\", \"section\": \"Table 28-2\", \"pages\": \"p. 322\", \"text\": \"). Other unidentified viruses probably also cause acute viral hepatitis. Hepatitis A virus (HAV): HAV is a single-stranded RNA picornavirus. It is the most common cause of acute viral hepatitis and is particularly common among children and young adults. In some countries, > 75% of adults have been exposed. HAV spreads primarily by fecal-oral contact and thus may occur in areas of poor hygiene. Waterborne and food-borne epidemics occur, especially in underdeveloped countries. Eating contaminated raw shellfish is sometimes responsible. Sporadic cases are also common, usually as a result of person-to-person contact. Fecal shedding of the virus occurs before symptoms develop and usually ceases a few days after symptoms begin; thus, infectivity often has already ceased when hepatitis becomes clinically evident. HAV has no known chronic carrier state and does not cause chronic hepatitis or cirrhosis. Hepatitis B virus (HBV): HBV is the most thoroughly characterized and complex hepatitis virus. The infective particle consists of a viral core plus an outer surface coat. The core contains circular doublestranded DNA and DNA polymerase, and it replicates within the nuclei of infected hepatocytes. A surface coat is added in the cytoplasm and, for unknown reasons, is produced in great excess. HBV is the 2nd most common cause of acute viral hepatitis. Prior unrecognized infection is common but is\"}, {\"chapter\": \"Chapter 28. Hepatitis\", \"section\": \"Chapter 28. Hepatitis\", \"pages\": \"p. 323\", \"text\": \"much less widespread than that with HAV. HBV is often transmitted parenterally, typically by contaminated blood or blood products. Routine screening of donor blood for hepatitis B surface antigen (HBsAg) has nearly eliminated the previously common posttransfusion transmission, but transmission through needles shared by drug users remains common. Risk of HBV is increased for patients in renal dialysis and oncology units and for hospital personnel in contact with blood. The virus may be spread through contact with other body fluids (eg, between sex partners, both heterosexual and homosexual; in closed institutions, such as mental health institutions and prisons), but infectivity is far lower than that of HAV, and the means of transmission is often unknown. The role of insect bites in transmission is unclear. Many cases of acute hepatitis B occur sporadically without a known source. HBV, for unknown reasons, is sometimes associated with several primarily extrahepatic disorders, including polyarteritis nodosa, other connective tissue diseases, membranous glomerulonephritis, and essential mixed cryoglobulinemia. The pathogenic role of HBV in these disorders is unclear, but autoimmune mechanisms are suggested. Chronic HBV carriers provide a worldwide reservoir of infection. Prevalence varies widely according to several factors, including geography (eg, < 0.5% in North America and northern Europe, > 10% in some regions of the Far East). Vertical transmission from mother to infant is common (see p. 2644 ). [ Table 28-1.\"}, {\"chapter\": \"Chapter 28. Hepatitis\", \"section\": \"Selected Diseases or Organisms Associated with Liver Inflammation]\", \"pages\": \"p. 323\", \"text\": \"Hepatitis C virus (HCV): HCV is a single-stranded RNA flavivirus. Six major"
+     }
+    }
+   ],
+   "final_text": "## Chapter 28. Hepatitis\nAcute viral hepatitis is presented as diffuse liver inflammation, beginning with a nonspecific viral prodrome followed by anorexia, nausea, and often fever or right upper quadrant pain (Chapter 28. Hepatitis \u2014 Acute Viral Hepatitis, p. 322). Jaundice often develops as other symptoms begin to resolve (Chapter 28. Hepatitis \u2014 Acute Viral Hepatitis, p. 322). Most cases resolve spontaneously, but some progress to chronic hepatitis, and occasionally to acute hepatic failure / fulminant hepatitis (Chapter 28. Hepatitis \u2014 Acute Viral Hepatitis, p. 322). Specific notes vary by virus: HCV may be asymptomatic during acute infection, with fluctuating severity (Chapter 28. Hepatitis \u2014 Chapter 28. Hepatitis, p. 324); acute HDV typically manifests as unusually severe acute HBV infection or an exacerbation in chronic HBV carriers (Chapter 28. Hepatitis \u2014 Characteristics of Hepatitis Viruses], p. 324). Diagnosis is by liver function tests \u2014 AST and ALT elevated out of proportion to alkaline phosphatase, usually with hyperbilirubinemia \u2014 and serologic tests to identify the virus (Chapter 28. Hepatitis \u2014 Acute Viral Hepatitis, p. 322; Chapter 28. Hepatitis \u2014 Diagnosis, p. 324). In the prodromal phase hepatitis mimics nonspecific viral illnesses and is difficult to diagnose, and is usually suspected only during the icteric phase (Chapter 28. Hepatitis \u2014 Diagnosis, p. 324). Treatment is usually supportive (Chapter 28. Hepatitis \u2014 Acute Viral Hepatitis, p. 322).\n\n## Chapter 23. Approach to the Patient With Liver Disease\nCommon nonspecific symptoms in liver disorders include fatigue, anorexia, nausea and occasionally vomiting, while jaundice is described as the most specific symptom and is often accompanied by dark urine and light stools (Chapter 23. Approach to the Patient With Liver Disease \u2014 Evaluation, p. 276). Fever can develop in viral hepatitis (Chapter 23. Approach to the Patient With Liver Disease \u2014 Evaluation, p. 276), and right upper quadrant pain usually results from distention or inflammation of the liver capsule (Chapter 23. Approach to the Patient With Liver Disease \u2014 Evaluation, p. 276). Prodromal symptoms before jaundice, such as fever, malaise and myalgias, are listed among important associated symptoms in evaluating jaundice (Chapter 23. Approach to the Patient With Liver Disease \u2014 Evaluation, p. 282). Acute jaundice, particularly with a viral prodrome, in the young and healthy is noted to suggest acute viral hepatitis (Chapter 23. Approach to the Patient With Liver Disease \u2014 Key Points, p. 285). Symptoms may be attenuated in the elderly, e.g. abdominal pain may be mild or absent in acute viral hepatitis (Chapter 23. Approach to the Patient With Liver Disease \u2014 Geriatrics Essentials, p. 285).\n\n## Chapter 263. Pregnancy Complicated by Disease\nAcute viral hepatitis is described as the most common cause of jaundice during pregnancy, may predispose to preterm delivery but does not appear teratogenic, and is generally mild, while hepatitis E may be severe (Chapter 263. Pregnancy Complicated by Disease \u2014 Hepatic Disorders in Pregnancy, p. 2803).\n\n## Chapter 149. Viruses\nViral hepatitis is listed among disorders caused by viruses affecting primarily the liver, transmitted by contact with infected blood or body secretions, or by the fecal-oral route for hepatitis A and E, with hepatitis D infecting only when hepatitis B is present (Chapter 149. Viruses \u2014 Ch. 28, p. 1557).\n\n## Chapter 128. Transplantation\nThis chapter's passages mention viral hepatitis only in the context of liver transplantation, including recurrence of hepatitis B and C after transplantation and differential diagnosis of rejection (Chapter 128. Transplantation \u2014 Chapter 128. Transplantation, p. 1274).\n\nSynthesis: The manual characterises acute viral hepatitis chiefly by a prodrome of anorexia, nausea, fever and right upper quadrant pain followed by jaundice as symptoms improve (Chapter 28. Hepatitis \u2014 Acute Viral Hepatitis, p. 322), with jaundice described as the most specific symptom among liver disorders (Chapter 23. Approach to the Patient With Liver Disease \u2014 Evaluation, p. 276).\n\n\u2695\ufe0f Demo \u2014 information from The Merck Manual of Diagnosis & Therapy (19th Ed.) only. Not medical advice; consult a qualified professional.",
+   "refusal": false,
+   "tokens_in": 25853,
+   "tokens_out": 984,
+   "calls": 1,
+   "cost_usd": 0.003077,
+   "recorded_at": "2026-11-27T13:56:40Z",
+   "next_steps": [
+    {
+     "label": "Export medical answer as Word file",
+     "kind": "action",
+     "command": "Save the medical answer as a Word file."
+    },
+    {
+     "label": "Automate hepatitis symptom reference check",
+     "kind": "automate",
+     "command": "Build a new automated agentic workflow."
+    }
+   ],
+   "automate_command": "Build a new automated agentic workflow."
+  },
+  {
+   "key": "paralegal",
+   "command": "What does the law say about federal-question jurisdiction?",
+   "rationale": "Checking the U.S. Code for federal-question jurisdiction \u2014 pulling the controlling passages for you.",
+   "steps": [
+    {
+     "name": "ask_paralegal",
+     "arguments": {
+      "question": "What does the law say about federal-question jurisdiction?"
+     }
+    }
+   ],
+   "trace": [
+    {
+     "tool": "ask_paralegal",
+     "arguments": {
+      "question": "What does the law say about federal-question jurisdiction?"
+     },
+     "result": {
+      "_trimmed_for_replay": true,
+      "preview": "{\"corpus\": \"US public-domain legal sources (U.S. Code, Federal Rules, Constitution, CFR)\", \"question\": \"What does the law say about federal-question jurisdiction?\", \"covered\": true, \"passages\": [{\"source\": \"cfr\", \"group\": \"Title 48 \\u2014 Federal Acquisition Regulations System (CFR)\", \"citation\": \"48 C.F.R. \\u00a7 652.236-71\", \"heading\": \"Foreign Service Buildings Act, as Amended.\", \"text\": \"As prescribed in 636.570(a), insert the following provision:\\n\\nForeign Service Buildings Act, as Amended (FEB 2015) \\n (a) This solicitation is subject to Section 11 of the Foreign Service Buildings Act of 1926, as amended (22 U.S.C. 302). This statute limits competition under this solicitation to: \\n (1) American-owned firms, as described in paragraph (b) of this provision; and, \\n (2) Firms from countries that permit or agree to permit substantially equal access to American firms for comparable diplomatic and consular building projects. \\n (b) To qualify as an American-owned firm for purposes of this solicitation, the bidder/offeror must demonstrate evidence of: \\n (1) Performance of similar construction work in the United States or at a United States diplomatic or consular establishment abroad; and \\n (2) Either\\u2014 \\n (i) Ownership in excess of 50% by U.S. citizens or permanent residents; or \\n (ii) Incorporation in the United States for more than three (3) years and employment of U.S. citizens or permanent residents in more than half of the company's permanent full-time professional and managerial positions in the United States. \\n (c) For purposes of determining competitive status, offers submitted by American-owned firms shall be reduced by ten (10) percent, provided that two responsible bidders/offerors submit a bid/offer. \\n \\n (d) \\n \\n Evidence of qualification. \\n (1) Performance of similar construction work in the United States or at a United States diplomatic or consular establishment abroad. The bidder/offeror must describe below one or more similar projects completed in the United States or at a United States diplomatic or consular establishment abroad. For each project, provide the following information:\\n Location: \\n (City and State/Country) \\n Complexity: \\n \\n (Office building, etc.) \\n Type of construction: \\n Value of project: \\n Location: \\n (City and State/Country) \\n Complexity: \\n \\n (Office building, etc.) \\n Type of construction: \\n Value of project: \\n Location: \\n (City and State/Country) \\n Complexity: \\n \\n (Office building, etc.) \\n Type of construction: \\n Value of project: \\n If the bidder/offeror's participation was as a partner or co-venturer, indicate the percentage of the project performed by the bidder/offeror: ______ % \\n (2) Corporate location or ownership. \\n (i) The bidder/offeror certifies that it \\u25a1 is \\u25a1 is not owned in excess of fifty (50) percent by United States citizens or permanent residents. \\n (ii) The bidder/offeror certifies that it \\u25a1 has \\u25a1 has not been incorporated in the United States for more than three years and that it \\u25a1 employs \\u25a1 does not employ United States citizens or permanent residents in more than half of its permanent full-time professional and managerial positions in the United States. \\n (e) By signing this bid/offer, the bidder/offeror certifies to the best of its knowledge, all of the representations and certifications provided in this provision are accurate, current and complete.\\n\\n(End of provision)\"}, {\"source\": \"cfr\", \"group\": \"Title 48 \\u2014 Federal Acquisition Regulations System (CFR)\", \"citation\": \"48 C.F.R. \\u00a7 652.236-72\", \"heading\": \"Statement of Qualifications for the Omnibus Diplomatic Security and Antiterrorism Act. (part 1 of 7)\", \"text\": \"Statement of Qualifications for the Omnibus Diplomatic Security and Antiterrorism Act (FEB 2015) \\n (a) This solicitation is subject to Section 402 of the Omnibus Diplomatic Security and Antiterrorism Act of 1986 (P.L. 99-399; 22 U.S.C. 4852). The Act limits certain construction projects abroad to United States persons or United States joint venture persons. This Statement of Qualifications shall be used to determine if a bidder/offeror meets the definition of a \\u201cUnited States person\\u201d or a \\u201cUnited States joint venture person\\u201d . \\n \\n (b) \\n \\n Definition. \\n As used in this provision\\u2014\\n \\n \\n U.S. person \\n means a company, partnership, or joint venture that the Government determines, after consideration of all available information, including but not limited to that provided by the bidder/offeror in response to this solicitation, to be qualified pursuant to Section 402.\\n \\n (c) \\n \\n Representation. \\n The bidder/offeror represents as part of its bid/offer that it \\u25a1 does \\u25a1 does not meet the qualifications as a U.S. person as set forth in Section 402 of the Act.\\n \\n [\\n \\n Complete a Statement of Qualifications for Purposes of Determining Status as a U.S. Person if the offeror represents that it is eligible. See paragraph (d) of this provision. \\n ]\\n \\n \\n Warning: \\n Any material misrepresentation made in the Statement of Qualifications may be the basis for disqualification of a bidder/offeror and reference for consideration of suspension or debarment or for prosecution \\n \\n under Federal law (cf. 18 U.S.C. 1001). Bidder/offeror qualifications will be determined primarily on the basis of information submitted in the Statement of Qualifications, including attachments thereto, but the Government may, at its discretion, rely on information contained elsewhere in the bidder's/offeror's bid/proposal or obtained from other sources.\\n \\n (d) \\n \\n Statement of Qualifications for Purposes of Determining Status as a U.S. Person (22 U.S.C. 4852). \\n A bidder/offeror that represents that it is a U.S. person must provide the following information.\\n Statement of Qualifications for Purposes of Determining Status as a U.S. Person (22 U.S.C. 4852) \\n Name and address of U.S. person organization providing this informati"
+     }
+    }
+   ],
+   "final_text": "## Title 28 \u2014 Judiciary and Judicial Procedure\n\nTitle 28 provides that district courts have original jurisdiction over all civil actions arising under the Constitution, laws, or treaties of the United States (28 U.S.C. \u00a7 1331). The surrounding provisions in the retrieved passages address distinct, specific bases of jurisdiction, e.g., actions against foreign states (28 U.S.C. \u00a7 1330), diversity and class-action jurisdiction (28 U.S.C. \u00a7 1332), bankruptcy cases (28 U.S.C. \u00a7 1334), patents and copyrights (28 U.S.C. \u00a7 1338), and suits by or against the United States (28 U.S.C. \u00a7\u00a7 1345-1346), rather than the general federal-question basis stated in \u00a7 1331.\n\n## Title 48 \u2014 Federal Acquisition Regulations System (CFR)\n\nThe retrieved Title 48 passages address federal contracting qualifications and procedures, not the general federal-question jurisdiction provision (e.g., 48 C.F.R. \u00a7 652.236-71; 48 C.F.R. \u00a7 652.237-73).\n\n## Title 20 \u2014 Employees' Benefits (CFR)\n\nThe retrieved Title 20 passages address Social Security and related administrative hearing procedures and jurisdiction of administrative bodies, not the general federal-question jurisdiction provision (e.g., 20 C.F.R. \u00a7 404.944; 20 C.F.R. \u00a7 501.2).\n\n## Title 29 \u2014 Labor (CFR)\n\nThe retrieved Title 29 passages address labor administrative review and related proceedings, not the general federal-question jurisdiction provision (e.g., 29 C.F.R. \u00a7 7.1; 29 C.F.R. \u00a7 9.34).\n\n## Title 38 \u2014 Veterans\u2019 Benefits\n\nThe retrieved Title 38 passages address veterans\u2019 benefits, insurance suits, and review by the Federal Circuit, including exclusive Federal Circuit jurisdiction over certain challenges to the validity of statutes or regulations in that specific veterans\u2019 system (38 U.S.C. \u00a7 7292), not the general federal-question jurisdiction provision.\n\nSynthesis: The directly relevant passage is 28 U.S.C. \u00a7 1331, which states the federal-question basis for original district-court jurisdiction. Other retrieved passages address narrower jurisdictional or administrative contexts.\n\nLegal information from US public-domain sources \u2014 not legal advice.\n\n\u2696\ufe0f Demo \u2014 legal information from US public-domain sources (U.S. Code, Federal Rules, US Constitution, CFR) only. Not legal advice; consult a licensed attorney.",
+   "refusal": false,
+   "tokens_in": 59247,
+   "tokens_out": 650,
+   "calls": 2,
+   "cost_usd": 0.006249,
+   "recorded_at": "2026-11-27T14:41:13Z",
+   "next_steps": [
+    {
+     "label": "Export legal answer as Word file",
+     "kind": "action",
+     "command": "Save the legal answer as a Word file."
+    },
+    {
+     "label": "Automate jurisdiction reference check",
+     "kind": "automate",
+     "command": "Build a new automated agentic workflow."
+    }
+   ],
+   "automate_command": "Build a new automated agentic workflow."
+  }
+ ]
+}

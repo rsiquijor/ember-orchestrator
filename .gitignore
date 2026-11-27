@@ -6,3 +6,12 @@ spend/real-send-done.flag
 board/
 runs/
 .env
+
+# Vendor PLC manual corpus (copyrighted text — box-only, never commit)
+plc_manuals/
+
+# Medical manual corpus (copyrighted text — box-only, never commit)
+medical_manual/
+
+# Legal corpus (public domain, but ~GBs — box-only, never commit)
+legal_corpus/

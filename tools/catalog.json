@@ -1,1 +1,1021 @@
-{"note":"Deterministic workflows and read-only reports ONLY. No Cube-side LLM steps in the demo path — Ember is the only brain. Phase 3 read tools run through the Metatron MCP Bus (JSON-RPC tools/call), except list_connectors and get_asset which call SysOps directly (the MCP wrappers for those two are broken server-side: list_connectors crashes on the types dict, get_asset 404s on ref-format paths). Every read is a pure data fetch — no model runs. Approval tokens are injected by the orchestrator's approval step and are never shown to Ember. EXCLUDED from the MCP bus on purpose: create_ticket (triggers Axion auto-triage), knowledge_search (embedding model), ask_cube (calls Axion).","tools":[{"description":"List the approved deterministic workflows the orchestrator may call.","name":"list_workflows","parameters":{"properties":{},"type":"object"},"returns":"Catalog of workflow ids, names, and required inputs."},{"description":"Read live Watcher status (components up/down, open incidents, host summary) from the AIOps console API. Read-only, deterministic.","name":"get_watcher_status","parameters":{"properties":{},"type":"object"},"returns":"Component totals, open-incident count, recent incidents (trimmed), host summary, as one sanitised payload."},{"description":"Fire a deterministic webhook-triggered Activepieces flow. Requires a human approval token (injected by the approval step) — Ember proposes, a human approves, only then does this unlock.","name":"run_workflow","parameters":{"properties":{"inputs":{"description":"Workflow-specific, deterministic values only.","type":"object"},"workflow_id":{"description":"One of the catalog workflow ids that has a production flow.","enum":["watcher-status-whatsapp"],"type":"string"}},"required":["workflow_id"],"type":"object"},"returns":"Run id and status; results are read back via get_run_status."},{"description":"Poll the result of a fired workflow run.","name":"get_run_status","parameters":{"properties":{"run_id":{"type":"string"}},"required":["run_id"],"type":"object"},"returns":"Run status and its deterministic result payload."},{"description":"File human-approved triaged help-desk tickets to the orchestrator board (deterministic local store; no AI). Each ticket carries Ember's classification, a draft reply, and a route. Requires a human approval token. Nothing is sent to requesters.","name":"file_tickets","parameters":{"properties":{"tickets":{"items":{"properties":{"category":{"enum":["Network","Billing","Access","Hardware","Account","Software","Other"],"type":"string"},"draft_reply":{"description":"Short draft reply to the requester. A draft only — a human approves before anything is sent.","type":"string"},"id":{"description":"Ticket id from the input, e.g. TKT-001.","type":"string"},"priority":{"description":"P1 highest, P4 lowest.","enum":["P1","P2","P3","P4"],"type":"string"},"route":{"description":"Team or queue the ticket routes to.","type":"string"}},"required":["id","category","priority","draft_reply"],"type":"object"},"type":"array"}},"required":["tickets"],"type":"object"},"returns":"Count filed, board total, and the filed ticket ids."},{"backend":"MCP Bus cube_status","description":"Live estate status: components up/down, host vitals, open incidents. Read-only.","name":"cube_status","parameters":{"properties":{},"type":"object"},"returns":"Component totals, down list, host summary, open-incident count."},{"backend":"MCP Bus capacity_report","description":"Capacity report: host saturation, disk-days-to-90 forecast, per-component 7-day uptime and latency. Read-only.","name":"capacity_report","parameters":{"properties":{},"type":"object"},"returns":"Host current + forecast scalars; worst components first (capped)."},{"backend":"MCP Bus list_assets","description":"List CMDB assets (SysOps). Optional type filter and limit. Read-only.","name":"list_assets","parameters":{"properties":{"limit":{"type":"integer"},"type":{"type":"string"}},"type":"object"},"returns":"Count plus capped asset list (ref, name, type, lifecycle)."},{"backend":"SysOps direct (MCP wrapper 404s on ref paths); ref resolved to id via MCP list_assets","description":"Get one CMDB asset by ref (e.g. CI-0001) or numeric id, with relationships. Read-only.","name":"get_asset","parameters":{"properties":{"ref":{"type":"string"}},"required":["ref"],"type":"object"},"returns":"Asset record plus depends/dependents (capped)."},{"backend":"MCP Bus list_changes","description":"Recent SysOps change-register entries. Optional limit. Read-only.","name":"list_changes","parameters":{"properties":{"limit":{"type":"integer"}},"type":"object"},"returns":"Count plus capped change entries (ref, kind, summary, status)."},{"backend":"MCP Bus list_tickets","description":"List ITSM tickets (read-only; never creates). Optional status filter and limit.","name":"list_tickets","parameters":{"properties":{"limit":{"type":"integer"},"status":{"type":"string"}},"type":"object"},"returns":"Count plus capped tickets (ref, title, status, priority, category)."},{"backend":"MCP Bus list_rca","description":"RCA and auto-heal records from ITSM. Read-only.","name":"list_rca","parameters":{"properties":{},"type":"object"},"returns":"Capped RCA records (ref, component, status, policy, summary)."},{"backend":"MCP Bus secops_status","description":"SecOps posture: CVE/KEV/EPSS counts, top priority CVEs, estate totals. Read-only data; never investigates.","name":"secops_status","parameters":{"properties":{},"type":"object"},"returns":"KPIs, source counts, estate totals, top 5 priority CVEs (trimmed)."},{"backend":"MCP Bus list_dashboards","description":"List dashboards from the Dashboard Generator. Read-only.","name":"list_dashboards","parameters":{"properties":{},"type":"object"},"returns":"Capped dashboard list (slug, title, source kind, last refresh)."},{"backend":"MCP Bus list_flows","description":"List Metatron RPA (Activepieces) flows with status. Read-only.","name":"list_flows","parameters":{"properties":{},"type":"object"},"returns":"Total + enabled counts, capped flow list (name, status)."},{"backend":"MCP Bus brain_status","description":"Which local brain is live (Axion/Qwen) and its state. Read-only.","name":"brain_status","parameters":{"properties":{},"type":"object"},"returns":"Live brain name, switching flag, target."},{"backend":"SysOps direct (MCP wrapper crashes server-side on the types dict)","description":"CMDB connectors configured in SysOps and their status. Read-only.","name":"list_connectors","parameters":{"properties":{},"type":"object"},"returns":"Connector list (name, type, status, has_credentials) plus known types."},{"backend":"MCP Bus graph_search","description":"Search the KAG knowledge graph by label text. Read-only.","name":"graph_search","parameters":{"properties":{"q":{"type":"string"}},"required":["q"],"type":"object"},"returns":"Capped matches (label, kind, ref)."},{"backend":"MCP Bus graph_dependents","description":"Blast radius: what depends transitively on a component slug (e.g. model-endpoint). Read-only.","name":"graph_dependents","parameters":{"properties":{"component":{"type":"string"}},"required":["component"],"type":"object"},"returns":"Dependent count plus capped dependents (label, kind, ref)."},{"backend":"MCP Bus predictions","description":"Failure predictions: per-component risk scores, bands, and reasons. Read-only.","name":"predictions","parameters":{"properties":{},"type":"object"},"returns":"Risk max, high/watch counts, host risk, top risks (capped, worst first)."},{"backend":"MCP Bus finops_summary","description":"FinOps summary: Cube run costs today/month/projected, budget %, alerts. Read-only.","name":"finops_summary","parameters":{"properties":{},"type":"object"},"returns":"Costs, budget, alerts, usage counts, host balance days-left."},{"backend":"MCP Bus list_leases","description":"Lease & Acquisition summary: pipeline, expiring/expired leases, rent totals. Read-only.","name":"list_leases","parameters":{"properties":{},"type":"object"},"returns":"Pipeline by stage, totals, capped expiring/expired leases."},{"backend":"MCP Bus sentiment_summary","description":"ITSM sentiment summary: ticket counts by requester sentiment, frustrated users, escalation risk. Read-only.","name":"sentiment_summary","parameters":{"properties":{},"type":"object"},"returns":"Counts by sentiment/risk, averages, capped frustrated tickets."},{"backend":"MCP Bus finclose_summary","description":"FinClose DEMO month-end close KPIs (simulated data): revenue, margins, EBITDA, exceptions. Read-only.","name":"finclose_summary","parameters":{"properties":{},"type":"object"},"returns":"Demo KPIs, close state, exception counts and capped exceptions."}],"version":"0.3.0-phase3","workflows":[{"dependency":"WhatsApp template watcher_status_update (UTILITY, approved Nov 24, 2026; delivery confirmed). Flow verified Nov 26, 2026 via the Activepieces API: webhook trigger -> HTTP (AIOps overview) -> CODE (deterministic compose) -> WhatsApp send -> webhook return. No LLM steps.","flow_id":"rBAcAYAXvIL2hNyrMQG1s","id":"watcher-status-whatsapp","name":"Watcher Status to WhatsApp","status":"production, ENABLED"},{"dependency":"Fixtures in fixtures/tickets.json. Filing route chosen Nov 26, 2026: the orchestrator's own board store. The Cube ITSM create path was rejected for the demo because it unconditionally runs a non-Ember model (auto-triage + sentiment) and sends notifications — both break the Ember-only rule.","id":"helpdesk-triage-routing","name":"Help-desk Triage Desk routing","status":"live — orchestrator board store (board/tickets.json), deterministic"},{"dependency":"Sample shape in fixtures/handover-sample.json; live runs pull the real endpoint.","id":"shift-handover-brief","name":"Shift Handover Brief","status":"live — data from AIOps /api/overview (deterministic)"},{"dependency":"FinOps service :8019 /api/summary via the MCP Bus. Pure data read; Ember only reports the numbers.","id":"finops-summary-report","name":"FinOps Summary Report","status":"live — read-only via MCP Bus finops_summary (deterministic)"},{"dependency":"KAG graph :8018 /api/dependents via the MCP Bus. Reverse depends_on closure over CMDB/Watcher data; no model runs.","id":"blast-radius-report","name":"Blast Radius Report","status":"live — read-only via MCP Bus graph_dependents (deterministic)"},{"dependency":"SecOps :8014 /api/status via the MCP Bus. Cached NVD/KEV/EPSS counts only — the orchestrator never calls investigate/hunt/patch (those run the local brain / execute).","id":"cve-exposure-report","name":"CVE Exposure Report","status":"live — read-only via MCP Bus secops_status (deterministic)"},{"dependency":"AIOps :8008 /api/capacity and /api/predictions via the MCP Bus. Deterministic trend math over Watcher history; no model runs.","id":"capacity-outlook-report","name":"Capacity Outlook Report","status":"live — read-only via MCP Bus capacity_report + predictions (deterministic)"}]}
+{
+ "note": "Deterministic workflows and read-only reports ONLY. No Cube-side LLM steps in the demo path — Ember is the only brain. Phase 3 read tools run through the Metatron MCP Bus (JSON-RPC tools/call); the formerly-broken list_connectors/get_asset wrappers are fixed bus-side (Nov 26, 2026). Since Nov 26, 2026 the live backend DISCOVERS its read tools from the bus (tools/list, eligibility-filtered) at startup and merges them over this catalog, which remains the fallback when the bus is unreachable and the source of the Ember-local gated tools. Every read is a pure data fetch — no model runs. Approval tokens are injected by the orchestrator's approval step and are never shown to Ember. EXCLUDED from the MCP bus on purpose: create_ticket (triggers Axion auto-triage), knowledge_search (embedding model), ask_cube (calls Axion). Phase 4 adds three gated write tools (create_agent_flow, file_intake, file_document_report): Ember proposes params/extractions only, a deterministic validator checks them, and execution needs the single-use approval token. Built agent flows contain no LLM steps and are created DISABLED; enable_agent_flow publishes+enables a registry-listed draft only after a second human approval. Image intake is read by Ember itself (multimodal) — no OCR/embedding/STT model runs in this path. File export (Nov 26, 2026): export_file generates CSV/XLSX/JSON/TXT/DOCX deterministically from filed data (intake extractions incl. audio/video transcripts, triage board, document reports, last run results) after human approval — no model runs in generation; downloads are Operator+-gated. Dashboard Builder (Nov 27, 2026): create_dashboard lets Ember author a dashboard spec against the live data profile; validation + rendering are deterministic (the Dashboard Generator's Axion design step is never used; Ember specs disable insight/chat so no Cube-side model runs). PLC Code Converter (Nov 27, 2026): convert_plc_code lets Ember convert PLC programs Allen-Bradley<->Siemens with the vendor instruction-reference manuals injected as long context by deterministic file reads (no KB search, no Cube-side model). A deterministic validator requires a complete per-instruction coverage report (unsupported instructions flagged, never silently replaced) and target-platform code before approval is offered. Converted code is DRAFT for qualified-engineer review and is never auto-deployed; change approval runs through a Metatron RPA flow (ITSM change record + approval waitpoint). Medical Manual Q&A (Nov 27, 2026): ask_medical_manual is an Ember-local read over The Merck Manual of Diagnosis & Therapy, 19th Ed. (4,114 pages, chunked by chapter/section with printed-page citations). Retrieval is deterministic keyword BM25 in-process — no embeddings, no KB search, no Cube-side model. Ember answers only from returned passages, citing chapter/section/pages; covered=false means say the manual does not cover it. Demo reference only, never medical advice; serve.py appends the disclaimer deterministically. Paralegal Assistant (Nov 27, 2026): ask_paralegal is an Ember-local read over US public-domain legal sources — United States Code (OLRC USLM XML, release point Public Law 119-142), Federal Rules of Civil/Criminal/Appellate/Bankruptcy Procedure and Evidence (uscourts.gov PDFs), US Constitution (archives.gov transcript), Code of Federal Regulations (govinfo bulk XML, 2025 annual edition). Retrieval is deterministic keyword BM25 (SQLite FTS5) in-process — no embeddings, no KB search, no Cube-side model. Ember answers only from returned passages, citing per section/rule (e.g. 28 U.S.C. § 1331, Fed. R. Civ. P. 26, U.S. Const. amend. XIV, 29 C.F.R. § 1910.95); covered=false means say the sources do not cover it. Legal information only, never legal advice for a specific case; serve.py appends the disclaimer deterministically.",
+ "tools": [
+  {
+   "description": "List the approved deterministic workflows the orchestrator may call.",
+   "name": "list_workflows",
+   "parameters": {
+    "properties": {},
+    "type": "object"
+   },
+   "returns": "Catalog of workflow ids, names, and required inputs."
+  },
+  {
+   "description": "Live Watcher status from AIOps (components, incidents, host). Read-only.",
+   "name": "get_watcher_status",
+   "parameters": {
+    "properties": {},
+    "type": "object"
+   },
+   "returns": "Component totals, open-incident count, recent incidents (trimmed), host summary, as one sanitised payload."
+  },
+  {
+   "description": "Fire a deterministic webhook flow. Needs approval token.",
+   "name": "run_workflow",
+   "parameters": {
+    "properties": {
+     "inputs": {
+      "description": "Workflow-specific, deterministic values only.",
+      "type": "object"
+     },
+     "workflow_id": {
+      "description": "One of the catalog workflow ids that has a production flow.",
+      "enum": [
+       "watcher-status-whatsapp"
+      ],
+      "type": "string"
+     }
+    },
+    "required": [
+     "workflow_id"
+    ],
+    "type": "object"
+   },
+   "returns": "Run id and status; results are read back via get_run_status."
+  },
+  {
+   "description": "Poll the result of a fired workflow run.",
+   "name": "get_run_status",
+   "parameters": {
+    "properties": {
+     "run_id": {
+      "type": "string"
+     }
+    },
+    "required": [
+     "run_id"
+    ],
+    "type": "object"
+   },
+   "returns": "Run status and its deterministic result payload."
+  },
+  {
+   "description": "File approved triaged tickets to the board (nothing sent). Needs approval token.",
+   "name": "file_tickets",
+   "parameters": {
+    "properties": {
+     "tickets": {
+      "items": {
+       "properties": {
+        "category": {
+         "enum": [
+          "Network",
+          "Billing",
+          "Access",
+          "Hardware",
+          "Account",
+          "Software",
+          "Other"
+         ],
+         "type": "string"
+        },
+        "draft_reply": {
+         "description": "Short draft reply to the requester. A draft only — a human approves before anything is sent.",
+         "type": "string"
+        },
+        "id": {
+         "description": "Ticket id from the input, e.g. TKT-001.",
+         "type": "string"
+        },
+        "priority": {
+         "description": "P1 highest, P4 lowest.",
+         "enum": [
+          "P1",
+          "P2",
+          "P3",
+          "P4"
+         ],
+         "type": "string"
+        },
+        "route": {
+         "description": "Team or queue the ticket routes to.",
+         "type": "string"
+        }
+       },
+       "required": [
+        "id",
+        "category",
+        "priority",
+        "draft_reply"
+       ],
+       "type": "object"
+      },
+      "type": "array"
+     }
+    },
+    "required": [
+     "tickets"
+    ],
+    "type": "object"
+   },
+   "returns": "Count filed, board total, and the filed ticket ids."
+  },
+  {
+   "backend": "MCP Bus cube_status",
+   "description": "Live estate status: components up/down, host vitals, open incidents. Read-only.",
+   "name": "cube_status",
+   "parameters": {
+    "properties": {},
+    "type": "object"
+   },
+   "returns": "Component totals, down list, host summary, open-incident count."
+  },
+  {
+   "backend": "MCP Bus capacity_report",
+   "description": "Capacity: host saturation, disk-days-to-90, 7-day uptime/latency. Read-only.",
+   "name": "capacity_report",
+   "parameters": {
+    "properties": {},
+    "type": "object"
+   },
+   "returns": "Host current + forecast scalars; worst components first (capped)."
+  },
+  {
+   "backend": "MCP Bus list_assets",
+   "description": "List CMDB assets (SysOps). Optional type filter and limit. Read-only.",
+   "name": "list_assets",
+   "parameters": {
+    "properties": {
+     "limit": {
+      "type": "integer"
+     },
+     "type": {
+      "type": "string"
+     }
+    },
+    "type": "object"
+   },
+   "returns": "Count plus capped asset list (ref, name, type, lifecycle)."
+  },
+  {
+   "backend": "MCP Bus get_asset (bus resolves CI-ref to SysOps id; fixed Nov 26, 2026)",
+   "description": "Get one CMDB asset by ref (e.g. CI-0001) or numeric id, with relationships. Read-only.",
+   "name": "get_asset",
+   "parameters": {
+    "properties": {
+     "ref": {
+      "type": "string"
+     }
+    },
+    "required": [
+     "ref"
+    ],
+    "type": "object"
+   },
+   "returns": "Asset record plus depends/dependents (capped)."
+  },
+  {
+   "backend": "MCP Bus list_changes",
+   "description": "Recent SysOps change-register entries. Optional limit. Read-only.",
+   "name": "list_changes",
+   "parameters": {
+    "properties": {
+     "limit": {
+      "type": "integer"
+     }
+    },
+    "type": "object"
+   },
+   "returns": "Count plus capped change entries (ref, kind, summary, status)."
+  },
+  {
+   "backend": "MCP Bus list_tickets",
+   "description": "List ITSM tickets (read-only; never creates). Optional status filter and limit.",
+   "name": "list_tickets",
+   "parameters": {
+    "properties": {
+     "limit": {
+      "type": "integer"
+     },
+     "status": {
+      "type": "string"
+     }
+    },
+    "type": "object"
+   },
+   "returns": "Count plus capped tickets (ref, title, status, priority, category)."
+  },
+  {
+   "backend": "MCP Bus list_rca",
+   "description": "RCA and auto-heal records from ITSM. Read-only.",
+   "name": "list_rca",
+   "parameters": {
+    "properties": {},
+    "type": "object"
+   },
+   "returns": "Capped RCA records (ref, component, status, policy, summary)."
+  },
+  {
+   "backend": "MCP Bus secops_status",
+   "description": "SecOps posture: CVE/KEV/EPSS counts and top CVEs. Read-only; never investigates.",
+   "name": "secops_status",
+   "parameters": {
+    "properties": {},
+    "type": "object"
+   },
+   "returns": "KPIs, source counts, estate totals, top 5 priority CVEs (trimmed)."
+  },
+  {
+   "backend": "MCP Bus list_dashboards",
+   "description": "List dashboards from the Dashboard Generator. Read-only.",
+   "name": "list_dashboards",
+   "parameters": {
+    "properties": {},
+    "type": "object"
+   },
+   "returns": "Capped dashboard list (slug, title, source kind, last refresh)."
+  },
+  {
+   "backend": "MCP Bus list_flows",
+   "description": "List Metatron RPA (Activepieces) flows with status. Read-only.",
+   "name": "list_flows",
+   "parameters": {
+    "properties": {},
+    "type": "object"
+   },
+   "returns": "Total + enabled counts, capped flow list (name, status)."
+  },
+  {
+   "backend": "MCP Bus brain_status",
+   "description": "Which local brain is live (Axion/Qwen) and its state. Read-only.",
+   "name": "brain_status",
+   "parameters": {
+    "properties": {},
+    "type": "object"
+   },
+   "returns": "Live brain name, switching flag, target."
+  },
+  {
+   "backend": "MCP Bus list_connectors (types-dict crash fixed Nov 26, 2026)",
+   "description": "CMDB connectors configured in SysOps and their status. Read-only.",
+   "name": "list_connectors",
+   "parameters": {
+    "properties": {},
+    "type": "object"
+   },
+   "returns": "Connector list (name, type, status, has_credentials) plus known types."
+  },
+  {
+   "backend": "MCP Bus graph_search",
+   "description": "Search the KAG knowledge graph by label text. Read-only.",
+   "name": "graph_search",
+   "parameters": {
+    "properties": {
+     "q": {
+      "type": "string"
+     }
+    },
+    "required": [
+     "q"
+    ],
+    "type": "object"
+   },
+   "returns": "Capped matches (label, kind, ref)."
+  },
+  {
+   "backend": "MCP Bus graph_dependents",
+   "description": "Blast radius: what depends on a component slug (e.g. model-endpoint). Read-only.",
+   "name": "graph_dependents",
+   "parameters": {
+    "properties": {
+     "component": {
+      "type": "string"
+     }
+    },
+    "required": [
+     "component"
+    ],
+    "type": "object"
+   },
+   "returns": "Dependent count plus capped dependents (label, kind, ref)."
+  },
+  {
+   "backend": "MCP Bus predictions",
+   "description": "Failure predictions: per-component risk scores, bands, and reasons. Read-only.",
+   "name": "predictions",
+   "parameters": {
+    "properties": {},
+    "type": "object"
+   },
+   "returns": "Risk max, high/watch counts, host risk, top risks (capped, worst first)."
+  },
+  {
+   "backend": "MCP Bus finops_summary",
+   "description": "FinOps summary: Cube run costs today/month/projected, budget %, alerts. Read-only.",
+   "name": "finops_summary",
+   "parameters": {
+    "properties": {},
+    "type": "object"
+   },
+   "returns": "Costs, budget, alerts, usage counts, host balance days-left."
+  },
+  {
+   "backend": "MCP Bus list_leases",
+   "description": "Lease & Acquisition summary: pipeline, expiring/expired leases, rent totals. Read-only.",
+   "name": "list_leases",
+   "parameters": {
+    "properties": {},
+    "type": "object"
+   },
+   "returns": "Pipeline by stage, totals, capped expiring/expired leases."
+  },
+  {
+   "backend": "MCP Bus sentiment_summary",
+   "description": "ITSM sentiment: counts, frustrated users, escalation risk. Read-only.",
+   "name": "sentiment_summary",
+   "parameters": {
+    "properties": {},
+    "type": "object"
+   },
+   "returns": "Counts by sentiment/risk, averages, capped frustrated tickets."
+  },
+  {
+   "backend": "MCP Bus finclose_summary",
+   "description": "FinClose DEMO month-end KPIs (simulated): revenue, margins, EBITDA. Read-only.",
+   "name": "finclose_summary",
+   "parameters": {
+    "properties": {},
+    "type": "object"
+   },
+   "returns": "Demo KPIs, close state, exception counts and capped exceptions."
+  },
+  {
+   "description": "Build a deterministic RPA workflow (fetch -> condition -> actions). DISABLED draft.",
+   "name": "create_agent_flow",
+   "parameters": {
+    "properties": {
+     "action": {
+      "description": "Legacy single-action form of `actions` — prefer `actions`.",
+      "enum": [
+       "whatsapp",
+       "board"
+      ],
+      "type": "string"
+     },
+     "actions": {
+      "description": "One or both actions, run in order after the fetch (and condition gate, if set): whatsapp = notify via the proven Watcher WhatsApp flow; board = file the composed report to the orchestrator board.",
+      "items": {
+       "enum": [
+        "whatsapp",
+        "board"
+       ],
+       "type": "string"
+      },
+      "type": "array"
+     },
+     "autonomy": {
+      "description": "Trust level: propose-only (default), auto-report, auto-silent. Still DISABLED.",
+      "enum": [
+       "propose-only",
+       "auto-report",
+       "auto-silent"
+      ],
+      "type": "string"
+     },
+     "condition": {
+      "description": "Optional numeric gate: the action(s) run only when the fetched data satisfies field <op> value. Fields are per-source (see system prompt). Omit for an unconditional process.",
+      "properties": {
+       "field": {
+        "type": "string"
+       },
+       "op": {
+        "enum": [
+         ">",
+         ">=",
+         "<",
+         "<=",
+         "==",
+         "!="
+        ],
+        "type": "string"
+       },
+       "value": {
+        "type": "number"
+       }
+      },
+      "required": [
+       "field",
+       "op",
+       "value"
+      ],
+      "type": "object"
+     },
+     "cron": {
+      "description": "5-field cron (schedule only), e.g. '0 6 * * *'.",
+      "type": "string"
+     },
+     "name": {
+      "description": "Agent/flow name, 3-80 chars.",
+      "type": "string"
+     },
+     "source": {
+      "description": "Allowlisted Cube read endpoint the agent fetches.",
+      "enum": [
+       "watcher_overview",
+       "capacity",
+       "predictions",
+       "finops",
+       "secops",
+       "dotkrc"
+      ],
+      "type": "string"
+     },
+     "steps": {
+      "description": "Optional chain (max 4): {kind:fetch,source}/{kind:condition,field,op,value}/{kind:action,action}. Starts with fetch.",
+      "items": {
+       "properties": {
+        "action": {
+         "enum": [
+          "whatsapp",
+          "board"
+         ],
+         "type": "string"
+        },
+        "field": {
+         "type": "string"
+        },
+        "kind": {
+         "enum": [
+          "fetch",
+          "condition",
+          "action"
+         ],
+         "type": "string"
+        },
+        "op": {
+         "enum": [
+          ">",
+          ">=",
+          "<",
+          "<=",
+          "==",
+          "!="
+         ],
+         "type": "string"
+        },
+        "source": {
+         "enum": [
+          "watcher_overview",
+          "capacity",
+          "predictions",
+          "finops",
+          "secops",
+          "dotkrc"
+         ],
+         "type": "string"
+        },
+        "value": {
+         "type": "number"
+        }
+       },
+       "required": [
+        "kind"
+       ],
+       "type": "object"
+      },
+      "type": "array"
+     },
+     "trigger": {
+      "enum": [
+       "schedule",
+       "webhook"
+      ],
+      "type": "string"
+     }
+    },
+    "required": [
+     "name",
+     "trigger",
+     "source"
+    ],
+    "type": "object"
+   },
+   "returns": "Flow id, name, DISABLED status, trigger/source/actions/condition/chain/autonomy, process step summary."
+  },
+  {
+   "description": "File Ember-extracted fields from an attached file. Needs approval.",
+   "name": "file_intake",
+   "parameters": {
+    "properties": {
+     "record": {
+      "properties": {
+       "fields": {
+        "description": "Extracted fields, e.g. vendor, invoice_number, date, line_items, subtotal, total_due. Only fields actually shown; omit blank/absent ones.",
+        "type": "object"
+       },
+       "kind": {
+        "enum": [
+         "invoice",
+         "document",
+         "photo",
+         "audio_note",
+         "video",
+         "other"
+        ],
+        "type": "string"
+       },
+       "notes": {
+        "description": "Factual observations only (e.g. illegible text). No arithmetic verdicts - totals are verified by the tool.",
+        "type": "string"
+       }
+      },
+      "required": [
+       "kind",
+       "fields"
+      ],
+      "type": "object"
+     }
+    },
+    "required": [
+     "record"
+    ],
+    "type": "object"
+   },
+   "returns": "Filed count, intake board total, kind, stored fields, deterministic totals_check verdict (invoices)."
+  },
+  {
+   "description": "File an Ember document-analysis report (findings with line refs). Needs approval token.",
+   "name": "file_document_report",
+   "parameters": {
+    "properties": {
+     "report": {
+      "properties": {
+       "findings": {
+        "items": {
+         "properties": {
+          "detail": {
+           "type": "string"
+          },
+          "line": {
+           "description": "Line number as numbered in the document text.",
+           "type": "integer"
+          },
+          "severity": {
+           "enum": [
+            "info",
+            "low",
+            "medium",
+            "high",
+            "critical"
+           ],
+           "type": "string"
+          }
+         },
+         "required": [
+          "severity",
+          "detail"
+         ],
+         "type": "object"
+        },
+        "type": "array"
+       },
+       "summary": {
+        "type": "string"
+       },
+       "title": {
+        "type": "string"
+       }
+      },
+      "required": [
+       "title",
+       "summary",
+       "findings"
+      ],
+      "type": "object"
+     }
+    },
+    "required": [
+     "report"
+    ],
+    "type": "object"
+   },
+   "returns": "Filed count, reports total, title, findings count."
+  },
+  {
+   "description": "Enable a DISABLED Agent Builder draft. Registry-scoped. Needs approval.",
+   "name": "enable_agent_flow",
+   "parameters": {
+    "properties": {
+     "flow_id": {
+      "description": "Exact flow id from create_agent_flow.",
+      "type": "string"
+     }
+    },
+    "required": [
+     "flow_id"
+    ],
+    "type": "object"
+   },
+   "returns": "Flow id, name, ENABLED status, trigger/cron."
+  },
+  {
+   "description": "Export filed data to a file (CSV/Excel/JSON/TXT/Word). Needs approval token.",
+   "name": "export_file",
+   "parameters": {
+    "properties": {
+     "format": {
+      "enum": [
+       "csv",
+       "xlsx",
+       "json",
+       "txt",
+       "docx"
+      ],
+      "type": "string"
+     },
+     "source": {
+      "description": "intake (latest extraction), board (triage tickets), document (latest report), last_run (previous run results), plc (latest PLC conversion), medical (latest medical-manual answer with cited passages), legal (latest paralegal answer with cited passages).",
+      "enum": [
+       "intake",
+       "board",
+       "document",
+       "last_run",
+       "plc",
+       "medical",
+       "legal"
+      ],
+      "type": "string"
+     }
+    },
+    "required": [
+     "format",
+     "source"
+    ],
+    "type": "object"
+   },
+   "returns": "Export id, filename, format, source, size, and the download path — or an honest no-data message when the source is empty."
+  },
+  {
+   "name": "create_dashboard",
+   "description": "Build a live dashboard from Cube data (Ember designs, Metatron renders).",
+   "parameters": {
+    "type": "object",
+    "properties": {
+     "title": {
+      "type": "string",
+      "description": "Dashboard title, 3-80 chars."
+     },
+     "subtitle": {
+      "type": "string",
+      "description": "Optional one-line subtitle."
+     },
+     "endpoints": {
+      "type": "array",
+      "items": {
+       "type": "string",
+       "enum": [
+        "watcher-overview",
+        "capacity",
+        "predictions",
+        "finops",
+        "leases",
+        "sentiment",
+        "finclose",
+        "dotkrc-status",
+        "agents-status"
+       ]
+      },
+      "description": "1-3 Cube data sources. The data profile for the chosen sources is provided with the request — reference ONLY its fact, list, and column names. With 2+ sources every name is prefixed with its source (e.g. capacity_host_disk_pct)."
+     },
+     "kpis": {
+      "type": "array",
+      "items": {
+       "type": "object",
+       "properties": {
+        "label": {
+         "type": "string"
+        },
+        "field": {
+         "type": "string",
+         "description": "A fact name from the profile."
+        },
+        "format": {
+         "type": "string",
+         "enum": [
+          "int",
+          "money",
+          "pct",
+          "ratio",
+          "text"
+         ]
+        }
+       },
+       "required": [
+        "label",
+        "field"
+       ]
+      },
+      "description": "Up to 8 KPI cards."
+     },
+     "charts": {
+      "type": "array",
+      "items": {
+       "type": "object",
+       "properties": {
+        "type": {
+         "type": "string",
+         "enum": [
+          "bar",
+          "line",
+          "share",
+          "status-list",
+          "echarts-line",
+          "echarts-bar"
+         ]
+        },
+        "title": {
+         "type": "string"
+        },
+        "from": {
+         "type": "string",
+         "description": "A list name from the profile."
+        },
+        "label_field": {
+         "type": "string"
+        },
+        "value_field": {
+         "type": "string",
+         "description": "Numeric column (bar/line/share/echarts)."
+        },
+        "status_field": {
+         "type": "string",
+         "description": "Status column (status-list)."
+        }
+       },
+       "required": [
+        "type",
+        "from"
+       ]
+      },
+      "description": "Up to 4 charts."
+     },
+     "table": {
+      "type": "object",
+      "properties": {
+       "title": {
+        "type": "string"
+       },
+       "from": {
+        "type": "string"
+       },
+       "columns": {
+        "type": "array",
+        "items": {
+         "type": "string"
+        }
+       }
+      },
+      "description": "Optional records table (max 8 columns)."
+     },
+     "thresholds": {
+      "type": "array",
+      "items": {
+       "type": "object",
+       "properties": {
+        "label": {
+         "type": "string"
+        },
+        "field": {
+         "type": "string"
+        },
+        "op": {
+         "type": "string",
+         "enum": [
+          ">",
+          ">=",
+          "<",
+          "<=",
+          "==",
+          "!="
+         ]
+        },
+        "value": {
+         "type": "number"
+        }
+       },
+       "required": [
+        "label",
+        "field",
+        "op",
+        "value"
+       ]
+      },
+      "description": "Optional alert thresholds evaluated at refresh (max 8)."
+     },
+     "refresh_frequency": {
+      "type": "string",
+      "enum": [
+       "Hourly",
+       "Daily 6 AM",
+       "Daily 6 PM",
+       "Weekly Mon 6 AM"
+      ],
+      "description": "Optional: also create a DISABLED RPA refresh flow on this schedule. Omit for manual refresh."
+     }
+    },
+    "required": [
+     "title",
+     "endpoints"
+    ]
+   },
+   "returns": "Dashboard slug, title, live URL, source labels, KPI/chart counts, refresh mode — or a validation error naming the fix."
+  },
+  {
+   "name": "convert_plc_code",
+   "description": "Convert PLC code Allen-Bradley<->Siemens using vendor manuals. DRAFT; needs approval.",
+   "parameters": {
+    "type": "object",
+    "properties": {
+     "direction": {
+      "type": "string",
+      "enum": [
+       "ab_to_siemens",
+       "siemens_to_ab"
+      ],
+      "description": "Conversion direction."
+     },
+     "program_name": {
+      "type": "string",
+      "description": "Program name, 1-80 chars."
+     },
+     "source_code": {
+      "type": "string",
+      "description": "The full source program text (Studio 5000 ST/ladder-text or Siemens SCL)."
+     },
+     "converted_code": {
+      "type": "string",
+      "description": "The full converted program in the target platform's language, written by Ember using the vendor manuals provided as context."
+     },
+     "coverage": {
+      "type": "array",
+      "description": "Per-instruction coverage report accounting for EVERY instruction in the source: mapped with its target equivalent, or unsupported (flagged, never silently replaced).",
+      "items": {
+       "type": "object",
+       "properties": {
+        "instruction": {
+         "type": "string"
+        },
+        "status": {
+         "type": "string",
+         "enum": [
+          "mapped",
+          "unsupported"
+         ]
+        },
+        "target": {
+         "type": "string",
+         "description": "Target instruction or construct (mapped only)."
+        },
+        "note": {
+         "type": "string",
+         "description": "Mapping note, or why unsupported and what redesign is needed."
+        }
+       },
+       "required": [
+        "instruction",
+        "status"
+       ]
+      }
+     },
+     "notes": {
+      "type": "string",
+      "description": "Conversion notes: assumptions, tag/type mapping, anything an engineer must check."
+     }
+    },
+    "required": [
+     "direction",
+     "source_code",
+     "converted_code",
+     "coverage"
+    ]
+   },
+   "returns": "Conversion id, direction, program name, coverage stats (mapped/unsupported counts + flagged list), converted code, DRAFT status — or a validation error naming the fix. Never deploys anything."
+  },
+  {
+   "name": "ask_medical_manual",
+   "description": "Answer a medical question from the Merck Manual, cited. Read-only.",
+   "parameters": {
+    "type": "object",
+    "properties": {
+     "question": {
+      "type": "string",
+      "description": "The medical question, as asked."
+     }
+    },
+    "required": [
+     "question"
+    ]
+   },
+   "returns": "Retrieved passages from The Merck Manual of Diagnosis & Therapy (19th Ed.) with chapter/section/page citations and a covered flag (false = the manual does not cover the question; say so, never answer from general knowledge). Demo reference only — not medical advice, no personalized diagnosis/treatment."
+  },
+  {
+   "name": "ask_paralegal",
+   "description": "Answer a legal question from US public-domain sources, cited. Read-only.",
+   "parameters": {
+    "type": "object",
+    "properties": {
+     "question": {
+      "type": "string",
+      "description": "The legal question, as asked."
+     }
+    },
+    "required": [
+     "question"
+    ]
+   },
+   "returns": "Retrieved passages from the U.S. Code, Federal Rules, US Constitution, and CFR with per-section/rule citations (e.g. 28 U.S.C. § 1331, Fed. R. Civ. P. 26, U.S. Const. amend. XIV, 29 C.F.R. § 1910.95) and a covered flag (false = the sources do not cover the question; say so, never answer from general knowledge). Legal information only — not legal advice for a specific case."
+  }
+ ],
+ "version": "1.2.0-paralegal",
+ "workflows": [
+  {
+   "dependency": "WhatsApp template watcher_status_update (UTILITY, approved Nov 24, 2026; delivery confirmed). Flow verified Nov 26, 2026 via the Activepieces API: webhook trigger -> HTTP (AIOps overview) -> CODE (deterministic compose) -> WhatsApp send -> webhook return. No LLM steps.",
+   "flow_id": "rBAcAYAXvIL2hNyrMQG1s",
+   "id": "watcher-status-whatsapp",
+   "name": "Watcher Status to WhatsApp",
+   "status": "production, ENABLED"
+  },
+  {
+   "dependency": "Fixtures in fixtures/tickets.json. Filing route chosen Nov 26, 2026: the orchestrator's own board store. The Cube ITSM create path was rejected for the demo because it unconditionally runs a non-Ember model (auto-triage + sentiment) and sends notifications — both break the Ember-only rule.",
+   "id": "helpdesk-triage-routing",
+   "name": "Help-desk Triage Desk routing",
+   "status": "live — orchestrator board store (board/tickets.json), deterministic"
+  },
+  {
+   "dependency": "Sample shape in fixtures/handover-sample.json; live runs pull the real endpoint.",
+   "id": "shift-handover-brief",
+   "name": "Shift Handover Brief",
+   "status": "live — data from AIOps /api/overview (deterministic)"
+  },
+  {
+   "dependency": "FinOps service :8019 /api/summary via the MCP Bus. Pure data read; Ember only reports the numbers.",
+   "id": "finops-summary-report",
+   "name": "FinOps Summary Report",
+   "status": "live — read-only via MCP Bus finops_summary (deterministic)"
+  },
+  {
+   "dependency": "KAG graph :8018 /api/dependents via the MCP Bus. Reverse depends_on closure over CMDB/Watcher data; no model runs.",
+   "id": "blast-radius-report",
+   "name": "Blast Radius Report",
+   "status": "live — read-only via MCP Bus graph_dependents (deterministic)"
+  },
+  {
+   "dependency": "SecOps :8014 /api/status via the MCP Bus. Cached NVD/KEV/EPSS counts only — the orchestrator never calls investigate/hunt/patch (those run the local brain / execute).",
+   "id": "cve-exposure-report",
+   "name": "CVE Exposure Report",
+   "status": "live — read-only via MCP Bus secops_status (deterministic)"
+  },
+  {
+   "dependency": "AIOps :8008 /api/capacity and /api/predictions via the MCP Bus. Deterministic trend math over Watcher history; no model runs.",
+   "id": "capacity-outlook-report",
+   "name": "Capacity Outlook Report",
+   "status": "live — read-only via MCP Bus capacity_report + predictions (deterministic)"
+  },
+  {
+   "dependency": "Ember proposes params (name/trigger/cron/source/action); orchestrator/agent_builder.py validates against the allowlist and assembles the flow with the Agents service's proven step shapes (no LLM steps). Created via AP API as a DISABLED draft.",
+   "id": "agent-builder",
+   "name": "Agent Builder — natural language to RPA agent",
+   "status": "live — DISABLED drafts only, never published"
+  },
+  {
+   "dependency": "Ember reads the image itself via the Meta Model API (multimodal input). No OCR model. Filing is a deterministic JSON store write after human approval.",
+   "id": "multimodal-intake",
+   "name": "Multimodal Intake — photo to filed record",
+   "status": "live — orchestrator intake store (board/intake.json)"
+  },
+  {
+   "dependency": "Ember parses the document (1M-token context) and proposes findings with line references; filing is a deterministic JSON store write after human approval.",
+   "id": "document-intelligence",
+   "name": "Document Intelligence — document to findings report",
+   "status": "live — orchestrator reports store (board/reports.json)"
+  },
+  {
+   "dependency": "One plan chains cube_status + graph_dependents + secops_status + predictions + finops_summary; Ember writes one brief.",
+   "id": "full-picture-brief",
+   "name": "Full Picture Brief — chained read reports",
+   "status": "live — read-only via MCP Bus (deterministic)"
+  },
+  {
+   "id": "dashboard-builder",
+   "name": "Dashboard Builder — Ember designs, Metatron renders",
+   "status": "live — deterministic render via the Dashboard Generator /api/create; no Axion design step",
+   "dependency": "Ember authors the spec against the live data profile (POST /api/profile); orchestrator/dashboard_builder.py validates it deterministically (mirrors the generator's validate_spec) and creates it with insight/chat disabled so no Cube-side model runs. Optional RPA refresh flow is created DISABLED."
+  },
+  {
+   "id": "plc-code-converter",
+   "name": "PLC Code Converter — Allen-Bradley <-> Siemens",
+   "status": "live — Ember converts with vendor manuals as long context; DRAFT only, engineer-gated",
+   "dependency": "Ember authors the converted code + coverage report against manuals in plc_manuals/ (injected by serve.py); orchestrator/plc_converter.py validates coverage deterministically; records in board/plc_conversions.json. Change approval via the 'PLC Conversion — Change Approval' RPA flow (ITSM RFC + waitpoint, no LLM steps)."
+  }
+ ]
+}
