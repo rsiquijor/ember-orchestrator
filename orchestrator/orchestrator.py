@@ -78,6 +78,20 @@ def _validate_next_steps(payload: str) -> list[dict]:
     return out
 
 
+def compose_fallback_text(trace: list[dict]) -> str:
+    """Deterministic summary used when the final compose call fails
+    after the tools already ran: says what ran, so the operator is
+    never left without a record of side effects."""
+    lines = ["The approved steps ran, but the summary could not be "
+             "written. What ran:"]
+    for t in trace:
+        res = t.get("result") or {}
+        state = ("error: " + str(res["error"])) if isinstance(res, dict) \
+            and res.get("error") else "done"
+        lines.append(f"- {t['tool']}: {state}")
+    return "\n".join(lines)
+
+
 def parse_next_steps(text: str) -> tuple[str, list[dict]]:
     """Split a trailing NEXT_STEPS: [...] line off Ember's summary.
 
@@ -585,6 +599,10 @@ class Orchestrator:
             if plan["steps"][idx]["name"] == "create_agent_flow":
                 from .agent_builder import validate_agent_params
                 validate_agent_params(new_args)
+        # Check the budget gate BEFORE any tool runs: a closed gate
+        # (BudgetHalt/BudgetStop) must stop the run before side
+        # effects, not after the tools have already fired.
+        self.meter.authorize(plan["purpose"])
         plan["status"] = "approved"
         trace = []
         messages = list(plan["messages"])
@@ -624,6 +642,21 @@ class Orchestrator:
                              "tool_call_id": step.get("id")
                              or f"call_{i}_{step['name']}",
                              "content": json.dumps(result)})
+        # Persist what actually ran BEFORE the compose call: the tools
+        # have already fired, so the trace and its verification must
+        # survive even if the compose call fails (network, budget).
+        plan["status"] = "executed"
+        plan["trace"] = trace
+        # Verification loop (Nov 26): deterministic re-reads of what
+        # the execution claims to have done ($0, no extra Ember
+        # call). Failures surface with a fix; nothing auto-retries.
+        from .verifier import verify_trace, verification_summary
+        plan["verification"] = verify_trace(trace, self.tools)
+        plan["verification_summary"] = verification_summary(
+            plan["verification"])
+        # The export_file 'last_run' source reads the previous
+        # completed run's trace from the tools object.
+        self.tools.last_run_trace = trace
         # One compose call writes the summary AND the NEXT_STEPS
         # suggestions (parsed + stripped below; absent/malformed ->
         # [] and the page falls back to Automate + Done).
@@ -639,25 +672,19 @@ class Orchestrator:
                and (t["result"] or {}).get("covered")
                for t in trace):
             compose_tokens = 4096
-        self.meter.authorize(plan["purpose"])
-        resp = self.ember.chat(messages, self.tool_schemas,
-                               max_tokens=compose_tokens)
+        try:
+            self.meter.authorize(plan["purpose"])
+            resp = self.ember.chat(messages, self.tool_schemas,
+                                   max_tokens=compose_tokens)
+        except Exception as e:  # noqa: BLE001 — the run already happened
+            plan["compose_error"] = f"{type(e).__name__}: {e}"
+            plan["final_text"] = compose_fallback_text(trace)
+            plan["next_steps"] = []
+            return plan
         self.meter.record(plan["purpose"], resp.prompt_tokens,
                           resp.completion_tokens,
                           note="compose-final"
                           + (f":{note_suffix}" if note_suffix else ""))
-        plan["status"] = "executed"
-        plan["trace"] = trace
-        # Verification loop (Nov 26): deterministic re-reads of what
-        # the execution claims to have done ($0, no extra Ember
-        # call). Failures surface with a fix; nothing auto-retries.
-        from .verifier import verify_trace, verification_summary
-        plan["verification"] = verify_trace(trace, self.tools)
-        plan["verification_summary"] = verification_summary(
-            plan["verification"])
-        # The export_file 'last_run' source reads the previous
-        # completed run's trace from the tools object.
-        self.tools.last_run_trace = trace
         plan["final_text"], plan["next_steps"] = parse_next_steps(resp.text)
         return plan
 

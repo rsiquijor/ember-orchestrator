@@ -486,5 +486,45 @@ class TestCatalog(unittest.TestCase):
         self.assertTrue(serve.is_plc_convert_command(chip_cmd))
 
 
+
+class TestPlcInputTokenGuard(unittest.TestCase):
+    """PLC conversions stay under Ember's 200K-token pricing tier:
+    manuals are trimmed to fit, and an oversized paste is refused
+    before any spend."""
+
+    def setUp(self):
+        self._tmp = tempfile.TemporaryDirectory()
+        for name in ("ab-ref.txt", "siemens-ref.txt"):
+            with open(os.path.join(self._tmp.name, name), "w") as f:
+                f.write("REF " * 50_000)  # 200K chars each
+        self._old = os.environ.get("EMBER_PLC_MANUALS_DIR")
+        os.environ["EMBER_PLC_MANUALS_DIR"] = self._tmp.name
+
+    def tearDown(self):
+        if self._old is None:
+            os.environ.pop("EMBER_PLC_MANUALS_DIR", None)
+        else:
+            os.environ["EMBER_PLC_MANUALS_DIR"] = self._old
+        self._tmp.cleanup()
+
+    def test_under_cap_untouched(self):
+        cmd = "Convert the sample Allen-Bradley program to Siemens"
+        context, stats = serve._plc_fit_context(cmd, cap=500_000)
+        self.assertNotIn("trimmed_to_fit", stats)
+        self.assertEqual(context, serve._plc_context(cmd)[0])
+
+    def test_trims_manuals_to_fit(self):
+        cmd = "Convert the sample Allen-Bradley program to Siemens"
+        context, stats = serve._plc_fit_context(cmd, cap=40_000)
+        self.assertTrue(stats["trimmed_to_fit"])
+        self.assertLessEqual(serve._est_tokens(cmd + "\n\n" + context),
+                             40_000)
+        self.assertTrue(stats["manuals"])
+
+    def test_oversized_paste_refused(self):
+        cmd = "Convert to Siemens: x := 1; " + ("y := y + 1; " * 20_000)
+        with self.assertRaises(serve.PlcTooLarge):
+            serve._plc_fit_context(cmd, cap=10_000)
+
 if __name__ == "__main__":
     unittest.main()

@@ -257,6 +257,75 @@ class TestHttpSurface(UiTestCase):
         finally:
             server.shutdown()
 
+    def test_security_headers_and_origin_check(self):
+        svc = self.make_service(user=None)
+        server = ThreadingHTTPServer(("127.0.0.1", 0),
+                                     serve.make_handler(svc))
+        port = server.server_address[1]
+        t = threading.Thread(target=server.serve_forever, daemon=True)
+        t.start()
+        try:
+            conn = http.client.HTTPConnection("127.0.0.1", port, timeout=10)
+            conn.request("GET", "/api/status")
+            r = conn.getresponse()
+            r.read()
+            self.assertEqual(r.getheader("X-Content-Type-Options"),
+                             "nosniff")
+            self.assertEqual(r.getheader("X-Frame-Options"), "DENY")
+            self.assertEqual(r.getheader("Content-Security-Policy"),
+                             serve.CSP_API)
+            conn.request("GET", "/")
+            r = conn.getresponse()
+            r.read()
+            self.assertEqual(r.getheader("Content-Security-Policy"),
+                             serve.CSP_PAGE)
+            # A cross-site page POSTing with the session cookie.
+            conn.request("POST", "/api/approve",
+                         body=json.dumps({"plan_id": "x"}),
+                         headers={"Content-Type": "application/json",
+                                  "Origin": "https://evil.example"})
+            r = conn.getresponse()
+            self.assertEqual(r.status, 403)
+            self.assertIn("cross-origin", json.loads(r.read())["error"])
+            # Same origin passes the check (and then hits the auth gate).
+            conn.request("POST", "/api/propose",
+                         body=json.dumps({"command": "hi"}),
+                         headers={"Content-Type": "application/json",
+                                  "Origin": f"http://127.0.0.1:{port}"})
+            r = conn.getresponse()
+            self.assertNotIn("cross-origin",
+                             json.loads(r.read()).get("error", ""))
+        finally:
+            server.shutdown()
+
+
+class TestOriginAllowed(unittest.TestCase):
+    def test_rules(self):
+        ok = serve.origin_allowed
+        self.assertTrue(ok(None, "ember.metatroncube.online"))
+        self.assertTrue(ok("https://ember.metatroncube.online",
+                           "127.0.0.1:8023"))
+        self.assertTrue(ok("https://metatroncube.online", "127.0.0.1:8023"))
+        self.assertTrue(ok("http://localhost:8023", "localhost:8023"))
+        self.assertTrue(ok("https://door.example", "127.0.0.1:8023",
+                           "door.example"))
+        self.assertFalse(ok("https://evil.metatroncube.online",
+                            "ember.metatroncube.online"))
+        self.assertFalse(ok("null", "ember.metatroncube.online"))
+        self.assertFalse(ok("https://evil.example", "127.0.0.1:8023"))
+
+    def test_env_allowlist(self):
+        old = os.environ.get("EMBER_ALLOWED_ORIGINS")
+        os.environ["EMBER_ALLOWED_ORIGINS"] = "https://staging.example/"
+        try:
+            self.assertTrue(serve.origin_allowed(
+                "https://staging.example", "127.0.0.1:8023"))
+        finally:
+            if old is None:
+                os.environ.pop("EMBER_ALLOWED_ORIGINS", None)
+            else:
+                os.environ["EMBER_ALLOWED_ORIGINS"] = old
+
 
 if __name__ == "__main__":
     unittest.main()

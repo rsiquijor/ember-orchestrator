@@ -527,6 +527,26 @@ def _cell(value: str) -> str:
     return text
 
 
+# Leading characters a spreadsheet may treat as a formula (OWASP CSV
+# injection), including full-width forms. Model- and document-derived
+# text reaches these cells, so a value like =HYPERLINK(...) must stay
+# text, never become a live formula.
+_FORMULA_LEAD = ("=", "+", "-", "@", "\t", "\r", "\n",
+                 "\uff1d", "\uff0b", "\uff0d", "\uff20")
+_PLAIN_NUMBER = re.compile(r"[+-]?[\d,]*\.?\d+")
+
+
+def _no_formula(value):
+    """Prefix a single quote on text that would start a formula.
+    Numbers (already converted, or plain numeric text such as -12.5)
+    are left alone so values stay intact."""
+    if not isinstance(value, str) or not value.startswith(_FORMULA_LEAD):
+        return value
+    if _PLAIN_NUMBER.fullmatch(value.strip()):
+        return value
+    return "'" + value
+
+
 def _number(value: str, allow_int: bool = False):
     """Numeric-looking strings -> numbers for spreadsheet cells.
     Field values keep plain integers as text (ids like work orders);
@@ -550,13 +570,13 @@ def to_csv_bytes(data: dict) -> bytes:
     if field_rows:
         writer.writerow(["Field", "Value"])
         for k, v in field_rows:
-            writer.writerow([k, _cell(v)])
+            writer.writerow([_no_formula(str(k)), _no_formula(_cell(v))])
     if table:
         if field_rows:
             writer.writerow([])
-        writer.writerow(table["columns"])
+        writer.writerow([_no_formula(str(c)) for c in table["columns"]])
         for row in table["rows"]:
-            writer.writerow([_cell(c) for c in row])
+            writer.writerow([_no_formula(_cell(c)) for c in row])
     return buf.getvalue().encode("utf-8")
 
 
@@ -578,17 +598,17 @@ def to_xlsx_bytes(data: dict) -> bytes:
         for cell in ws[1]:
             cell.font = bold
         for k, v in field_rows:
-            ws.append([k, _number(_cell(v))])
+            ws.append([_no_formula(str(k)), _no_formula(_number(_cell(v)))])
         ws.column_dimensions["A"].width = 24
         ws.column_dimensions["B"].width = 60
     if table:
         target = ws if not field_rows else wb.create_sheet(
             (data.get("table_title") or "Table")[:31])
-        target.append(list(table["columns"]))
+        target.append([_no_formula(str(c)) for c in table["columns"]])
         for cell in target[1]:
             cell.font = bold
         for row in table["rows"]:
-            target.append([_number(_cell(c), allow_int=True)
+            target.append([_no_formula(_number(_cell(c), allow_int=True))
                            for c in row])
         for idx in range(1, len(table["columns"]) + 1):
             target.column_dimensions[

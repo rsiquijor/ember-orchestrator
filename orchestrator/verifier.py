@@ -4,7 +4,9 @@ After an approved plan executes, each step's result is checked
 against reality with deterministic re-reads ($0, no model):
   - create_agent_flow -> the flow id is in the registry
   - enable_agent_flow -> the registry entry is enabled
-  - run_workflow      -> run status SUCCEEDED (WhatsApp wamid when
+  - run_workflow      -> run status SUCCEEDED; on the live service
+                         this is the sync webhook's answer, not a
+                         polled run status (WhatsApp wamid when
                          the flow returns one; sends cannot be
                          unsent, so undo is never offered for them)
   - file_tickets      -> every filed id is on the board
@@ -70,7 +72,13 @@ def verify_trace(trace, tools) -> list[dict]:
             if isinstance(inner, dict):
                 wamid = str(inner.get("wamid") or
                             inner.get("message_id") or "")
-            detail = (f"run {result.get('run_id')} SUCCEEDED"
+            if result.get("confirmed_by") == "sync-webhook-response":
+                head = (f"run {result.get('run_id')}: the RPA sync "
+                        "webhook answered without an error (run status "
+                        "not polled)")
+            else:
+                head = f"run {result.get('run_id')} SUCCEEDED"
+            detail = (head
                       + (f"; WhatsApp wamid {wamid}" if wamid else
                          "; WhatsApp sends cannot be unsent"))
             checks.append(_check(

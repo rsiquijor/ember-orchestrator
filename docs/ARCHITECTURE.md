@@ -91,7 +91,8 @@ Teaching errors: validators return specific, actionable messages ("at most 8 KPI
 
 `orchestrator/mcp_discovery.py`:
 
-1. **Fetch**: JSON-RPC `tools/list` to the bus with the Cube services key (`X-API-Key`), 10 s timeout.
+1. **Fetch**: JSON-RPC `tools/list` to the bus with the Cube services key (`X-API-Key`), 5 s timeout in the live service (10 s function default).
+   Only known reads (`READ_TOOLS`) and tools the bus annotates `readOnlyHint: true` are admitted, because discovered tools run without an approval token; everything else is quarantined and listed as `quarantined_tools` in `/api/status`.
 2. **Filter**: drop `EXCLUDED_BUS_TOOLS` (`create_ticket`, `knowledge_search`, `ask_cube` — non-Ember models) and anything starting with `ember_` (self-calls). Malformed entries are skipped; duplicate names deduped.
 3. **Convert**: bus `inputSchema` → Ember function schema; descriptions capped at 240 chars so a verbose bus tool can't blow up the prompt.
 4. **Merge** (`merge_schemas`): Ember-local tools (`LOCAL_ONLY_TOOLS` — gated writes + local reads) always come from the static catalog; for bus-backed tools the discovered schema wins, except `required` is **unioned** with the catalog's hand-tuned required fields. Order: catalog order first, then discovered-only tools in bus order.

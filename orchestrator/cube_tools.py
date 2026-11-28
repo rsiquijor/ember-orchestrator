@@ -1830,16 +1830,18 @@ class HttpCubeTools(CubeTools):
                              LOCAL_ONLY_TOOLS)
 
     def discovery_state(self) -> dict:
-        from .mcp_discovery import EXCLUDED_BUS_TOOLS
+        from .mcp_discovery import EXCLUDED_BUS_TOOLS, LAST_QUARANTINED
         if self._discovered:
             return {"source": "mcp-bus-discovery",
                     "discovered_tools": len(self._discovered),
                     "bus_url": self.mcp_url,
-                    "excluded_tools": sorted(EXCLUDED_BUS_TOOLS)}
+                    "excluded_tools": sorted(EXCLUDED_BUS_TOOLS),
+                    "quarantined_tools": list(LAST_QUARANTINED)}
         return {"source": "static-catalog-fallback",
                 "discovered_tools": 0,
                 "bus_url": self.mcp_url,
-                "excluded_tools": sorted(EXCLUDED_BUS_TOOLS)}
+                "excluded_tools": sorted(EXCLUDED_BUS_TOOLS),
+                "quarantined_tools": list(LAST_QUARANTINED)}
 
     # ------------------------------------------------------------- MCP Bus
     def _mcp_key(self) -> str:
@@ -1949,8 +1951,12 @@ class HttpCubeTools(CubeTools):
             raise ValueError(f"workflow {workflow_id} has no production flow yet")
         out = self._post_json(f"{self.webhook_base}/{flow_id}/sync", inputs)
         run_id = out.get("run_id") or flow_id
+        # "SUCCEEDED" here means the sync webhook answered without an
+        # HTTP error; the run status itself is not polled. `confirmed_by`
+        # says so, and the verifier words its check accordingly.
         result = {"run_id": run_id, "workflow_id": workflow_id,
-                  "status": "SUCCEEDED", "result": out}
+                  "status": "SUCCEEDED", "result": out,
+                  "confirmed_by": "sync-webhook-response"}
         self.runs[run_id] = result
         return result
 

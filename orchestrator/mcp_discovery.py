@@ -15,6 +15,11 @@ Eligibility guardrails (hackathon: Ember is the ONLY AI in the path):
   - SELF_TOOL_PREFIX tools (ember_*, Ember's own bus surface from
     Direction 2) are never exposed to Ember — Ember does not call
     itself.
+  - Allowlist (Nov 28): a discovered tool runs ungated, so it is
+    admitted only if its name is a known bus read (READ_TOOLS) or
+    the bus marks it read-only (MCP annotations.readOnlyHint true).
+    Anything else is quarantined and listed in /api/status, so a new
+    write tool on the bus can never bypass the approval gate.
 
 Fallback: any discovery failure (bus unreachable, bad payload, auth)
 returns None and the caller uses the static catalog, so the demo
@@ -36,6 +41,25 @@ SELF_TOOL_PREFIX = "ember_"
 # Cap discovered descriptions so a verbose bus tool cannot blow up
 # Ember's prompt. The bus's own descriptions are far shorter.
 DESC_CAP = 240
+
+# Names quarantined by the last discovery (not read-only, not known).
+LAST_QUARANTINED: list[str] = []
+
+
+def _known_read_names() -> set[str]:
+    from .cube_tools import READ_TOOLS
+    return set(READ_TOOLS)
+
+
+def _is_admissible(tool: dict, known: set[str]) -> bool:
+    """A discovered tool executes WITHOUT an approval token, so only
+    known reads, or tools the bus annotates as read-only, qualify.
+    Annotations are hints, but the default (no annotation) is denied."""
+    if tool.get("name") in known:
+        return True
+    ann = tool.get("annotations")
+    return isinstance(ann, dict) and ann.get("readOnlyHint") is True \
+        and ann.get("destructiveHint") is not True
 
 
 def _log(msg: str) -> None:
@@ -103,12 +127,22 @@ def discover_bus_tools(mcp_url: str, api_key: str,
         return None
     schemas = []
     seen = set()
+    quarantined = []
+    known = _known_read_names()
     for tool in raw:
         schema = _to_ember_schema(tool)
         if schema is None or schema["name"] in seen:
             continue
+        if not _is_admissible(tool, known):
+            if schema["name"] not in quarantined:
+                quarantined.append(schema["name"])
+            continue
         seen.add(schema["name"])
         schemas.append(schema)
+    LAST_QUARANTINED[:] = sorted(quarantined)
+    if quarantined:
+        _log(f"quarantined {len(quarantined)} bus tools that are not "
+             f"known reads or annotated read-only: {sorted(quarantined)}")
     if not schemas:
         _log("discovery returned no eligible tools — falling back "
              "to the static catalog")

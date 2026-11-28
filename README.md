@@ -4,7 +4,7 @@
 
 > **You prompt. MAC checks. You approve. Metatron Cube executes.**
 
-![Tests](https://img.shields.io/badge/tests-479%20passing-brightgreen)
+[![Tests](https://github.com/rsiquijor/ember-orchestrator/actions/workflows/tests.yml/badge.svg)](https://github.com/rsiquijor/ember-orchestrator/actions/workflows/tests.yml)
 ![Tools](https://img.shields.io/badge/tools-33-blue)
 ![Demos](https://img.shields.io/badge/demos-19-blue)
 ![Python](https://img.shields.io/badge/python-3.11%2B%20stdlib%20only-yellow)
@@ -247,7 +247,7 @@ Once approved, steps execute in order through `orchestrator/cube_tools.py` — p
 After execution, `orchestrator/verifier.py` re-reads reality with deterministic checks ($0, no model):
 
 - created flow → is it in the registry? enabled flow → is it actually ENABLED?
-- workflow run → status SUCCEEDED? (with the WhatsApp message id when the flow returns one)
+- workflow run → did the RPA sync webhook answer without an error? (with the WhatsApp message id when the flow returns one; the run status itself is not polled yet)
 - filed tickets → on the board? filed intake → in the store? export → file exists, size > 0?
 - dashboard → registered *and* its page serves? PLC conversion → stored with a complete coverage report?
 - medical/legal answers → passages present iff `covered` is true (no invented passages)?
@@ -499,7 +499,7 @@ No dependencies beyond the **Python 3.11+ standard library** (the Excel/Word exp
 ```bash
 git clone https://github.com/rsiquijor/ember-orchestrator.git
 cd ember-orchestrator
-python3 -m unittest discover -s tests      # 479 tests, stub client, $0
+MCP_DISCOVERY_TTL_S=0 python3 -m unittest discover -s tests      # stub client, offline, $0
 python3 run_demo.py                        # two scripted demos in the terminal
 python3 serve.py                           # demo UI (recorded-only mode without a key)
 ```
@@ -550,7 +550,7 @@ On the Cube, `run_live.sh` sources the key and bus credentials from the box's en
 | `tools/catalog.json` | The 33-tool catalog (v1.2.0-paralegal) — the only things Ember may call |
 | `demos/recorded.json` | The 19 recorded demo runs (real runs, replayed free) |
 | `fixtures/` | Reproducible demo data (tickets, invoices, logs) |
-| `tests/` | 479 unit/integration tests (stub-backed, $0) |
+| `tests/` | Unit/integration tests (stub-backed, $0; run in CI on every push) |
 | `docs/` | [ARCHITECTURE.md](docs/ARCHITECTURE.md), [DEMO-GUIDE.md](docs/DEMO-GUIDE.md), spend-meter spec, screenshots |
 
 ## Hackathon compliance

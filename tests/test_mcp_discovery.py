@@ -67,7 +67,17 @@ FAKE_BUS_TOOLS = [
     {"name": "future_bus_tool", "description": "A tool added later.",
      "inputSchema": {"type": "object",
                      "properties": {"x": {"type": "integer"}},
-                     "required": []}},
+                     "required": []},
+     "annotations": {"readOnlyHint": True}},
+    # A later bus tool that is NOT marked read-only: it would run
+    # without an approval token, so discovery must quarantine it.
+    {"name": "future_write_tool", "description": "Restart a service.",
+     "inputSchema": {"type": "object",
+                     "properties": {"svc": {"type": "string"}},
+                     "required": ["svc"]}},
+    {"name": "future_destructive_tool", "description": "Delete things.",
+     "inputSchema": {"type": "object", "properties": {}},
+     "annotations": {"readOnlyHint": True, "destructiveHint": True}},
 ]
 
 
@@ -88,6 +98,18 @@ class TestDiscoveryFiltering(unittest.TestCase):
         self.assertFalse(any(n.startswith("ember_") for n in names))
         self.assertIn("capacity_report", names)
         self.assertIn("future_bus_tool", names)
+
+    def test_unannotated_unknown_tools_quarantined(self):
+        import orchestrator.mcp_discovery as md
+        schemas = discover_bus_tools("http://bus/mcp", "k",
+                                     fetch_fn=fake_fetch)
+        names = {s["name"] for s in schemas}
+        self.assertNotIn("future_write_tool", names)
+        self.assertNotIn("future_destructive_tool", names)
+        self.assertEqual(md.LAST_QUARANTINED,
+                         ["future_destructive_tool", "future_write_tool"])
+        # Known reads are admitted by name even without annotations.
+        self.assertIn("cube_status", names)
 
     def test_failure_returns_none(self):
         self.assertIsNone(discover_bus_tools("http://bus/mcp", "k",
@@ -203,6 +225,12 @@ class TestHttpToolsDiscovery(unittest.TestCase):
         # A discovered-only tool dispatches through the bus too.
         tools.call("future_bus_tool", {"x": 1})
         self.assertEqual(calls[-1][0], "future_bus_tool")
+        # A quarantined tool is not callable at all.
+        with self.assertRaises(ValueError):
+            tools.call("future_write_tool", {"svc": "db"})
+        self.assertNotEqual(calls[-1][0], "future_write_tool")
+        self.assertIn("future_write_tool",
+                      tools.discovery_state()["quarantined_tools"])
 
     def test_orchestrator_uses_effective_schemas(self):
         tools = self._tools_with_discovery()
