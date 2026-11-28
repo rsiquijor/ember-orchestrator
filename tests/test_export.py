@@ -250,6 +250,43 @@ class TestXlsx(ExportCase):
         self.assertTrue(li[1][0].font.bold)
 
 
+class TestFormulaEscaping(unittest.TestCase):
+    """Model/document text must never become a live spreadsheet
+    formula (OWASP CSV injection)."""
+
+    DATA = {"field_rows": [["Vendor", '=HYPERLINK("http://x","click")'],
+                           ["Total", "-12.50"]],
+            "table": {"columns": ["Item", "Qty", "Note"],
+                      "rows": [["@SUM(A1:A2)", "-3", "+cmd"],
+                               ["\uff1dEVIL()", "4", "ok"]]}}
+
+    def test_csv_prefixes_formula_text(self):
+        from orchestrator.exporter import to_csv_bytes
+        rows = list(csv.reader(io.StringIO(
+            to_csv_bytes(self.DATA).decode())))
+        self.assertEqual(rows[1][1], '\'=HYPERLINK("http://x","click")')
+        self.assertEqual(rows[2][1], "-12.50")  # numbers untouched
+        self.assertEqual(rows[5][0], "'@SUM(A1:A2)")
+        self.assertEqual(rows[5][1], "-3")
+        self.assertEqual(rows[5][2], "'+cmd")
+        self.assertEqual(rows[6][0], "'\uff1dEVIL()")
+
+    def test_xlsx_has_no_formula_cells(self):
+        try:
+            import openpyxl
+        except ImportError:
+            self.skipTest("openpyxl not installed")
+        from orchestrator.exporter import to_xlsx_bytes
+        wb = openpyxl.load_workbook(io.BytesIO(to_xlsx_bytes(self.DATA)))
+        for ws in wb.worksheets:
+            for row in ws.iter_rows():
+                for cell in row:
+                    self.assertNotEqual(cell.data_type, "f", cell.value)
+        ws = wb.worksheets[0]
+        self.assertEqual(ws["B2"].value, '\'=HYPERLINK("http://x","click")')
+        self.assertEqual(ws["B3"].value, -12.5)
+
+
 class TestJson(ExportCase):
     def test_intake_json_shape(self):
         self.file_invoice()

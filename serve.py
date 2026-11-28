@@ -97,7 +97,11 @@ Bus proxies its ember_* tools here — Nov 26, 2026, Direction 2):
 
 Guardrails:
   - Every live Ember call goes through the SpendMeter (gates $7/$9/$9.75).
-  - A per-day live-run cap (default 100) bounds public exposure.
+  - A per-day live-run cap (EMBER_UI_DAILY_CAP, default 1000) bounds
+    public exposure.
+  - Cookie-authenticated POSTs refuse a foreign Origin (see
+    origin_allowed); every response carries nosniff, frame-deny and
+    a Content-Security-Policy.
   - Approved live runs execute for real: UiCubeTools inherits
     HttpCubeTools._execute, so an approved run_workflow fires the
     production flow's sync webhook (the WhatsApp demo sends a real
@@ -117,6 +121,7 @@ from __future__ import annotations
 
 import base64
 import binascii
+import hmac
 import json
 import os
 import re
@@ -631,13 +636,18 @@ def _plc_carries_code(command: str) -> bool:
             or "END_IF" in c.upper() or "#RunDelay" in c)
 
 
-def _plc_context(command: str) -> tuple[str, dict]:
+def _plc_context(command: str,
+                 char_budget: int | None = None) -> tuple[str, dict]:
     """Brief Ember for a PLC conversion: the vendor manuals as
     long context (deterministic file reads — no KB search, no
     Cube-side model) plus the sample program when the command
     carries no code of its own. Returns (context_text, stats)."""
     direction = _plc_direction_for(command)
-    manuals_text, stats = load_manual_context(direction)
+    if char_budget is None:
+        manuals_text, stats = load_manual_context(direction)
+    else:
+        manuals_text, stats = load_manual_context(
+            direction, char_budget=char_budget)
     stats = dict(stats)
     stats["direction"] = direction
     src_label = PLATFORM_LABELS[SOURCE_PLATFORM[direction]]
@@ -701,6 +711,45 @@ def _plc_context(command: str) -> tuple[str, dict]:
     if manuals_text:
         parts.append(manuals_text)
     return "\n\n".join(parts), stats
+
+
+# Ember bills input above 200K tokens per request at a higher tier
+# (ember-rates.env). A PLC conversion sends ~180K tokens of manuals,
+# so a long pasted program could tip it over: estimate before the
+# call and trim the manuals to stay under the cap (Nov 28).
+PLC_INPUT_TOKEN_CAP = int(os.environ.get("EMBER_PLC_INPUT_TOKEN_CAP",
+                                         "190000"))
+
+
+class PlcTooLarge(ValueError):
+    """The command alone is over the input-token cap."""
+
+
+def _est_tokens(text: str) -> int:
+    return max(1, len(text) // 4)
+
+
+def _plc_fit_context(command: str,
+                     cap: int | None = None) -> tuple[str, dict]:
+    """_plc_context, with the manuals trimmed so command + context
+    stays under the input-token cap. Raises PlcTooLarge when even
+    an empty manuals block would not fit."""
+    cap = PLC_INPUT_TOKEN_CAP if cap is None else cap
+    context, stats = _plc_context(command)
+    est = _est_tokens(command + "\n\n" + context)
+    if est <= cap:
+        return context, stats
+    over_chars = (est - cap) * 4 + 4000  # margin for headers
+    budget = max(0, stats.get("chars", 0) - over_chars)
+    context, stats = _plc_context(command, char_budget=budget)
+    est = _est_tokens(command + "\n\n" + context)
+    if est > cap:
+        raise PlcTooLarge(
+            f"this conversion would send about {est:,} input tokens, "
+            f"over the {cap:,} cap — paste a shorter program")
+    stats = dict(stats)
+    stats["trimmed_to_fit"] = True
+    return context, stats
 
 
 # Curated one-liners + example prompts per catalog tool, grouped by
@@ -1117,7 +1166,8 @@ class DemoService:
     def _require_service(self, api_key: str) -> tuple | None:
         """None when the services key is valid, else an error tuple."""
         expected = _services_key()
-        if not expected or not api_key or api_key != expected:
+        if not expected or not api_key or not hmac.compare_digest(
+                api_key.encode(), expected.encode()):
             return (401, {"error": "valid X-API-Key required"})
         if self.orch is None:
             return (503, {"error": "live Ember is not configured on "
@@ -1793,7 +1843,10 @@ class DemoService:
         plc = is_plc_convert_command(command)
         plc_context, plc_stats = "", None
         if plc:
-            plc_context, plc_stats = _plc_context(command)
+            try:
+                plc_context, plc_stats = _plc_fit_context(command)
+            except PlcTooLarge as e:
+                return 413, {"error": str(e)}
             if not context:
                 context = plc_context
         with self.lock:
@@ -2931,7 +2984,8 @@ class DemoService:
     # -- internal: board filing from Agent-Builder flows --------------
     def board_file(self, payload: dict, api_key: str) -> tuple[int, dict]:
         expected = _services_key()
-        if not expected or not api_key or api_key != expected:
+        if not expected or not api_key or not hmac.compare_digest(
+                api_key.encode(), expected.encode()):
             return 401, {"error": "valid X-API-Key required"}
         if not isinstance(payload, dict):
             return 400, {"error": "JSON object required"}
@@ -2982,9 +3036,59 @@ def build_live_service() -> DemoService:
 
 SERVICE = None  # built in main(); tests inject their own
 
+# Browser-facing hardening (Nov 28). The session cookie is scoped to
+# .metatroncube.online with SameSite=Lax, so any sibling subdomain
+# counts as "same site" and a page there could POST with the cookie.
+# Cookie-authenticated POSTs therefore check Origin: a browser always
+# sends it on a cross-origin POST, and only the Ember origins (plus
+# the request's own host) are accepted. Requests without an Origin
+# (curl, server-to-server) are unaffected; the services-key routes
+# are exempt because they authenticate by header, not cookie.
+DEFAULT_ALLOWED_ORIGIN_HOSTS = ("ember.metatroncube.online",
+                                "metatroncube.online")
+SERVICE_KEY_ROUTES = ("/api/mcp/", "/api/board/file")
+
+# JSON and downloads load nothing; the page keeps its inline scripts
+# and styles but may not be framed or re-based.
+CSP_API = "default-src 'none'; frame-ancestors 'none'"
+CSP_PAGE = "frame-ancestors 'none'; base-uri 'none'; object-src 'none'"
+
+
+def allowed_origin_hosts() -> set[str]:
+    extra = os.environ.get("EMBER_ALLOWED_ORIGINS", "")
+    hosts = set(DEFAULT_ALLOWED_ORIGIN_HOSTS)
+    for item in extra.split(","):
+        item = item.strip().lower()
+        if item:
+            hosts.add(item.split("://", 1)[-1].rstrip("/"))
+    return hosts
+
+
+def origin_allowed(origin: str | None, host: str | None,
+                   forwarded_host: str | None = None) -> bool:
+    """True when a POST's Origin may carry the session cookie.
+    No Origin header -> allowed (not a cross-site browser POST)."""
+    if origin is None:
+        return True
+    origin = origin.strip().lower()
+    if "://" not in origin:  # includes the opaque "null" origin
+        return False
+    o_host = origin.split("://", 1)[1].rstrip("/")
+    own = {h.strip().lower() for h in (host, forwarded_host) if h}
+    return o_host in own or o_host in allowed_origin_hosts()
+
 
 def make_handler(service: DemoService):
     class Handler(BaseHTTPRequestHandler):
+        _csp = CSP_API
+
+        def end_headers(self):
+            self.send_header("X-Content-Type-Options", "nosniff")
+            self.send_header("X-Frame-Options", "DENY")
+            self.send_header("Referrer-Policy", "same-origin")
+            self.send_header("Content-Security-Policy", self._csp)
+            super().end_headers()
+
         def _json(self, code, obj, set_cookies=None):
             body = json.dumps(obj).encode()
             self.send_response(code)
@@ -3013,6 +3117,7 @@ def make_handler(service: DemoService):
                 except OSError:
                     self._json(500, {"error": "demo page missing"})
                     return
+                self._csp = CSP_PAGE
                 self.send_response(200)
                 self.send_header("Content-Type", "text/html; charset=utf-8")
                 self.send_header("Content-Length", str(len(body)))
@@ -3104,6 +3209,12 @@ def make_handler(service: DemoService):
 
         def do_POST(self):
             path = self.path.split("?", 1)[0]
+            if not path.startswith(SERVICE_KEY_ROUTES) and \
+                    not origin_allowed(self.headers.get("Origin"),
+                                       self.headers.get("Host"),
+                                       self.headers.get("X-Forwarded-Host")):
+                self._json(403, {"error": "cross-origin request refused"})
+                return
             limit = (30_000_000 if path == "/api/intake-file"
                      else 8_000_000 if path == "/api/intake"
                      else 1_000_000)

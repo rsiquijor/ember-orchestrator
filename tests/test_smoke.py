@@ -57,6 +57,37 @@ class TestApprovalGate(unittest.TestCase):
         self.assertIn("SHIFT HANDOVER BRIEF", done["final_text"])
 
 
+class TestApproveFailureOrder(unittest.TestCase):
+    """The trace of what ran must survive a failed compose call, and a
+    closed budget gate must stop the run before any tool fires."""
+
+    def test_trace_persisted_when_compose_fails(self):
+        orch = make_orchestrator()
+        plan = orch.propose("Send the Watcher status to WhatsApp")
+        def boom(*a, **k):
+            raise ConnectionError("compose down")
+        orch.ember.chat = boom
+        done = orch.approve(plan["id"])
+        self.assertEqual(done["status"], "executed")
+        self.assertTrue(done["trace"])
+        self.assertIn("verification", done)
+        self.assertIn("ConnectionError", done["compose_error"])
+        self.assertIn("run_workflow", done["final_text"])
+        self.assertEqual(done["next_steps"], [])
+        self.assertIs(orch.tools.last_run_trace, done["trace"])
+
+    def test_closed_budget_gate_runs_nothing(self):
+        meter = SpendMeter(rate_input_per_1k=1.0, rate_output_per_1k=1.0)
+        orch = make_orchestrator(meter)
+        plan = orch.propose("Send the Watcher status to WhatsApp")
+        meter.record("experiment", 9800, 0)  # past the absolute stop
+        runs_before = len(orch.tools.runs)
+        with self.assertRaises(BudgetStop):
+            orch.approve(plan["id"])
+        self.assertEqual(len(orch.tools.runs), runs_before)
+        self.assertEqual(plan["status"], "proposed")
+
+
 class TestSpendMeter(unittest.TestCase):
     def test_ledger_and_exports(self):
         meter = SpendMeter(rate_input_per_1k=0.01, rate_output_per_1k=0.03)
